@@ -21,7 +21,7 @@ const App: React.FC = () => {
 
   return (
 
-	<div className="w-screen h-screen relative">
+	<div className="w-screen h-screen relative overflow-hidden">
 
 	<Background></Background>
 	<Suspect imgUrl='/images/suspects/suspect_1.png'></Suspect>
