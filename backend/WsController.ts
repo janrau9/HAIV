@@ -23,7 +23,13 @@ export class WsController {
             console.log('Client error');
         });
         ws.on('message', (message: string) => {
-            console.log('Received message:', message);
+            const data = JSON.parse(message);
+            console.log('Received message:', data);
+            if (data.type === 'action') {
+                // Handle action message
+                console.log('Action:', data.action);
+                ws.send(JSON.stringify({ type: 'reply', message: 'Hi, I am the murderer' }));
+            }
         });
     }
 }

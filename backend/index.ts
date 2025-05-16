@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import fastify from 'fastify';
 import websocketPlugin from '@fastify/websocket';
 import routes from './routes';
+import cors from '@fastify/cors';
 
 
 dotenv.config();
@@ -15,6 +16,9 @@ const start = async () => {
   try {
     // Register fastify-jwt plugin with secret from env variables
     // Register routes
+    await app.register(cors, {
+      origin: 'http://localhost:5174', // or use `true` to allow all origins during dev
+    })
     app.register(websocketPlugin); // Register websocket plugin
 
     app.register(routes); // Register user routes inside the plugin

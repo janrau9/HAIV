@@ -11,7 +11,7 @@ export default async function routes(fastify: FastifyInstance) {
   // Register the API route
   fastify.get('/api', (req, reply) => apiController.getAPI(req, reply));
   // Register the WebSocket route
-  fastify.get('/game/', { websocket: true }, (socket: any, request) =>
+  fastify.get('/room', { websocket: true }, (socket: any, request) =>
     wsController.play.bind(wsController)(socket, request)
   );
 }
