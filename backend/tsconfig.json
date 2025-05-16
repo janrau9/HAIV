@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    /* Backend-specific options */
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+
+    /* Output options */
+    "outDir": "dist"
+
+    /* Backend path aliases */
+  }
+}
