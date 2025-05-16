@@ -12,8 +12,6 @@ export class RoomScene extends Scene {
   url = 'http://localhost:8000/room'
   ws: WebSocket | null = null
 
-
-
   constructor() {
     super('RoomScene')
     this.connect()
@@ -45,27 +43,36 @@ export class RoomScene extends Scene {
   }
 
   create() {
-    this.add.text(400, 100, 'MUrder', { fontSize: '40px', color: '#ffffff' }).setDepth(1)
+    this.add
+      .text(400, 100, 'MUrder', { fontSize: '40px', color: '#ffffff' })
+      .setDepth(1)
     // Add a button using text
-    const button = this.add.text(400, 200, 'fetch api', { fontSize: '32px', color: '#ffffff' })
+    const button = this.add
+      .text(400, 200, 'fetch api', { fontSize: '32px', color: '#ffffff' })
       .setInteractive() // Makes it clickable
       .on('pointerdown', () => {
-        console.log('Button Clicked!');
+        console.log('Button Clicked!')
         this.fetchApi()
       })
       .on('pointerover', () => {
-        button.setColor('#f00'); // Changes color on hover
+        button.setColor('#f00') // Changes color on hover
       })
       .on('pointerout', () => {
-        button.setColor('#ffffff'); // Reverts color on exit
-      }).setDepth(1)
+        button.setColor('#ffffff') // Reverts color on exit
+      })
+      .setDepth(1)
 
     this.cursors = this.input.keyboard!.createCursorKeys()
     // Add player
-    this.player = this.add.rectangle(0, 0, this.tileSize * 0.9, this.tileSize * 0.9, 0xff66aa)
+    this.player = this.add.rectangle(
+      0,
+      0,
+      this.tileSize * 0.9,
+      this.tileSize * 0.9,
+      0xff66aa,
+    )
     this.player.setOrigin(0)
     this.placePlayerAt(0, 0) // Start at entrance (1,1)
-
   }
 
   placePlayerAt(x: number, y: number) {
