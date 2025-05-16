@@ -1,42 +1,31 @@
+import React, {useState, useEffect} from 'react'
 import { motion } from 'framer-motion'
+import { ChatBubble } from './components/dialogue/ChatBubble'
+import UserInput from './components/dialogue/UserInput'
+import { Suspect } from './components/suspect/Suspect'
+import { Background } from './components/Background'
 
-const DialogueBox = ({ text }) => {
-	return (
-	  <motion.div
-		className="absolute top-24 left-24 transform bg-white text-black px-6 py-4 shadow-[4px_4px_0_0_black] max-w-md text-center text-lg font-mono"
-		initial={{ opacity: 0, y: 20 }}
-		animate={{ opacity: 1, y: 0 }}
-		transition={{ duration: 0.5 }}
-	  >
-		{text}
-	  </motion.div>
-	);
-  };
 
-function App() {
+const App: React.FC = () => {
+
+	const [suspectResponse, setSuspectResponse] = useState('I was at home that night. You gotta believe me!');
+
+	const handleUserMessage = (message: string) => {
+	  // Simulated AI response
+	  const aiResponse = `I dont know anything about "${message}" ...`;
+	  setSuspectResponse(aiResponse);
+
+	}
+
+
   return (
 
 	<div className="w-screen h-screen relative">
 
-    <motion.div
-	className='bg-black w-screen h-screen object-contain'
-    >
-		<img src="/images/wall.png" className="w-full h-full"></img>
-    </motion.div>
-	<motion.img
-  className="absolute bottom-0 left-1/2 max-h-[60%] "
-  src="/images/suspects/suspect_1.png"
-  animate={{
-    y: [0, -5, 0], // Moves up 10px then back down
-  }}
-  transition={{
-    duration: 3,
-    repeat: Infinity,
-    repeatType: "loop",
-    ease: "easeInOut",
-  }}
-/>
-<DialogueBox text="I was at home that night. You gotta believe me!" />
+	<Background></Background>
+	<Suspect imgUrl='/images/suspects/suspect_1.png'></Suspect>
+	<ChatBubble text={suspectResponse} />
+	<UserInput onSend={handleUserMessage}></UserInput>
 
 	</div>
   )
