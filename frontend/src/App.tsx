@@ -3,48 +3,44 @@ import { ChatBubble } from './components/dialogue/ChatBubble'
 import UserInput from './components/dialogue/UserInput'
 import { Suspect } from './components/suspect/Suspect'
 import { Background } from './components/Background'
-import { WebSocketManager } from './WebSocketManager'
 import { Table } from './components/Table'
+import { useGameStore } from './store'
+import { WebSocketManager } from './WebSocketManager'
+import useWebsocket from './useWebsocket'
+
 
 
 const App: React.FC = () => {
 
-  const [suspectResponse, setSuspectResponse] = useState('I was at home that night. You gotta believe me!');
-  const isWsOpen = useRef(false);
-  const ws = WebSocketManager.getInstance();
-
-  const handleResponse = (message: string) => {
-    console.log("response: ", message);
-    setSuspectResponse(message);
-  }
+  const [suspectResponse, setSuspectResponse] = useState('');
+  const {
+    addMessage,
+    currentSuspectId,
+    suspects,
+    adjustSuspicion,
+  } = useGameStore.getState()
+  const messages = useGameStore((state) => state.messages);
 
   useEffect(() => {
-    ws.connect();
-    ws.addEventListener('response', handleResponse);
-    ws.addEventListener('open', () => {
-      isWsOpen.current = true;
-      console.log('WebSocket connection opened');
-    });
-    ws.addEventListener('close', () => {
-      isWsOpen.current = false;
-      console.log('WebSocket connection closed');
-    });
-  }, []);
-
-
-  const handleUserMessage = (message: string) => {
-    // Simulated AI response
-    if (isWsOpen.current) {
-      const data = {
-        type: 'question',
-        message: message,
-      }
-      ws.sendMessage(data);
-    } else {
-      console.error('WebSocket is not open. Message not sent:', message);
+    const lastMessage = messages[messages.length - 1];
+    if (lastMessage && lastMessage.role === 'suspect') {
+      console.log('last message', lastMessage.content)
+      setSuspectResponse(lastMessage.content);
     }
   }
+    , [messages]);
 
+  useWebsocket();
+
+  const handleUserMessage = (playerInput: string) => {
+    // Simulated AI response
+    console.log('Player input:', playerInput)
+    addMessage({
+      id: crypto.randomUUID(),
+      role: 'player',
+      content: playerInput,
+    })
+  }
 
   return (
 

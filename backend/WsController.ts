@@ -28,7 +28,15 @@ export class WsController {
             if (data.type === 'question') {
                 // Handle action message
                 console.log('question:', data.message);
-                ws.send(JSON.stringify({ type: 'response', message: `Hi, I am the murderer', ${data.message} ` }));
+                const response = {
+                    type: 'response',
+                    message: {
+                        content: 'We dated... That doesn’t mean I killed her!',
+                        role: 'suspect',
+                        suspicionChange: 1,
+                    }
+                }
+                ws.send(JSON.stringify(response));
             }
         });
     }
