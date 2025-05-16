@@ -4,6 +4,7 @@ import UserInput from './components/dialogue/UserInput'
 import { Suspect } from './components/suspect/Suspect'
 import { Background } from './components/Background'
 import { WebSocketManager } from './WebSocketManager'
+import { Table } from './components/Table'
 
 
 const App: React.FC = () => {
@@ -51,6 +52,9 @@ const App: React.FC = () => {
 
       <Background></Background>
       <Suspect imgUrl='/images/suspects/suspect_1.png'></Suspect>
+      <div className="w-full h-full absolute top-0">
+        <Table></Table>
+      </div>
       <ChatBubble text={suspectResponse} />
       <UserInput onSend={handleUserMessage}></UserInput>
 
