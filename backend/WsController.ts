@@ -31,7 +31,7 @@ export class WsController {
                 const response = {
                     type: 'response',
                     message: {
-                        content: 'We dated... That doesn’t mean I killed her!',
+                        content: `We dated... That doesn’t mean I killed her! ${data.message.content}`,
                         role: 'suspect',
                         suspicionChange: 1,
                     }
