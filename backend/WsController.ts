@@ -25,10 +25,10 @@ export class WsController {
         ws.on('message', (message: string) => {
             const data = JSON.parse(message);
             console.log('Received message:', data);
-            if (data.type === 'action') {
+            if (data.type === 'question') {
                 // Handle action message
-                console.log('Action:', data.action);
-                ws.send(JSON.stringify({ type: 'reply', message: 'Hi, I am the murderer' }));
+                console.log('question:', data.message);
+                ws.send(JSON.stringify({ type: 'response', message: `Hi, I am the murderer', ${data.message} ` }));
             }
         });
     }
