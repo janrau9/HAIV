@@ -1,0 +1,20 @@
+
+> backend@1.0.0 dev
+> ts-node-dev --respawn --transpile-only index.ts
+
+[INFO] 22:59:56 ts-node-dev ver. 2.0.0 (using ts-node ver. 10.9.2, typescript ver. 5.8.3)
+{"level":30,"time":1747425601299,"pid":524,"hostname":"DESKTOP-KIP54JI","msg":"Server listening at http://127.0.0.1:8000"}
+Server running on port 8000
+{"level":30,"time":1747425601299,"pid":524,"hostname":"DESKTOP-KIP54JI","msg":"Server listening at http://172.26.70.0:8000"}
+{"level":30,"time":1747425649992,"pid":524,"hostname":"DESKTOP-KIP54JI","reqId":"req-1","req":{"method":"GET","url":"/room","host":"localhost:8000","remoteAddress":"127.0.0.1","remotePort":47476},"msg":"incoming request"}
+Client connected
+Client disconnected
+{"level":30,"time":1747425650358,"pid":524,"hostname":"DESKTOP-KIP54JI","reqId":"req-2","req":{"method":"GET","url":"/room","host":"localhost:8000","remoteAddress":"127.0.0.1","remotePort":47488},"msg":"incoming request"}
+Client connected
+Client disconnected
+{"level":30,"time":1747425653076,"pid":524,"hostname":"DESKTOP-KIP54JI","reqId":"req-3","req":{"method":"GET","url":"/room","host":"localhost:8000","remoteAddress":"127.0.0.1","remotePort":47504},"msg":"incoming request"}
+Client connected
+Received message: { type: 'question', message: 'hello' }
+question: hello
+Received message: { type: 'question', message: 'perkele' }
+question: perkele

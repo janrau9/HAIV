@@ -7,9 +7,10 @@ WORKDIR /app
 # Copy your server code into the container
 COPY run.py ./
 
-# Install the latest versions of required Python packages
+# Install Python dependencies, including an updated typing_extensions
 RUN pip install --no-cache-dir \
-    torch==2.7.0 \
+    typing_extensions>=4.5.0 \
+    torch==2.2.2 \
     transformers==4.51.3 \
     flask \
     flask-cors
