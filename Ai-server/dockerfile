@@ -1,0 +1,21 @@
+# Dockerfile for the Flask/CUDA model server
+# Uses an official PyTorch runtime with CUDA support
+FROM pytorch/pytorch:2.2.2-cuda12.1-cudnn8-runtime
+
+WORKDIR /app
+
+# Copy your server code into the container
+COPY run.py ./
+
+# Install the latest versions of required Python packages
+RUN pip install --no-cache-dir \
+    torch==2.7.0 \
+    transformers==4.51.3 \
+    flask \
+    flask-cors
+
+# Expose the port the Flask app listens on
+EXPOSE 5000
+
+# Launch the server
+CMD ["python", "run.py"]
