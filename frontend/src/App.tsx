@@ -10,6 +10,8 @@ import { WebSocketManager } from './WebSocketManager'
 
 import { SuspectSelection } from './components/suspect/SuspectSelection'
 import { AnimatePresence } from 'framer-motion'
+import { NoteBookMoadal } from './components/modals/NoteBookModal'
+import { useModal } from './contexts/ModalContext'
 
 const App: React.FC = () => {
   const [suspectResponse, setSuspectResponse] = useState('')
@@ -28,6 +30,8 @@ const App: React.FC = () => {
   const [outOfQuestions, setOutOfQuestions] = useState(false)
   const [gameStart, setGameStart] = useState(false)
   const [showChatBubble, setShowChatBubble] = useState(false)
+  const [showIntro, setShowIntro] = useState(false)
+  const {openModal} = useModal()
 
   const guessesPerSuspect = 5
 
@@ -42,43 +46,41 @@ const App: React.FC = () => {
     }
   }, [messages])
 
-  if (!gameStart) {
-    return (
-      <div className="w-screen h-screen bg-black gap-2 relative flex flex-col gap-10 justify-center items-center p-10 font-display">
-        <h1 className="uppercase font-bold text-5xl">Dead Loop</h1>
-        <h2 className="uppercase font-bold" onClick={() => setGameStart(true)}>
-          New Game
-        </h2>
-      </div>
-    )
-  }
   const handleUserMessage = (playerInput: string) => {
-    console.log('Player input:', playerInput)
-    addMessage({
-      id: crypto.randomUUID(),
-      role: 'player',
-      content: playerInput,
-    })
+	  console.log('Player input:', playerInput)
+	  addMessage({
+		  id: crypto.randomUUID(),
+		  role: 'player',
+		  content: playerInput,
+		})
+		
+		const newGuessCount = guessCount + 1
+		setGuessCount(newGuessCount)
+		
+		const newIndex = Math.floor(newGuessCount / guessesPerSuspect)
+		setCurrentSuspect(suspects[newIndex].id)
+		if (newIndex < suspects.length) {
+			setSuspectIndex(newIndex)
+		}
+		
+		if (newIndex == suspects.length) {
+			setOutOfQuestions(true)
+		}
+		
+	}
 
-    const newGuessCount = guessCount + 1
-    setGuessCount(newGuessCount)
+	
 
-    const newIndex = Math.floor(newGuessCount / guessesPerSuspect)
-    setCurrentSuspect(suspects[newIndex].id)
-    if (newIndex < suspects.length) {
-      setSuspectIndex(newIndex)
-    }
-
-    if (newIndex == suspects.length) {
-      setOutOfQuestions(true)
-    }
-
-    const timer = setTimeout(() => {
-      setShowChatBubble(false)
-    }, 3000) // Chat bubble disappears after 3 seconds
-
-    return () => clearTimeout(timer) // Clear timeout on re-render
-  }
+	if (!gameStart) {
+	  return (
+		<div className="w-screen h-screen bg-black gap-2 relative flex flex-col gap-10 justify-center items-center p-10 font-display">
+		  <h1 className="uppercase font-bold text-5xl">Dead Loop</h1>
+		  <h2 className="uppercase font-bold" onClick={() => {setGameStart(true); openModal('noteBook')}}>
+			New Game
+		  </h2>
+		</div>
+	  )
+	}
 
   return (
     <div className="w-screen h-screen bg-black-custom gap-2 relative flex flex-col justify-center items-center p-10 ">
@@ -101,7 +103,9 @@ const App: React.FC = () => {
       </div>
       <div className="w-[80%] flex justify-between">
         <UserInput onSend={handleUserMessage}></UserInput>
-        <img className="w-12 h-12" src="/images/gameBoy/notes.png"></img>
+		<button onClick={() => openModal('noteBook')}>
+        <img className="w-12 h-12" src="/images/gameBoy/notes.png" ></img>
+		</button>
       </div>
       <AnimatePresence>
         {outOfQuestions && (
@@ -118,6 +122,7 @@ const App: React.FC = () => {
           />
         )}
       </AnimatePresence>
+	<NoteBookMoadal></NoteBookMoadal>
     </div>
   )
 }
