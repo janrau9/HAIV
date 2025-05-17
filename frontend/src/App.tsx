@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { WebSocketManager } from './WebSocketManager'
+import { useGameStore } from './store'
+import { SuspectSelection } from './components/suspect/SuspectSelection'
+import Result from './components/Result'
 import { ChatBubble } from './components/dialogue/ChatBubble'
 import UserInput from './components/dialogue/UserInput'
 import { Suspect } from './components/suspect/Suspect'
 import { Background } from './components/Background'
 import { Table } from './components/Table'
-import { useGameStore } from './store'
-import useWebsocket from './useWebsocket'
 import { getNarrative } from './api'
-import { SuspectSelection } from './components/suspect/SuspectSelection'
 import { SuspectSelector } from './components/suspect/SuspectSelector'
 import { SuspectInfo } from './components/suspect/SuspectInfo'
-import { AnimatePresence, motion } from 'framer-motion'
 import { NoteBookMoadal } from './components/modals/NoteBookModal'
 import { useModal } from './contexts/ModalContext'
 
-// Animation variants for staggered animations
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -37,13 +37,15 @@ const itemVariants = {
 }
 
 const App: React.FC = () => {
-  // State variables
   const [suspectResponse, setSuspectResponse] = useState('')
   const [outOfQuestions, setOutOfQuestions] = useState(false)
   const [gameStart, setGameStart] = useState(false)
   const [showChatBubble, setShowChatBubble] = useState(false)
   const [showFinishConfirm, setShowFinishConfirm] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [showResult, setShowResult] = useState(false)
+  const [isCorrect, setIsCorrect] = useState(false)
+  const [selectedSuspectName, setSelectedSuspectName] = useState('')
   const { openModal } = useModal()
 
   // Store functions and state
@@ -53,13 +55,13 @@ const App: React.FC = () => {
     resetQuestionCounts,
     addNarrative,
     updateSuspect,
+    resetGame,
   } = useGameStore.getState()
 
   const messages = useGameStore((state) => state.messages)
   const suspects = useGameStore((state) => state.suspects)
   const currentSuspectId = useGameStore((state) => state.currentSuspectId)
   const questionCounts = useGameStore((state) => state.questionCounts)
-  const narrative = useGameStore((state) => state.narrative)
 
   // Helper functions for finishing questioning
   const handleFinishQuestioning = () => {
@@ -75,6 +77,14 @@ const App: React.FC = () => {
     setShowFinishConfirm(false)
   }
 
+  // Handle returning to main screen from result
+  const handleReturnToMainScreen = () => {
+    setShowResult(false)
+    setGameStart(false)
+    setOutOfQuestions(false)
+    resetGame()
+  }
+
   // Security camera filter effect CSS
   const securityCameraStyle = {
     filter: 'sepia(0.3) hue-rotate(90deg) brightness(0.8) contrast(1.2)',
@@ -82,7 +92,27 @@ const App: React.FC = () => {
       'inset 0 0 30px rgba(0, 255, 0, 0.3), 0 0 10px rgba(0, 255, 0, 0.5)',
   }
 
-  useWebsocket()
+  // Custom WebSocket event handler for accusation responses
+  useEffect(() => {
+    const ws = WebSocketManager.getInstance()
+
+    const handleAccusationResult = (result: any) => {
+      console.log('Accusation result:', result)
+      if (result.result === 'win') {
+        setIsCorrect(true)
+      } else {
+        setIsCorrect(false)
+      }
+      // No need to set selectedSuspectName again
+      setShowResult(true)
+    }
+
+    ws.addEventListener('accusation_result', handleAccusationResult)
+
+    return () => {
+      ws.removeEventListener('accusation_result', handleAccusationResult)
+    }
+  }, [])
 
   // Get the current suspect
   const currentSuspect =
@@ -136,15 +166,6 @@ const App: React.FC = () => {
     fetchNarrative()
   }, [gameStart])
 
-  // Logging effects
-  useEffect(() => {
-    console.log('narrative:', narrative)
-  }, [narrative])
-
-  useEffect(() => {
-    console.log('suspects:', suspects)
-  }, [suspects])
-
   // Handle user messages
   const handleUserMessage = (playerInput: string) => {
     console.log('Player input:', playerInput)
@@ -177,6 +198,21 @@ const App: React.FC = () => {
         className="w-screen h-screen bg-black gap-2 relative flex flex-col gap-10 justify-center items-center p-10 font-display"
         style={securityCameraStyle}
       >
+        {/* Scanline effect overlay */}
+        <div className="absolute inset-0 pointer-events-none z-50 overflow-hidden opacity-20">
+          {[...Array(100)].map((_, i) => (
+            <div
+              key={i}
+              className="w-full h-px bg-green-500"
+              style={{
+                position: 'absolute',
+                top: `${i * 10}px`,
+                opacity: i % 3 === 0 ? 0.8 : 0.3,
+              }}
+            />
+          ))}
+        </div>
+
         <motion.h1
           className="uppercase font-bold text-5xl text-green-500"
           initial={{ opacity: 0 }}
@@ -210,6 +246,34 @@ const App: React.FC = () => {
     )
   }
 
+  // Show result screen if a final suspect was selected
+  if (showResult) {
+    return (
+      <div style={securityCameraStyle} className="w-screen h-screen">
+        {/* Scanline effect overlay */}
+        <div className="absolute inset-0 pointer-events-none z-50 overflow-hidden opacity-20">
+          {[...Array(100)].map((_, i) => (
+            <div
+              key={i}
+              className="w-full h-px bg-green-500"
+              style={{
+                position: 'absolute',
+                top: `${i * 10}px`,
+                opacity: i % 3 === 0 ? 0.8 : 0.3,
+              }}
+            />
+          ))}
+        </div>
+
+        <Result
+          isCorrect={isCorrect}
+          suspectName={selectedSuspectName}
+          onReturnToMainScreen={handleReturnToMainScreen}
+        />
+      </div>
+    )
+  }
+
   // Show loading screen while fetching narrative
   if (isLoading) {
     return (
@@ -217,6 +281,21 @@ const App: React.FC = () => {
         className="w-screen h-screen flex justify-center items-center bg-black"
         style={securityCameraStyle}
       >
+        {/* Scanline effect overlay */}
+        <div className="absolute inset-0 pointer-events-none z-50 overflow-hidden opacity-20">
+          {[...Array(100)].map((_, i) => (
+            <div
+              key={i}
+              className="w-full h-px bg-green-500"
+              style={{
+                position: 'absolute',
+                top: `${i * 10}px`,
+                opacity: i % 3 === 0 ? 0.8 : 0.3,
+              }}
+            />
+          ))}
+        </div>
+
         <div className="flex flex-col items-center">
           <div className="text-green-500 font-mono text-xl animate-pulse mb-4">
             GENERATING CASE FILE...
@@ -256,15 +335,6 @@ const App: React.FC = () => {
               }}
             />
           ))}
-        </div>
-
-        {/* Camera interface elements */}
-        <div className="absolute top-5 left-5 text-green-500 font-mono text-xs">
-          REC ● {new Date().toLocaleTimeString()}
-        </div>
-
-        <div className="absolute top-5 right-5 text-green-500 font-mono text-xs">
-          CAM-01 :: INTERROGATION
         </div>
 
         {/* Main content area */}
@@ -385,9 +455,28 @@ const App: React.FC = () => {
               <SuspectSelection
                 suspects={suspects}
                 onSelect={(index) => {
-                  alert(`You selected ${suspects[index].name} as the murderer!`)
-                  setGameStart(false)
-                  setOutOfQuestions(false)
+                  // Get the selected suspect
+                  const selectedSuspect = suspects[index]
+
+                  // Send accusation via websocket
+                  const ws = WebSocketManager.getInstance()
+                  ws.sendMessage({
+                    type: 'accusation',
+                    suspectId: selectedSuspect.id,
+                  })
+
+                  // For now, we'll determine correctness based on suspicion level
+                  // In a full implementation, the backend would tell us if we're correct
+                  const suspectWithHighestSuspicion = [...suspects].sort(
+                    (a, b) => (b.suspicion || 0) - (a.suspicion || 0),
+                  )[0]
+
+                  // Set state for the result screen
+                  const isCorrect =
+                    selectedSuspect.id === suspectWithHighestSuspicion?.id
+                  setIsCorrect(isCorrect)
+                  setSelectedSuspectName(selectedSuspect.name)
+                  setShowResult(true)
                 }}
               />
             </motion.div>
