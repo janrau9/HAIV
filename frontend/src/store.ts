@@ -85,7 +85,7 @@ const initialSuspects: SuspectProfile[] = [
     suspicion: 0,
     trust: 0,
     guessCount: 0,
-    mugshot: '/images/gameBoy/suspects/suspect_3.png',
+    mugshot: '/images/gameBoy/suspects/suspect_5.png',
     characteristics: [
       'Speaks in a calm and collected manner',
       'Uses flattery to gain trust',
