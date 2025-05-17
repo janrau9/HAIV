@@ -54,6 +54,7 @@ export type SuspectSummary = {
   known_interactions: string
   suspicion: number
   trust: number
+  revealedClues?: string[]
 }
 
 // if you change anything here, update that change to WsController.ts as well please!

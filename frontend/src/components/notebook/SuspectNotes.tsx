@@ -1,8 +1,9 @@
 import { Polaroid } from './Polaroid'
 import { motion } from 'framer-motion'
 import { useGameStore } from '../../store'
+import type { SuspectSummary } from '../../../../types/types'
 
-export const SuspectNotes: React.FC<{ suspect: any }> = ({ suspect }) => {
+export const SuspectNotes: React.FC<{ suspect: SuspectSummary }> = ({ suspect }) => {
   console.log('suspect notes: ', suspect)
   return (
     <div className="p-4 flex-grow">
@@ -32,8 +33,11 @@ export const SuspectNotes: React.FC<{ suspect: any }> = ({ suspect }) => {
           NOTES
         </h1>
         <ul>
-          <li>- asdasdasdasdasd</li>
-          <li>- asdasdasdasdasd</li>
+          {suspect.revealedClues?.map((note: string, index: number) => (
+            <li key={index} className="list-disc">
+              <span className="font-bold">{note}</span>
+            </li>
+          ))}
         </ul>
       </div>
     </div>

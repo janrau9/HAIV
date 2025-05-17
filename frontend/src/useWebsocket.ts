@@ -42,6 +42,7 @@ const useWebsocket = () => {
       console.log('suspicionChange: ', message.suspicion)
       updateSuspect(message.suspectId, {
         suspicion: message.suspicion,
+        revealedClues: [message.content],
       })
       // adjustSuspicion(message.suspectId, message.suspicionChange)
     }
@@ -51,6 +52,7 @@ const useWebsocket = () => {
       console.log('trustChange: ', message.trust)
       updateSuspect(message.suspectId, {
         trust: message.trust,
+        revealedClues: [message.content],
       })
       // adjustTrust(message.suspectId, message.trustChange)
     }
