@@ -3,12 +3,10 @@
 
 @import 'tailwindcss';
 
-
 @theme {
-
   --breakpoint-3xl: 1920px;
-  --color-white-custom: #faf7ff;
-  --color-black-custom: #262626;
+  --color-white-custom: #c2e1e9;
+  --color-black-custom: #404049;
   --color-gray-custom: #c3c3c3;
 }
 
