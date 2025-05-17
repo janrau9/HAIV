@@ -1,9 +1,15 @@
-import { create } from 'zustand';
-import type { Clue, Message, Narrative, Scene, SuspectSummary } from '../../types/types'; // Adjust the import path as necessary
+import { create } from 'zustand'
+import type {
+  Clue,
+  Message,
+  Narrative,
+  Scene,
+  SuspectSummary,
+} from '../../types/types' // Adjust the import path as necessary
 
 // New interface for managing question counts
 interface QuestionCounts {
-  [suspectId: string]: number;
+  [suspectId: string]: number
 }
 
 type GameState = {
@@ -81,12 +87,12 @@ const initialSuspects: SuspectSummary[] = [
 
 // Initialize question counts (4 per suspect)
 const initializeQuestionCounts = (): QuestionCounts => {
-  const counts: QuestionCounts = {};
-  initialSuspects.forEach(suspect => {
-    counts[suspect.id] = 4;
-  });
-  return counts;
-};
+  const counts: QuestionCounts = {}
+  initialSuspects.forEach((suspect) => {
+    counts[suspect.id] = 4
+  })
+  return counts
+}
 
 export const useGameStore = create<GameState>((set, get) => ({
   narrative: {
@@ -124,11 +130,11 @@ export const useGameStore = create<GameState>((set, get) => ({
     set((state) => {
       // If it's a player message, decrement the question count for the current suspect
       if (message.role === 'player' && state.currentSuspectId) {
-        get().decrementQuestionCount(state.currentSuspectId);
+        get().decrementQuestionCount(state.currentSuspectId)
       }
       return {
         messages: [...state.messages, { ...message, timestamp: Date.now() }],
-      };
+      }
     }),
 
   setCurrentSuspect: (id) => set({ currentSuspectId: id }),
@@ -144,17 +150,17 @@ export const useGameStore = create<GameState>((set, get) => ({
 
   adjustSuspicion: (suspectId, amount) =>
     set((state) => {
-      const suspect = state.suspects.find((s) => s.id === suspectId);
-      if (!suspect) return {};
-      
+      const suspect = state.suspects.find((s) => s.id === suspectId)
+      if (!suspect) return {}
+
       // Create a new suspects array with the updated suspect
-      const updatedSuspects = state.suspects.map(s => 
-        s.id === suspectId 
-          ? { ...s, suspicion: Math.max(0, s.suspicion + amount) } 
-          : s
-      );
-      
-      return { suspects: updatedSuspects };
+      const updatedSuspects = state.suspects.map((s) =>
+        s.id === suspectId
+          ? { ...s, suspicion: Math.max(0, s.suspicion + amount) }
+          : s,
+      )
+
+      return { suspects: updatedSuspects }
     }),
 
     
