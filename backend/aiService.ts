@@ -5,6 +5,7 @@ import type {
   from "../types/types";
 import fs from "fs/promises";
 import path from "path";
+import { getRecentHistory, addToHistory } from "./memory";
 
 export interface ChatResponse {
   content: string;
@@ -17,14 +18,8 @@ export async function askSuspect(
   suspect: SuspectProfile,
   question: string
 ) {
-  // suspect characteristics array 4 suspects for now
-  const suspects = ["your name is John Doe, you are a 35-year-old and you are blind but can hear very well",
-    "your name is Jane Doe, you are a 28-year-old and you are deaf but can see very well",
-    "your name is Jack Doe, you are a 40-year-old and you are mute but can smell very well",
-    "your name is Jill Doe, you are a 30-year-old and you are a robot but can feel very well",
-  ];
 
-  const systemPrompt = `You are suspect number ${suspect.id}. your name is ${suspect.name}.
+  const intro = `You are suspect #${suspect.id}. named ${suspect.name}.
   you are a ${suspect.age}-year-old, you are a ${suspect.personality} person.
   you ${suspect.characteristics.map((c) => `\n- ${c}`).join("")},
   you have the following secrets: ${suspect.secrets.map((s) => `\n- ${s}`).join("")},
@@ -32,6 +27,18 @@ export async function askSuspect(
   you are a suspect from murder case.
   You are being interrogated by a detective.
   you will give answers based on your characteristics.`;
+
+  const recentMsgs = getRecentHistory(suspect, 3)
+    .map(m =>
+      m.role === 'user'
+        ? `Detective: ${m.content}`
+        : `${suspect.name}: ${m.content}`
+    ).join('\n');
+    console.log("recent messages: ", recentMsgs);
+
+    const systemPrompt = [intro, '[RECENT CONVERCATION]', recentMsgs]
+      .filter(Boolean)
+      .join('\n\n');
 
   const resp = await openai_obj.responses.create({
     model: "gpt-4.1-nano",
@@ -46,6 +53,10 @@ export async function askSuspect(
       },
     ],
   });
+  const answer = resp.output_text;
+
+  addToHistory(suspect, question, answer);
+
   return (resp);
 }
 
