@@ -180,9 +180,8 @@ const App: React.FC = () => {
           </motion.h2>
 
           <motion.div className="text-green-600 text-sm mt-4 text-center max-w-md">
-            <p>A murder investigation simulator with AI-driven narrative.</p>
-            <p>Use the suspect selector to choose who to question.</p>
-            <p>Each suspect can be questioned 4 times.</p>
+            <p>A murder investigation simulator</p>
+            <p>with AI-driven narrative.</p>
           </motion.div>
         </motion.div>
       </div>
