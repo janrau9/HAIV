@@ -8,6 +8,8 @@
   --color-white-custom: #c2e1e9;
   --color-black-custom: #404049;
   --color-gray-custom: #c3c3c3;
+  --color-notebook-bg: #F6EEE3;
+  --color-notebook-darker: #ccc6bf;
 }
 
 :root {
@@ -16,11 +18,16 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
+  color: rgba(171, 169, 169, 0.87);
   background-color: black;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+
+#notebook  {
+  filter: url(#distort);
 }
