@@ -1,9 +1,9 @@
-import * as React from 'react';
-import { motion, useInView } from 'framer-motion';
- 
+import * as React from 'react'
+import { motion, useInView } from 'framer-motion'
+
 export function TypingEffect({ text = 'Typing Effect' }: { text: string }) {
-  const ref = React.useRef(null);
-  const isInView = useInView(ref, { once: true });
+  const ref = React.useRef(null)
+  const isInView = useInView(ref, { once: true })
   return (
     <p
       ref={ref}
@@ -20,5 +20,5 @@ export function TypingEffect({ text = 'Typing Effect' }: { text: string }) {
         </motion.span>
       ))}
     </p>
-  );
+  )
 }
