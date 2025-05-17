@@ -30,37 +30,37 @@ Below is the required output JSON format:
 
 ```json
 {
-  "detective_briefing": "A paragraph summarizing what the detective knows and suspects so far.",
-  "scene": {
-    "when": "Date, time, weather",
-    "where": "Specific location",
-    "victim": {
-      "name": "Victim's full name",
-      "age": Number,
-      "description": "Occupation or role in the setting, how they were found, known facts"
+  detective_briefing: "A paragraph summarizing what the detective knows and suspects so far.",
+  scene: {
+    when: "Date, time, weather",
+    where: "Specific location",
+    victim: {
+      name: "Victim's full name",
+      age: Number,
+      description: "Occupation or role in the setting, how they were found, known facts"
     }
   },
-  "suspects": [
+  suspects: [
     {
-      "summary": {
-        "name": "Suspect's full name",
-        "age": Number,
-        "occupation": "What they do",
-        "relationship_to_victim": "Known relationship",
-        "alibi": "Their claimed whereabouts and who could confirm it"
+			id: 
+      summary: {
+        name: "Suspect's full name",
+        age: Number,
+        occupation: "What they do",
+        relationship_to_victim: "Known relationship",
+        alibi: "Their claimed whereabouts and who could confirm it"
       },
-      "personality": "How they act, speak, behave under questioning",
-      "motive": "What they might gain or fear losing",
-      "alibi": "Repeat or expand on their claimed story",
-      "secrets_and_red_herrings": {
-        "secret": "One juicy hidden fact",
-        "red_herring": "One detail that seems suspicious but isn’t"
-      },
-      "voice": "Notes on their tone, sentence style, tics, or speaking habits",
-      "clues": {
-        "genuine": "A true clue related to the crime (e.g., timeline, weapon)",
-        "distracting": "A misleading clue that seems suspicious but leads nowhere"
+      personality: "How they act, speak, behave under questioning",
+      motive: "What they might gain or fear losing",
+      alibi: "Repeat or expand on their claimed story",
+      voice: "Notes on their tone, sentence style, tics, or speaking habits",
+      secret: "One juicy hidden fact",
+      clues: {
+        genuine: "A true clue related to the crime (e.g., timeline, weapon)",
+        distracting: "A misleading clue that seems suspicious but leads nowhere"
       }
+			suspicion: Number (0 initially)
+			trust: Number (0 initially)
     }
     // Repeat for 4 suspects total
   ]

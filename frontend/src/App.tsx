@@ -1,34 +1,45 @@
-import React, { useState, useEffect } from 'react'
-import { ChatBubble } from './components/dialogue/ChatBubble'
-import UserInput from './components/dialogue/UserInput'
-import { Suspect } from './components/suspect/Suspect'
+import { AnimatePresence, motion } from 'framer-motion'
+import React, { useEffect, useState } from 'react'
+import { getNarrative } from './api'
 import { Background } from './components/Background'
 import { Table } from './components/Table'
-import { useGameStore } from './store'
-import useWebsocket from './useWebsocket'
+import { ChatBubble } from './components/dialogue/ChatBubble'
+import UserInput from './components/dialogue/UserInput'
+import { NoteBookMoadal } from './components/modals/NoteBookModal'
+import { Suspect } from './components/suspect/Suspect'
+import { SuspectInfo } from './components/suspect/SuspectInfo'
 import { SuspectSelection } from './components/suspect/SuspectSelection'
 import { SuspectSelector } from './components/suspect/SuspectSelector'
-import { SuspectInfo } from './components/suspect/SuspectInfo'
-import { AnimatePresence, motion } from 'framer-motion'
-import { NoteBookMoadal } from './components/modals/NoteBookModal'
 import { useModal } from './contexts/ModalContext'
+import { useGameStore } from './store'
+import useWebsocket from './useWebsocket'
 
 const App: React.FC = () => {
+  // State variables
   const [suspectResponse, setSuspectResponse] = useState('')
-  const { addMessage, setCurrentSuspect, resetQuestionCounts } =
-    useGameStore.getState()
-  const messages = useGameStore((state) => state.messages)
-  const suspects = useGameStore((state) => state.suspects)
-  const currentSuspectId = useGameStore((state) => state.currentSuspectId)
-  const questionCounts = useGameStore((state) => state.questionCounts)
-
   const [outOfQuestions, setOutOfQuestions] = useState(false)
   const [gameStart, setGameStart] = useState(false)
   const [showChatBubble, setShowChatBubble] = useState(false)
   const [showFinishConfirm, setShowFinishConfirm] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const { openModal } = useModal()
 
-  // Define the missing handler functions
+  // Store functions and state
+  const {
+    addMessage,
+    setCurrentSuspect,
+    resetQuestionCounts,
+    addNarrative,
+    updateSuspect,
+  } = useGameStore.getState()
+
+  const messages = useGameStore((state) => state.messages)
+  const suspects = useGameStore((state) => state.suspects)
+  const currentSuspectId = useGameStore((state) => state.currentSuspectId)
+  const questionCounts = useGameStore((state) => state.questionCounts)
+  const narrative = useGameStore((state) => state.narrative)
+
+  // Helper functions for finishing questioning
   const handleFinishQuestioning = () => {
     setShowFinishConfirm(true)
   }
@@ -55,6 +66,30 @@ const App: React.FC = () => {
   const currentSuspect =
     suspects.find((s) => s.id === currentSuspectId) || suspects[0]
 
+  // Fetch narrative function
+  const fetchNarrative = async () => {
+    try {
+      setIsLoading(true)
+      const narrativeData = await getNarrative()
+      console.log('narrative:', narrativeData)
+      addNarrative(narrativeData)
+
+      // Randomize suspects and update them with narrative data
+      const randomizeSuspects = [...suspects].sort(() => Math.random() - 0.5)
+      randomizeSuspects.forEach((suspect, index) => {
+        if (narrativeData.suspects[index]?.summary) {
+          updateSuspect(suspect.id, narrativeData.suspects[index].summary)
+        }
+      })
+    } catch (error) {
+      console.error('Error fetching narrative:', error)
+      // Handle error
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  // Effect to handle suspect responses
   useEffect(() => {
     const lastMessage = messages[messages.length - 1]
     if (lastMessage && lastMessage.role === 'suspect') {
@@ -63,8 +98,8 @@ const App: React.FC = () => {
     }
   }, [messages])
 
+  // Effect to check if all questions are used
   useEffect(() => {
-    // Check if all suspects are out of questions
     const allQuestionsUsed = Object.values(questionCounts).every(
       (count) => count <= 0,
     )
@@ -73,6 +108,22 @@ const App: React.FC = () => {
     }
   }, [questionCounts])
 
+  // Effect to fetch narrative when game starts
+  useEffect(() => {
+    if (!gameStart) return
+    fetchNarrative()
+  }, [gameStart])
+
+  // Logging effects
+  useEffect(() => {
+    console.log('narrative:', narrative)
+  }, [narrative])
+
+  useEffect(() => {
+    console.log('suspects:', suspects)
+  }, [suspects])
+
+  // Handle user messages
   const handleUserMessage = (playerInput: string) => {
     console.log('Player input:', playerInput)
     addMessage({
@@ -82,6 +133,7 @@ const App: React.FC = () => {
     })
   }
 
+  // Handle suspect selection
   const handleSuspectSelect = (suspectId: string) => {
     // Only allow selection if the suspect has questions remaining
     if (questionCounts[suspectId] > 0) {
@@ -89,6 +141,7 @@ const App: React.FC = () => {
     }
   }
 
+  // Start new game
   const restartGame = () => {
     setGameStart(true)
     setOutOfQuestions(false)
@@ -127,14 +180,36 @@ const App: React.FC = () => {
           </motion.h2>
 
           <motion.div className="text-green-600 text-sm mt-4 text-center max-w-md">
-            <p>A murder investigation simulator</p>
-            <p>with AI-driven narrative.</p>
+            <p>A murder investigation simulator with AI-driven narrative.</p>
           </motion.div>
         </motion.div>
       </div>
     )
   }
 
+  // Show loading screen while fetching narrative
+  if (isLoading) {
+    return (
+      <div
+        className="w-screen h-screen flex justify-center items-center bg-black-custom"
+        style={securityCameraStyle}
+      >
+        <div className="flex flex-col items-center">
+          <div className="text-green-500 font-mono text-xl animate-pulse mb-4">
+            GENERATING CASE FILE...
+          </div>
+          <div className="w-32 h-1 bg-green-900 relative overflow-hidden">
+            <div
+              className="absolute h-full bg-green-500 animate-[loading_1.5s_ease-in-out_infinite]"
+              style={{ width: '30%' }}
+            />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Main game screen
   return (
     <div
       className="w-screen h-screen bg-black-custom relative flex flex-col justify-center items-center p-10"

@@ -2,31 +2,33 @@ import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useGameStore } from '../../store'
 import { Meter } from '../suspect/Meter'
+import { Case } from './Case' // Import from separate component if it exists
+import { SuspectsTab as MainSuspectsTab } from './SuspectNotes' // Import from separate component if it exists
 
 interface NotesNavProps {
   selectedTab?: 'case' | 'suspects' | 'clues'
   setSelectedTab: (tab: 'case' | 'suspects' | 'clues') => void
 }
 
-// Enhanced NotesNav with additional "Clues" tab
+// Enhanced NotesNav with notebook styling
 const NotesNav: React.FC<NotesNavProps> = ({ selectedTab, setSelectedTab }) => {
   return (
-    <div className="w-full h-16 flex gap-4 font-bold justify-center items-center">
+    <div className="w-full flex font-bold">
       <button
         onClick={() => setSelectedTab('case')}
-        className={`px-3 py-1 ${selectedTab === 'case' ? 'bg-green-900 text-white' : ''}`}
+        className={`${selectedTab !== 'case' ? 'bg-notebook-darker' : 'bg-notebook-bg'} px-4 py-2 rounded-t-lg border-1 border-b-0`}
       >
         Case
       </button>
       <button
         onClick={() => setSelectedTab('suspects')}
-        className={`px-3 py-1 ${selectedTab === 'suspects' ? 'bg-green-900 text-white' : ''}`}
+        className={`${selectedTab !== 'suspects' ? 'bg-notebook-darker' : 'bg-notebook-bg'} px-4 py-2 rounded-t-lg border-1 border-b-0`}
       >
         Suspects
       </button>
       <button
         onClick={() => setSelectedTab('clues')}
-        className={`px-3 py-1 ${selectedTab === 'clues' ? 'bg-green-900 text-white' : ''}`}
+        className={`${selectedTab !== 'clues' ? 'bg-notebook-darker' : 'bg-notebook-bg'} px-4 py-2 rounded-t-lg border-1 border-b-0`}
       >
         Clues
       </button>
@@ -108,15 +110,13 @@ const SuspectsNav: React.FC<SuspectsNavProps> = ({
   const suspects = useGameStore((state) => state.suspects)
 
   return (
-    <div className="w-full flex justify-center items-center gap-2 overflow-x-auto p-2">
+    <div className="w-full flex justify-center items-center">
       {suspects.map((suspect) => (
         <button
           key={suspect.id}
           onClick={() => setSelectedTab(suspect.id)}
-          className={`px-4 py-2 border rounded whitespace-nowrap ${
-            selectedTab === suspect.id
-              ? 'bg-green-900 text-white'
-              : 'bg-white text-black'
+          className={`px-4 py-2 text-xs rounded-t-lg border-1 border-b-0 whitespace-nowrap flex-shrink-0 ${
+            selectedTab === suspect.id ? 'bg-notebook-bg' : 'bg-notebook-darker'
           }`}
         >
           {suspect.name}
@@ -126,20 +126,32 @@ const SuspectsNav: React.FC<SuspectsNavProps> = ({
   )
 }
 
-const SuspectsTab: React.FC = () => {
+// Our custom SuspectsTab that includes SuspectNotes
+const OurSuspectsTab: React.FC<{ selectedSuspectId?: string | null }> = ({
+  selectedSuspectId,
+}) => {
   const suspects = useGameStore((state) => state.suspects)
-  const [selectedSuspectId, setSelectedSuspectId] = useState<string | null>(
-    'suspect_1',
-  )
+  const [localSelectedSuspectId, setLocalSelectedSuspectId] = useState<
+    string | null
+  >(selectedSuspectId || 'suspect_1')
 
-  const selectedSuspect = suspects.find((s) => s.id === selectedSuspectId)
+  // Update local state if prop changes
+  useEffect(() => {
+    if (selectedSuspectId) {
+      setLocalSelectedSuspectId(selectedSuspectId)
+    }
+  }, [selectedSuspectId])
+
+  const selectedSuspect = suspects.find((s) => s.id === localSelectedSuspectId)
 
   return (
     <motion.div>
-      <SuspectsNav
-        setSelectedTab={setSelectedSuspectId}
-        selectedTab={selectedSuspectId}
-      />
+      {!selectedSuspectId && (
+        <SuspectsNav
+          setSelectedTab={setLocalSelectedSuspectId}
+          selectedTab={localSelectedSuspectId}
+        />
+      )}
       {selectedSuspect && <SuspectNotes suspect={selectedSuspect} />}
     </motion.div>
   )
@@ -187,7 +199,7 @@ const CluesTab: React.FC = () => {
 }
 
 // Enhanced Case component to display crime scene details
-const Case: React.FC = () => {
+const OurCase: React.FC = () => {
   // This would ideally be populated from the narrative created by the backend
   const [caseDetails, setCaseDetails] = useState({
     detective_briefing: 'The case details are still being loaded...',
@@ -224,10 +236,10 @@ const Case: React.FC = () => {
   }, [])
 
   return (
-    <div className="w-full p-4 text-green-900">
+    <div className="w-full p-4 text-black">
       <h2 className="text-xl font-bold mb-4">Case Summary</h2>
 
-      <div className="mb-6 p-3 border border-green-700 bg-green-50">
+      <div className="mb-6 p-3 border border-gray-300 bg-gray-50">
         <p className="italic">{caseDetails.detective_briefing}</p>
       </div>
 
@@ -261,24 +273,42 @@ export const Notes: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<'case' | 'suspects' | 'clues'>(
     'case',
   )
+  const [selectedSuspectId, setSelectedSuspectId] = useState<string | null>(
+    'suspect_1',
+  )
 
   return (
-    <motion.div className="text-black-custom h-full w-full flex flex-col">
-      <h1 className="font-bold uppercase text-center text-2xl text-green-900 pt-3">
-        Investigation Notes
-      </h1>
+    <div className="w-full h-full">
+      <div className="my-0 flex items-end">
+        <NotesNav selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
 
-      <div className="w-full flex-grow overflow-auto">
-        {selectedTab === 'suspects' ? (
-          <SuspectsTab />
-        ) : selectedTab === 'clues' ? (
-          <CluesTab />
-        ) : (
-          <Case />
+        {selectedTab === 'suspects' && (
+          <SuspectsNav
+            setSelectedTab={setSelectedSuspectId}
+            selectedTab={selectedSuspectId}
+          />
         )}
       </div>
 
-      <NotesNav selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
-    </motion.div>
+      <motion.div className="notebook relative text-black my-0 bg-notebook-bg rounded-sm h-full w-full flex flex-col">
+        <div id="content" className="w-full flex-grow overflow-auto">
+          {selectedTab === 'suspects' ? (
+            // Try to use imported SuspectsTab if it exists, otherwise use our custom one
+            typeof MainSuspectsTab !== 'undefined' ? (
+              <MainSuspectsTab selectedSuspectId={selectedSuspectId} />
+            ) : (
+              <OurSuspectsTab selectedSuspectId={selectedSuspectId} />
+            )
+          ) : selectedTab === 'clues' ? (
+            <CluesTab />
+          ) : // Try to use imported Case if it exists, otherwise use our custom one
+          typeof Case !== 'undefined' ? (
+            <Case />
+          ) : (
+            <OurCase />
+          )}
+        </div>
+      </motion.div>
+    </div>
   )
 }

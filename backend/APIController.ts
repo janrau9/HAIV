@@ -1,4 +1,5 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
+import { createNarrative } from './aiService';
 
 export class APIController {
     private static instance: APIController;
@@ -18,5 +19,9 @@ export class APIController {
             message: 'API is running',
         };
         reply.send(api);
+    }
+    async getNarrative(req: FastifyRequest, reply: FastifyReply) {
+        const narrative = await createNarrative();
+        reply.send(narrative);
     }
 }
