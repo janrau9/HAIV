@@ -2,6 +2,8 @@ import { WebSocket } from '@fastify/websocket';
 import { FastifyRequest } from 'fastify';
 import { askSuspect, createNarrative } from "./aiService";
 
+let narrative: any;
+
 export class WsController {
     private static instance: WsController;
     constructor() {
@@ -16,8 +18,13 @@ export class WsController {
 
     async play(ws: any, req: FastifyRequest) {
 
-        console.log('Client connected');
-
+			console.log('Client connected');
+			
+			// just test narrative creation and print it to console
+			if (!narrative) {
+				narrative = await createNarrative();
+				console.log('narrative:', narrative);
+			}
 
         ws.on('close', () => {
             console.log('Client disconnected');
@@ -29,12 +36,6 @@ export class WsController {
             const data = JSON.parse(raw);
             console.log('Received message:', data);
             if (data.type === 'question') {
-                // just test narrative creation and print it to console
-                /*const narrative = await createNarrative();
-                console.log('narrative:', narrative);*/
-                // just test narrative creation and print it to console
-                /*const narrative = await createNarrative();
-                console.log('narrative:', narrative);*/
                 // Handle action message
                 try {
                     const ai = await askSuspect(data.suspect, data.message.content);

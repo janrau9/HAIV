@@ -3,6 +3,8 @@ import type {
   SuspectProfile,
 }
   from "../types/types";
+import fs from "fs/promises";
+import path from "path";
 
 export interface ChatResponse {
   content: string;
@@ -49,44 +51,8 @@ export async function askSuspect(
 
 // function to create murder mystery narrative with 4 suspects, where, when, how and who was killed for murdermystery game
 export async function createNarrative() {
-
-  const systemPrompt = "You are the Narrator for a classic murder mystery. Generate unique story, example follows:1. Scene Overview \
-- When: Date, time of day, weather, atmosphere (e.g. “June 12, 1927 at 10:45 PM, a sweltering thunderstorm rages…”).  \
-- Where: Precise location (e.g. “the drawing room of Ravenswood Manor, its grand windows thrown open to the storm…”).  \
-- Victim & Crime: Name, age, relation to the setting (e.g. “Lord Percival Blackwood, age 52, found slumped over his desk, a single stab wound to the heart…”).  \
-2. Suspect Profiles (repeat the following template four times, once per suspect):  \
-- Name & Age \
-- Occupation & Social Standing (how they fit into the household or town)  \
-- Relationship to the Victim (friend, protégé, rival, secret lover, etc.)  \
-- Personality & Demeanor (outgoing and jovial, cold and reserved, nervous tics, choice of words)  \
-- Motive (what they’d gain or fear losing)  \
-- Alibi (where they claim to have been and who could corroborate it)  \
-- Hidden Secrets / Red Herrings (one juicy secret plus one misleading detail that seems suspicious but isn’t)  \
-- How They Speak (brief “voice notes” on tone—e.g. clipped, poetic, rambling—so your AI can roleplay their answers)\
-3. Clues & Contradictions\
-- Scatter two puzzle-worthy clues in each profile (one genuine lead tied to the murder weapon or timeline, one distracting red herring).  \
-Formatting Instructions\
-- Use third-person, present tense.  \
-- Keep each suspect profile to 200–250 words.  \
-- Label each section clearly so the backstory can be handed out with no further editing.\
-Example output snippet for one suspect:  \
-Name & Age:\
-Isabella “Izzy” Crawford, 29  \
-Occupation & Social Standing:\
-Lady’s maid to the late Lady Blackwood—privy to all household secrets, but officially low in the household hierarchy.  \
-Relationship to the Victim:  \
-Secretly in love with Lord Blackwood’s son; once spilled tea on his wife’s gloves in a fit of jealousy.  \
-Personality & Demeanor:  \
-Soft-spoken and dutiful, but clenches her jaw when nervous; habitually smooths her apron.  \
-Motive:\
-Feared being discovered and dismissed after overhearing Lord Blackwood’s plan to fire her for gossiping to guests.  \
-Alibi:\
-Claims she was polishing silver in the kitchen with Cook (Mrs. Farnsworth), though Cook admits she glanced only twice and may not have seen everything.  \
-Hidden Secrets / Red Herrings:  \
-– Secret: Kept a vial of unknown powder in her locket (a sleeping draught, not poison).  \
-– Red herring: A monogrammed handkerchief found near the body, but it actually belongs to her sister.  \
-How She Speaks: \
-Soft, hesitant; often trails off mid-sentence and tightens her lips when asked about the powder."
+  const promptPath = path.join(__dirname, "prompts", "narrative.txt");
+  const systemPrompt = await fs.readFile(promptPath, "utf-8");
 
   const resp = openai_obj.responses.create({
     model: "gpt-4.1-nano",
