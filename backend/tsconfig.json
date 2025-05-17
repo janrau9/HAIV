@@ -5,8 +5,9 @@
     "moduleResolution": "NodeNext",
 
     /* Output options */
-    "outDir": "dist"
+    "outDir": "dist",
 
     /* Backend path aliases */
-  }
+    "baseUrl": "."
+  },
 }

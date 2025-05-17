@@ -1,12 +1,10 @@
 // Import environment variables
 import dotenv from 'dotenv';
+dotenv.config();
 import fastify from 'fastify';
 import websocketPlugin from '@fastify/websocket';
 import routes from './routes';
 import cors from '@fastify/cors';
-
-
-dotenv.config();
 
 // Create Fastify instance
 const app = fastify({
