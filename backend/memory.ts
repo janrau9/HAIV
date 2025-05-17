@@ -7,12 +7,9 @@ export function addToHistory(
   answer: string,
   suspicionChange?: number
 ) {
-  console.log("did i get here1?");
   if (!suspect.memory) {
     suspect.memory = { history: [] };
   }
-
-  console.log("did i get here?", suspect.memory);
 
   suspect.memory.history.push({
     role: "user",
