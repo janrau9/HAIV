@@ -21,6 +21,8 @@ type GameState = {
   // Actions
   addMessage: (message: Message) => void
   setCurrentSuspect: (id: string) => void
+  updateSuspect: (id: string, updates: Partial<SuspectProfile>) => void;
+
   markClueFound: (clueId: string) => void
   adjustSuspicion: (suspectId: string, amount: number) => void
   resetGame: () => void
@@ -162,6 +164,13 @@ export const useGameStore = create<GameState>((set, get) => ({
         },
       }
     }),
+
+  updateSuspect: (id, updates) =>
+    set((state) => ({
+      suspects: state.suspects.map((suspect) =>
+        suspect.id === id ? { ...suspect, ...updates } : suspect
+      ),
+    })),
 
   resetGame: () =>
     set({

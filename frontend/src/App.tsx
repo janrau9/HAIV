@@ -18,6 +18,7 @@ const App: React.FC = () => {
     currentSuspectId,
     // suspects,
     adjustSuspicion,
+    updateSuspect,
     setCurrentSuspect,
   } = useGameStore.getState()
   const messages = useGameStore((state) => state.messages);
@@ -59,11 +60,16 @@ const App: React.FC = () => {
     })
 
     const newGuessCount = guessCount + 1;
+    const newIndex = Math.floor(newGuessCount / guessesPerSuspect);
     setGuessCount(newGuessCount);
 
-    const newIndex = Math.floor(newGuessCount / guessesPerSuspect);
-    setCurrentSuspect(suspects[newIndex].id);
     if (newIndex < suspects.length) {
+      console.log('New index:', newIndex)
+      console.log('lenth:', suspects.length)
+      setCurrentSuspect(suspects[newIndex].id);
+      updateSuspect(suspects[newIndex].id, {
+        guessCount: newGuessCount % guessesPerSuspect,
+      });
       setSuspectIndex(newIndex);
     }
 
@@ -88,6 +94,12 @@ const App: React.FC = () => {
         <UserInput onSend={handleUserMessage}></UserInput>
         <img className="w-12 h-12" src="/images/gameBoy/notes.png"></img>
       </div>
+      <span className="text-white text-2xl font-bold">
+        {suspects[suspectIndex].name}
+      </span>
+      <span className="text-white text-2xl font-bold">
+        {suspects[suspectIndex].guessCount} / {guessesPerSuspect}
+      </span>
       <AnimatePresence>
         {outOfQuestions && (
           <SuspectSelection
