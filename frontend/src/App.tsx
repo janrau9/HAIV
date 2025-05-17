@@ -6,88 +6,116 @@ import { Background } from './components/Background'
 import { Table } from './components/Table'
 import { useGameStore } from './store'
 import useWebsocket from './useWebsocket'
+import { WebSocketManager } from './WebSocketManager'
 
 import { SuspectSelection } from './components/suspect/SuspectSelection'
 import { AnimatePresence } from 'framer-motion'
 
-
 const App: React.FC = () => {
-
-  const [suspectResponse, setSuspectResponse] = useState('');
+  const [suspectResponse, setSuspectResponse] = useState('')
   const {
     addMessage,
     currentSuspectId,
     // suspects,
     adjustSuspicion,
   } = useGameStore.getState()
-  const messages = useGameStore((state) => state.messages);
-  const suspects = useGameStore((state) => state.suspects);
+  const messages = useGameStore((state) => state.messages)
 
+  const [guessCount, setGuessCount] = useState(0)
+  const [suspectIndex, setSuspectIndex] = useState(0)
+  const [outOfQuestions, setOutOfQuestions] = useState(false)
+  const guessesPerSuspect = 5
 
-  const [guessCount, setGuessCount] = useState(0);
-  const [suspectIndex, setSuspectIndex] = useState(0);
-  const [outOfQuestions, setOutOfQuestions] = useState(false);
-  const guessesPerSuspect = 5;
+  const suspects = [
+    {
+      mugshot: '/images/gameBoy/suspects/suspect_1.png',
+      name: 'Suspect One',
+      guessCount: 0,
+    },
+    {
+      mugshot: '/images/gameBoy/suspects/suspect_4.png',
+      name: 'Suspect Four',
+      guessCount: 0,
+    },
+    {
+      mugshot: '/images/gameBoy/suspects/suspect_5.png',
+      name: 'Suspect Five',
+      guessCount: 0,
+    },
+    {
+      mugshot: '/images/gameBoy/suspects/suspect_2.png',
+      name: 'Suspect Two',
+      guessCount: 0,
+    },
+    // Add more suspects here
+  ]
 
-  // const suspects = [
-  //   '/images/suspects/suspect_1.png',
-  //   '/images/suspects/suspect_2.png'
-  //   // Add more suspects here
-  // ];
+  const isWsOpen = useRef(false)
+  const ws = WebSocketManager.getInstance()
 
-  useWebsocket();
+  const handleResponse = (message: string) => {
+    console.log('response: ', message)
+    setSuspectResponse(message.content)
+  }
 
   useEffect(() => {
-    const lastMessage = messages[messages.length - 1];
-    if (lastMessage && lastMessage.role === 'suspect') {
-      console.log('last message', lastMessage.content)
-      setSuspectResponse(lastMessage.content);
+    ws.connect()
+    ws.addEventListener('response', handleResponse)
+    ws.addEventListener('open', () => {
+      isWsOpen.current = true
+      console.log('WebSocket connection opened')
+    })
+    ws.addEventListener('close', () => {
+      isWsOpen.current = false
+      console.log('WebSocket connection closed')
+    })
+  }, [])
+
+  const handleUserMessage = (message: string) => {
+    if (isWsOpen.current) {
+      const data = {
+        type: 'question',
+        message: message,
+      }
+      ws.sendMessage(data)
+    } else {
+      console.error('WebSocket is not open. Message not sent:', message)
+    }
+
+    const newGuessCount = guessCount + 1
+    setGuessCount(newGuessCount)
+
+    const newIndex = Math.floor(newGuessCount / guessesPerSuspect)
+    if (newIndex < suspects.length) {
+      setSuspectIndex(newIndex)
+    }
+    if (newIndex == suspects.length) {
+      setOutOfQuestions(true)
     }
   }
-    , [messages]);
-
-  const handleUserMessage = (playerInput: string) => {
-    // Simulated AI response
-    console.log('Player input:', playerInput)
-    addMessage({
-      id: crypto.randomUUID(),
-      role: 'player',
-      content: playerInput,
-    })
-
-    const newGuessCount = guessCount + 1;
-    setGuessCount(newGuessCount);
-
-    const newIndex = Math.floor(newGuessCount / guessesPerSuspect);
-    if (newIndex < suspects.length) {
-      setSuspectIndex(newIndex);
-    }
-
-    if (newIndex == suspects.length) {
-      setOutOfQuestions(true);
-    }
-  };
 
   return (
-
-    <div className="w-screen h-screen relative">
-
-      <Background></Background>
-      <AnimatePresence>
-        <Suspect imgUrl={suspects[suspectIndex].url} />
-      </AnimatePresence>
-      <div className="w-full h-full absolute top-0">
-        <Table></Table>
+    <div className="w-screen h-screen bg-black gap-2 relative flex flex-col justify-center items-center p-10">
+      <div className="w-[80%] relative border-white border-1 overflow-hidden">
+        <Background></Background>
+        <AnimatePresence>
+          <Suspect imgUrl={suspects[suspectIndex].mugshot} />
+        </AnimatePresence>
+        <div className="w-full h-full absolute top-0 ">
+          <Table></Table>
+        </div>
+        <ChatBubble text={suspectResponse} />
       </div>
-      <ChatBubble text={suspectResponse} />
-      <UserInput onSend={handleUserMessage}></UserInput>
+      <div className="w-[80%] flex justify-between">
+        <UserInput onSend={handleUserMessage}></UserInput>
+        <img className="w-12 h-12" src="/images/gameBoy/notes.png"></img>
+      </div>
       <AnimatePresence>
-
         {outOfQuestions && (
           <SuspectSelection
-            suspects={suspects.map((suspect) => suspect.url)}
+            suspects={suspects}
             onSelect={(index) => {
-              alert(`You selected Suspect #${index + 1}`);
+              alert(`You selected Suspect #${index + 1}`)
               // You can handle logic here (like showing result or resetting)
             }}
           />
