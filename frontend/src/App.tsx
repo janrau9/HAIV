@@ -25,7 +25,22 @@ const App: React.FC = () => {
   const [outOfQuestions, setOutOfQuestions] = useState(false)
   const [gameStart, setGameStart] = useState(false)
   const [showChatBubble, setShowChatBubble] = useState(false)
+  const [showFinishConfirm, setShowFinishConfirm] = useState(false)
   const { openModal } = useModal()
+
+  // Define the missing handler functions
+  const handleFinishQuestioning = () => {
+    setShowFinishConfirm(true)
+  }
+
+  const confirmFinishQuestioning = () => {
+    setOutOfQuestions(true)
+    setShowFinishConfirm(false)
+  }
+
+  const cancelFinishQuestioning = () => {
+    setShowFinishConfirm(false)
+  }
 
   // Security camera filter effect CSS
   const securityCameraStyle = {
@@ -112,11 +127,8 @@ const App: React.FC = () => {
           </motion.h2>
 
           <motion.div className="text-green-600 text-sm mt-4 text-center max-w-md">
-            <p>A murder investigation simulator with AI-driven narrative.</p>
-            <p>
-              Use A, B, C, and D buttons to select suspects for questioning.
-            </p>
-            <p>Each suspect can be questioned 4 times.</p>
+            <p>A murder investigation simulator</p>
+            <p>with AI-driven narrative.</p>
           </motion.div>
         </motion.div>
       </div>
@@ -163,7 +175,44 @@ const App: React.FC = () => {
           <Table />
         </div>
 
-        {/* Notes button moved to bottom right of suspect screen */}
+        {/* Finish Questioning button - repositioned to bottom center */}
+        <button
+          onClick={handleFinishQuestioning}
+          className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black border-2 border-green-500 text-green-500 px-4 py-2 font-mono hover:bg-green-900 transition-colors z-20"
+        >
+          FINISH QUESTIONING
+        </button>
+
+        {/* Confirmation dialog */}
+        {showFinishConfirm && (
+          <div className="absolute inset-0 bg-black bg-opacity-70 flex items-center justify-center z-30">
+            <div className="bg-black border-2 border-green-500 p-6 max-w-md text-green-500 font-mono">
+              <h3 className="text-lg font-bold mb-4">
+                Confirm End Investigation
+              </h3>
+              <p className="mb-6">
+                Are you ready to make your final accusation? This will end the
+                questioning phase.
+              </p>
+              <div className="flex justify-center gap-4">
+                <button
+                  onClick={cancelFinishQuestioning}
+                  className="border border-green-500 px-4 py-2 hover:bg-red-900"
+                >
+                  CANCEL
+                </button>
+                <button
+                  onClick={confirmFinishQuestioning}
+                  className="border border-green-500 px-4 py-2 hover:bg-green-900"
+                >
+                  CONFIRM
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Notes button at bottom right */}
         <button
           onClick={() => openModal('noteBook')}
           className="absolute bottom-4 right-4 bg-black border border-green-500 p-2 hover:bg-green-900 z-10"
