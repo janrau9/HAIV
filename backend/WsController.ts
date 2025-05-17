@@ -29,10 +29,10 @@ export class WsController {
 			console.log('Client connected');
 			
 			// just test narrative creation and print it to console
-			// if (!narrative) {
-			// 	narrative = await createNarrative();
-			// 	console.log('narrative:', narrative);
-			// }
+			if (!narrative) {
+				narrative = await createNarrative();
+				console.log('narrative:', narrative);
+			}
 
         ws.on('close', () => {
             console.log('Client disconnected');
@@ -49,17 +49,20 @@ export class WsController {
                     if (!suspect) {
                         suspect = {
                             id: data.suspect.id,
-                            name: data.suspect.name,
-                            personality: data.suspect.personality,
-                            characteristics: data.suspect.characteristics,
-                            secrets: data.suspect.secrets,
-                            alibi: data.suspect.alibi,
-                            relationships: data.suspect.relationships,
-                            suspicion: data.suspect.suspicion,
-                            trust: data.suspect.trust,
-                            mugshot: data.suspect.mugshot,
-                            guessCount: data.suspect.guessCount,
-                            age: data.suspect.age,
+                            summary: data.SuspectSummary,
+                            personality: '',
+                            motive: '',
+                            alibi: '',
+                            how_they_speak: '',
+                            secret: '',
+                            clues: {
+                                genuine: '',
+                                distracting: '',
+                            },
+                            suspicion: 0,
+                            trust: 0,
+                            guessCount: 0,
+                            age: 0,
                             memory: {
                                 history: [],
                             },

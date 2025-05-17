@@ -30,7 +30,7 @@ export async function askSuspect(
     .map(m =>
       m.role === 'user'
         ? `Detective: ${m.content}`
-        : `${suspect.name}: ${m.content}`
+        : `${suspect.summary.name}: ${m.content}`
     ).join('\n');
     console.log("recent messages: ", recentMsgs);
 
