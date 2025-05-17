@@ -51,7 +51,6 @@ const App: React.FC = () => {
     )
   }
   const handleUserMessage = (playerInput: string) => {
-    // Simulated AI response
     console.log('Player input:', playerInput)
     addMessage({
       id: crypto.randomUUID(),

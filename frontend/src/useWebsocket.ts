@@ -23,6 +23,9 @@ const useWebsocket = () => {
   useEffect(() => {
     ws.connect()
     ws.addEventListener('response', handleResponse)
+    ws.addEventListener('error', (error) => {
+      console.error('WebSocket error:', error)
+    })
     ws.addEventListener('open', () => {
       isWsOpen.current = true
       console.log('WebSocket connection opened')
