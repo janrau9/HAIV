@@ -16,12 +16,8 @@ import { useModal } from './contexts/ModalContext'
 
 const App: React.FC = () => {
   const [suspectResponse, setSuspectResponse] = useState('')
-  const {
-    addNarrative,
-    addMessage,
-    setCurrentSuspect,
-    updateSuspect,
-  } = useGameStore.getState()
+  const { addNarrative, addMessage, setCurrentSuspect, updateSuspect } =
+    useGameStore.getState()
   const messages = useGameStore((state) => state.messages)
   const suspects = useGameStore((state) => state.suspects)
   const narrative = useGameStore((state) => state.narrative)
@@ -67,7 +63,6 @@ const App: React.FC = () => {
     if (newIndex == suspects.length) {
       setOutOfQuestions(true)
     }
-
   }
 
   const fetchNarrative = async () => {
@@ -88,7 +83,7 @@ const App: React.FC = () => {
     }
   }
   useEffect(() => {
-    if (!gameStart) return;
+    if (!gameStart) return
     fetchNarrative()
   }, [gameStart])
 
@@ -104,60 +99,63 @@ const App: React.FC = () => {
     return (
       <div className="w-screen h-screen bg-black gap-2 relative flex flex-col gap-10 justify-center items-center p-10 font-display">
         <h1 className="uppercase font-bold text-5xl">Dead Loop</h1>
-        <h2 className="uppercase font-bold" onClick={() => { setGameStart(true); openModal('noteBook') }}>
+        <h2
+          className="uppercase font-bold"
+          onClick={() => {
+            setGameStart(true)
+            openModal('noteBook')
+          }}
+        >
           New Game
         </h2>
       </div>
     )
   }
 
-  return (
-    !isLoading ? (
-      <div className="w-screen h-screen bg-black-custom gap-2 relative flex flex-col justify-center items-center p-10 ">
-        <div className="w-[80%] relative border-white border-1 overflow-hidden">
-          <Background></Background>
-          <AnimatePresence>
-            <Suspect imgUrl={suspects[suspectIndex].mugshot} />
-          </AnimatePresence>
-          <div className="w-full h-full absolute top-0 ">
-            <Table></Table>
-          </div>
-          <AnimatePresence mode="wait">
-            {showChatBubble && (
-              <ChatBubble
-                text={suspectResponse}
-                onComplete={() => setShowChatBubble(false)}
-              />
-            )}
-          </AnimatePresence>
-        </div>
-        <div className="w-[80%] flex justify-between">
-          <UserInput onSend={handleUserMessage}></UserInput>
-          <button onClick={() => openModal('noteBook')}>
-            <img className="w-12 h-12" src="/images/gameBoy/notes.png" ></img>
-          </button>
-        </div>
+  return !isLoading ? (
+    <div className="w-screen h-screen bg-black-custom gap-2 relative flex flex-col justify-center items-center p-10 ">
+      <div className="w-[80%] relative border-white border-1 overflow-hidden">
+        <Background></Background>
         <AnimatePresence>
-          {outOfQuestions && (
-            <SuspectSelection
-              suspects={suspects}
-              onSelect={(index) => {
-                alert(`You selected Suspect #${index + 1}`)
-                setGameStart(false)
-                setGuessCount(0)
-                setOutOfQuestions(false)
-                setSuspectIndex(0)
-                // You can handle logic here (like showing result or resetting)
-              }}
+          <Suspect imgUrl={suspects[suspectIndex].mugshot} />
+        </AnimatePresence>
+        <div className="w-full h-full absolute top-0 ">
+          <Table></Table>
+        </div>
+        <AnimatePresence mode="wait">
+          {showChatBubble && (
+            <ChatBubble
+              text={suspectResponse}
+              onComplete={() => setShowChatBubble(false)}
             />
           )}
         </AnimatePresence>
-        <NoteBookMoadal></NoteBookMoadal>
       </div>
-    ) :
-      <span className="text-white">
-        generating narrative...
-      </span>
+      <div className="w-[80%] flex justify-between">
+        <UserInput onSend={handleUserMessage}></UserInput>
+        <button onClick={() => openModal('noteBook')}>
+          <img className="w-12 h-12" src="/images/gameBoy/notes.png"></img>
+        </button>
+      </div>
+      <AnimatePresence>
+        {outOfQuestions && (
+          <SuspectSelection
+            suspects={suspects}
+            onSelect={(index) => {
+              alert(`You selected Suspect #${index + 1}`)
+              setGameStart(false)
+              setGuessCount(0)
+              setOutOfQuestions(false)
+              setSuspectIndex(0)
+              // You can handle logic here (like showing result or resetting)
+            }}
+          />
+        )}
+      </AnimatePresence>
+      <NoteBookMoadal></NoteBookMoadal>
+    </div>
+  ) : (
+    <span className="text-white">generating narrative...</span>
   )
 }
 

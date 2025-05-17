@@ -1,40 +1,39 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode } from 'react'
 
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion'
 
-import { useModal } from '../../contexts/ModalContext';
-
-
+import { useModal } from '../../contexts/ModalContext'
 
 interface ModalWrapperProps {
-  modalName: string;
-  children: ReactNode;
+  modalName: string
+  children: ReactNode
 }
 
 const backdropVariants = {
   initial: { opacity: 0 },
   animate: { opacity: 1 },
   exit: { opacity: 0 },
-};
+}
 
 const modalVariants = {
   initial: { opacity: 0, scale: 0.95 },
   animate: { opacity: 1, scale: 1 },
   exit: { opacity: 0, scale: 0.95 },
-};
+}
 
-export const ModalWrapper: React.FC<ModalWrapperProps> = ({ modalName, children }) => {
-  const { closeModal, isModalOpen } = useModal();
+export const ModalWrapper: React.FC<ModalWrapperProps> = ({
+  modalName,
+  children,
+}) => {
+  const { closeModal, isModalOpen } = useModal()
 
   const handleOverlayClick = () => {
-
-      closeModal(modalName);
-    
-  };
+    closeModal(modalName)
+  }
 
   const handleModalClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-  };
+    e.stopPropagation()
+  }
 
   return (
     <>
@@ -49,7 +48,7 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = ({ modalName, children 
             onClick={handleOverlayClick}
           >
             <motion.div
-              className="text-primary w-full h-full md:w-2xl relative flex flex-col justify-center items-center overflow-hidden"
+              className="w-full h-full md:w-2xl relative flex flex-col justify-center items-center overflow-hidden"
               variants={modalVariants}
               initial="initial"
               animate="animate"
@@ -62,5 +61,5 @@ export const ModalWrapper: React.FC<ModalWrapperProps> = ({ modalName, children 
         )}
       </AnimatePresence>
     </>
-  );
-};
+  )
+}

@@ -1,5 +1,12 @@
 import { create } from 'zustand'
-import type { Message, SuspectProfile, Clue, Scene, Narrative, SuspectSummary } from '../../types/types' // Adjust the import path as necessary
+import type {
+  Message,
+  SuspectProfile,
+  Clue,
+  Scene,
+  Narrative,
+  SuspectSummary,
+} from '../../types/types' // Adjust the import path as necessary
 import { Suspect } from './components/suspect/Suspect'
 
 type GameState = {
@@ -17,7 +24,7 @@ type GameState = {
   addNarrative: (narrative: Narrative) => void
   addMessage: (message: Message) => void
   setCurrentSuspect: (id: string) => void
-  updateSuspect: (id: string, updates: Partial<SuspectSummary>) => void;
+  updateSuspect: (id: string, updates: Partial<SuspectSummary>) => void
 
   markClueFound: (clueId: string) => void
   adjustSuspicion: (suspectId: string, amount: number) => void
@@ -71,7 +78,7 @@ export const useGameStore = create<GameState>((set, get) => ({
         age: 0,
         description: '',
       },
-    }
+    },
   },
   messages: [],
   currentSceneId: 'intro',
@@ -88,7 +95,7 @@ export const useGameStore = create<GameState>((set, get) => ({
         ...state.narrative,
         detective_briefing: newNarrative.detective_briefing,
         scene: newNarrative.scene,
-      }
+      },
     })),
 
   addMessage: (message) =>
@@ -124,11 +131,10 @@ export const useGameStore = create<GameState>((set, get) => ({
   updateSuspect: (id, updates) =>
     set((state) => {
       const updatedSuspects = state.suspects.map((suspect) =>
-        suspect.id === id ? { ...suspect, ...updates } : suspect
-      );
-      return { suspects: updatedSuspects };
+        suspect.id === id ? { ...suspect, ...updates } : suspect,
+      )
+      return { suspects: updatedSuspects }
     }),
-
 
   resetGame: () =>
     set({
