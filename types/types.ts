@@ -1,6 +1,8 @@
 import type { ChatResponse } from '../backend/aiService'
 
 export type Role = 'player' | 'suspect' | 'narrator' | 'system'
+export type GameState = 'playing' | 'accused' | 'won' | 'lost'
+
 
 export type Narrative = {
   detective_briefing: string
@@ -62,8 +64,8 @@ export type SuspectProfile = {
 	how_they_speak: string
 	secret: string
 	clues: {
-		genuine: string
-		distracting: string
+		genuine: Clue[]
+		distracting: Clue[]
 	}
 	suspicion: number
   trust: number
@@ -74,12 +76,19 @@ export type SuspectProfile = {
   };
 }
 
+// types/clue.ts
 export type Clue = {
-  id: string
-  content: string
-  foundInSceneId: string
-  discovered: boolean
-}
+  id: string;
+  content: string;
+  category: 'evidence' | 'motive' | 'alibi' | 'relationship' | 'behavior';
+  suspectId?: string;
+  tags: string[];
+  difficulty: 'easy' | 'medium' | 'hard';
+  revealed: boolean;
+  triggeredBy?: string[]; // keywords
+  isDynamic?: boolean;
+};
+
 
 export type Scene = {
   id: string
