@@ -36,11 +36,11 @@ export const SuspectInfo: React.FC = () => {
             colorScheme="suspicion"
           />
 
-          <Meter
+          {/* <Meter
             label="TRUST"
             value={currentSuspect.trust}
             colorScheme="trust"
-          />
+          /> */}
         </div>
       </div>
     </div>
