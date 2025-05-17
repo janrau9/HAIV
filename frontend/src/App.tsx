@@ -180,7 +180,8 @@ const App: React.FC = () => {
           </motion.h2>
 
           <motion.div className="text-green-600 text-sm mt-4 text-center max-w-md">
-            <p>A murder investigation simulator with AI-driven narrative.</p>
+            <p>A murder investigation simulator</p>
+            <p>with AI-driven narrative.</p>
           </motion.div>
         </motion.div>
       </div>
