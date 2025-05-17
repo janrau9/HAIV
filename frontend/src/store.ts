@@ -1,117 +1,78 @@
 import { create } from 'zustand'
-import type { Message, SuspectProfile, Clue, Scene } from '../../types/types' // Adjust the import path as necessary
+import type { Message, SuspectProfile, Clue, Scene, Narrative, SuspectSummary } from '../../types/types' // Adjust the import path as necessary
+import { Suspect } from './components/suspect/Suspect'
 
 type GameState = {
+  narrative: Narrative
   messages: Message[]
   currentSceneId: string
   currentSuspectId: string | null
-  suspects: SuspectProfile[]
+  suspects: SuspectSummary[]
   scenes: Record<string, Scene>
   clues: Record<string, Clue>
   playerNotebook: string[]
   gameOver: boolean
 
   // Actions
+  addNarrative: (narrative: Narrative) => void
   addMessage: (message: Message) => void
   setCurrentSuspect: (id: string) => void
-  updateSuspect: (id: string, updates: Partial<SuspectProfile>) => void;
+  updateSuspect: (id: string, updates: Partial<SuspectSummary>) => void;
 
   markClueFound: (clueId: string) => void
   adjustSuspicion: (suspectId: string, amount: number) => void
   resetGame: () => void
 }
 
-// const suspects = [
-//   {
-//     mugshot: '/images/gameBoy/suspects/suspect_1.png',
-//     name: 'Suspect One',
-//     guessCount: 0,
-//   },
-//   {
-//     mugshot: '/images/gameBoy/suspects/suspect_4.png',
-//     name: 'Suspect Four',
-//     guessCount: 0,
-//   },
-//   {
-//     mugshot: '/images/gameBoy/suspects/suspect_5.png',
-//     name: 'Suspect Five',
-//     guessCount: 0,
-//   },
-//   {
-//     mugshot: '/images/gameBoy/suspects/suspect_2.png',
-//     name: 'Suspect Two',
-//     guessCount: 0,
-//   },
-//   // Add more suspects here
-// ]
-
-const initialSuspects: SuspectProfile[] = [
+const initialSuspects: SuspectSummary[] = [
   {
     id: 'suspect_1',
     name: 'John Doe',
-    personality: 'aggressive',
-    secrets: ['Has a criminal record'],
-    alibi: 'Was at the bar during incident',
-    age: 35,
-    relationships: {},
-    suspicion: 0,
-    trust: 0,
-    guessCount: 0,
+    age: 32,
+    occupation: 'Mechanic',
+    relationship_to_victim: 'Friend',
     mugshot: '/images/gameBoy/suspects/suspect_1.png',
-    characteristics: ['Has a short temper', 'Often speaks in a loud voice'],
   },
   {
     id: 'suspect_2',
     name: 'Jane Smith',
-    personality: 'nervous',
-    secrets: ['Has a secret affair'],
-    alibi: 'Was at home during incident',
     age: 28,
-    relationships: {},
-    suspicion: 0,
-    trust: 0,
-    guessCount: 0,
+    occupation: 'Nurse',
+    relationship_to_victim: 'Colleague',
     mugshot: '/images/gameBoy/suspects/suspect_2.png',
-    characteristics: ['Fidgets with her hands', 'Avoids eye contact'],
   },
   {
     id: 'suspect_3',
-    name: 'Alice Johnson',
-    personality: 'manipulative',
-    secrets: ['Involved in a shady business deal'],
-    alibi: 'Was at the gym during incident',
-    age: 40,
-    relationships: {},
-    suspicion: 0,
-    trust: 0,
-    guessCount: 0,
-    mugshot: '/images/gameBoy/suspects/suspect_5.png',
-    characteristics: [
-      'Speaks in a calm and collected manner',
-      'Uses flattery to gain trust',
-    ],
+    name: 'Charlie Brown',
+    age: 45,
+    occupation: 'Teacher',
+    relationship_to_victim: 'Neighbor',
+    mugshot: '/images/gameBoy/suspects/suspect_3.png',
   },
   {
     id: 'suspect_4',
     name: 'Bob Brown',
-    personality: 'calm',
-    secrets: ['Has a hidden agenda'],
-    alibi: 'Was at the library during incident',
-    age: 30,
-    relationships: {},
-    suspicion: 0,
-    trust: 0,
-    guessCount: 0,
+    age: 40,
+    occupation: 'Artist',
+    relationship_to_victim: 'Stranger',
     mugshot: '/images/gameBoy/suspects/suspect_4.png',
-    characteristics: [
-      'Speaks slowly and deliberately',
-      'Maintains a neutral expression',
-    ],
   },
   // Add more suspects here
 ]
 
 export const useGameStore = create<GameState>((set, get) => ({
+  narrative: {
+    detective_briefing: '',
+    scene: {
+      when: '',
+      where: '',
+      victim: {
+        name: '',
+        age: 0,
+        description: '',
+      },
+    }
+  },
   messages: [],
   currentSceneId: 'intro',
   currentSuspectId: null,
@@ -120,6 +81,15 @@ export const useGameStore = create<GameState>((set, get) => ({
   clues: {},
   playerNotebook: [],
   gameOver: false,
+
+  addNarrative: (newNarrative) =>
+    set((state) => ({
+      narrative: {
+        ...state.narrative,
+        detective_briefing: newNarrative.detective_briefing,
+        scene: newNarrative.scene,
+      }
+    })),
 
   addMessage: (message) =>
     set((state) => ({
@@ -151,13 +121,14 @@ export const useGameStore = create<GameState>((set, get) => ({
         },
       }
     }),
-
   updateSuspect: (id, updates) =>
-    set((state) => ({
-      suspects: state.suspects.map((suspect) =>
+    set((state) => {
+      const updatedSuspects = state.suspects.map((suspect) =>
         suspect.id === id ? { ...suspect, ...updates } : suspect
-      ),
-    })),
+      );
+      return { suspects: updatedSuspects };
+    }),
+
 
   resetGame: () =>
     set({

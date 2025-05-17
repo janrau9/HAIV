@@ -1,19 +1,15 @@
 // components/SuspectSelection.tsx
 import React from 'react'
+import type { SuspectSummary } from '../../../../types/types'
 
-interface Suspect {
-  mugshot: string
-  name: string
-  guessCount: number
-}
 
 interface SuspectSelectionProps {
-  suspects: Suspect[]
+  suspects: SuspectSummary[]
   onSelect: (index: number) => void
 }
 
 interface SuspectCardProps {
-  suspect: Suspect
+  suspect: SuspectSummary
 }
 
 const SuspectCard: React.FC<SuspectCardProps> = ({ suspect }) => {
