@@ -492,16 +492,27 @@ const App: React.FC = () => {
                     suspectId: selectedSuspect.id,
                   })
 
+                  ws.addEventListener('accusation_result', (result: any) => {
+                    console.log('Accusation result:', result)
+                    if (result.result === 'win') {
+                      setIsCorrect(true)
+                    } else {
+                      setIsCorrect(false)
+                    }
+                    setShowResult(true)
+                  })
+                  // For now, we'll just simulate the accusation result
+
                   // For now, we'll determine correctness based on suspicion level
                   // In a full implementation, the backend would tell us if we're correct
-                  const suspectWithHighestSuspicion = [...suspects].sort(
-                    (a, b) => (b.suspicion || 0) - (a.suspicion || 0),
-                  )[0]
+                  // const suspectWithHighestSuspicion = [...suspects].sort(
+                  //   (a, b) => (b.suspicion || 0) - (a.suspicion || 0),
+                  // )[0]
 
-                  // Set state for the result screen
-                  const isCorrect =
-                    selectedSuspect.id === suspectWithHighestSuspicion?.id
-                  setIsCorrect(isCorrect)
+                  // // Set state for the result screen
+                  // const isCorrect =
+                  //   selectedSuspect.id === suspectWithHighestSuspicion?.id
+                  // setIsCorrect(isCorrect)
                   setSelectedSuspectName(selectedSuspect.name)
                   setShowResult(true)
                 }}

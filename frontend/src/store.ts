@@ -163,7 +163,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       return { suspects: updatedSuspects }
     }),
 
-    
+
   decrementQuestionCount: (suspectId) =>
     set((state) => ({
       questionCounts: {
@@ -176,14 +176,25 @@ export const useGameStore = create<GameState>((set, get) => ({
     set({
       questionCounts: initializeQuestionCounts(),
     }),
-  
+
   updateSuspect: (id, updates) =>
     set((state) => {
-      const updatedSuspects = state.suspects.map((suspect) =>
-        suspect.id === id ? { ...suspect, ...updates } : suspect,
-      )
-      return { suspects: updatedSuspects }
+      const updatedSuspects = state.suspects.map((suspect) => {
+        if (suspect.id !== id) return suspect;
+
+        return {
+          ...suspect,
+          ...updates,
+          revealedClues: [
+            ...(suspect.revealedClues ?? []), // default to empty array if undefined
+            ...(updates.revealedClues ?? []), // append new clues
+          ],
+        };
+      });
+
+      return { suspects: updatedSuspects };
     }),
+
 
   resetGame: () =>
     set({

@@ -38,7 +38,7 @@ const useWebsocket = () => {
     console.log('reveal: ', message)
 
     // If there's a suspicion change and a suspectId, update the suspect's suspicion level
-    if (message.suspicionChange && message.suspectId) {
+    if (message.suspectId) {
       console.log('suspicionChange: ', message.suspicion)
       updateSuspect(message.suspectId, {
         suspicion: message.suspicion,
@@ -48,14 +48,14 @@ const useWebsocket = () => {
     }
 
     // If there's a trust change and a suspectId, update the suspect's trust level
-    if (message.trustChange && message.suspectId) {
-      console.log('trustChange: ', message.trust)
-      updateSuspect(message.suspectId, {
-        trust: message.trust,
-        revealedClues: [message.content],
-      })
-      // adjustTrust(message.suspectId, message.trustChange)
-    }
+    // if (message.trustChange && message.suspectId) {
+    //   console.log('trustChange: ', message.trust)
+    //   updateSuspect(message.suspectId, {
+    //     trust: message.trust,
+    //     revealedClues: [message.content],
+    //   })
+    //   // adjustTrust(message.suspectId, message.trustChange)
+    // }
   }
 
   useEffect(() => {

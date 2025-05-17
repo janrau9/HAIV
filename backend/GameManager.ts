@@ -19,6 +19,7 @@ class GameManager {
     }
 
     initGame(suspects: SuspectProfile[], clues: Clue[], caseSummary: any) {
+        console.log('caseSummary', caseSummary)
         this.caseSummary = caseSummary
         this.suspects = suspects.map(suspect => ({
             ...suspect,
@@ -26,7 +27,7 @@ class GameManager {
             trust: 0,
         }))
         this.clues = clues
-        this.killerId = null
+        this.killerId = caseSummary.killer
 
         this.gameState = 'playing'
     }

@@ -85,6 +85,16 @@ export class WsController {
                     }));
                 }
             }
+            if (data.type === 'accusation') {
+                const result = this.gameManager.accuseSuspect(data.suspectId);
+                ws.send(JSON.stringify({
+                    type: 'accusation_result',
+                    message: {
+                        result: result.result,
+                        message: result.message,
+                    }
+                }));
+            }
         });
     }
 
@@ -100,17 +110,18 @@ export class WsController {
         const distractingTriggerWords = suspect.clues.distracting.triggeredBy;
         const genuineTriggerWords = suspect.clues.genuine.triggeredBy;
         const isDistracting = distractingTriggerWords.some((word: string) => message.includes(word));
-        let content = '';
+        let content = [];
         const isGenuine = genuineTriggerWords.some((word: string) => message.includes(word));
         if (isDistracting) {
             console.log(`Distracting clue triggered by: ${distractingTriggerWords}`);
             this.gameManager.updateSuspicion(suspect.id, 1);
-            content = suspect.clues.distracting.content;
+            content.push(suspect.clues.distracting.content);
         }
         if (isGenuine) {
             console.log(`Genuine clue triggered by: ${genuineTriggerWords}`);
-            this.gameManager.updateTrust(suspect.id, 1);
-            content = suspect.clues.genuine.content;
+            // this.gameManager.updateTrust(suspect.id, 1);
+            this.gameManager.updateSuspicion(suspect.id, 1);
+            content.push(suspect.clues.genuine.content);
         }
         if (!isDistracting && !isGenuine) {
             console.log('No trigger words found');
@@ -121,11 +132,11 @@ export class WsController {
             message: {
                 content: content,
                 role: 'suspect',
-                suspicionChange: isDistracting ? 1 : 0,
-                trustChange: isGenuine ? 1 : 0,
+                // suspicionChange: 1,
+                // trustChange: isGenuine ? 1 : 0,
                 suspectId: suspect.id,
                 suspicion: this.gameManager.getSuspects().find((s) => s.id === suspect.id)?.suspicion,
-                trust: this.gameManager.getSuspects().find((s) => s.id === suspect.id)?.trust,
+                // trust: this.gameManager.getSuspects().find((s) => s.id === suspect.id)?.trust,
             }
         }
         ws.send(JSON.stringify(response));
