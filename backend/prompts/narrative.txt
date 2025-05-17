@@ -27,6 +27,8 @@ Additionally:
 - The `"summary"` is used for the suspect mugshot display and overview panel.
 - For each suspect, include a known_interactions field: a list of 1–2 short statements about what this suspect publicly knows, saw, or believes about other suspects (names must match the ones generated). These should not reveal secrets or falsehoods, only what is plausibly public knowledge or observable behavior.
 
+Make sure each suspect’s profile matches the given visual and identity constraints in character_constraints. The generated suspects must be consistent with the provided details (e.g., age, gender, appearance, or role). These visuals will be used as profile pictures in-game, so they must align closely.
+
 At the end of your output, include a hidden "case_summary" field (outside of the detective_briefing). This is a factual summary of the true events of the murder:
 Who committed the murder and why (motive).
 How the murder was carried out (method, time, location).
@@ -50,6 +52,28 @@ Below is the required output JSON format:
       "description": "Occupation or role in the setting, how they were found, known facts"
     }
   },
+	"character_constraints": {
+		"Suspect_1": {
+			"gender": "female",
+			"age": 73,
+			"notes": "grey hair, stern face"
+		},
+		"Suspect_2": {
+			"gender": "male",
+			"age": 42,
+			"notes": "thick moustache, cat sitting on top of his hat"
+		},
+		"Suspect_3": {
+			"gender": "male",
+			"age": 19,
+			"notes": "wide open eyes, likes to hide under a table"
+		},
+		"Suspect_4": {
+			"gender": "male dog",
+			"age": 9,
+			"notes": "an actual dog smoking a pipe, can speak like a human but only about dog activities"
+		}
+}
   "suspects": [
     {
 			"id": "<Suspect_1>"
