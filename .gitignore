@@ -5,3 +5,4 @@ frontend/frontend.log
 frontend.log
 backend.log
 *.env
+backend/.env

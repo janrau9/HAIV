@@ -18,6 +18,7 @@ export class WsController {
 
         console.log('Client connected');
 
+
         ws.on('close', () => {
             console.log('Client disconnected');
         });
@@ -31,19 +32,30 @@ export class WsController {
                 // just test narrative creation and print it to console
                 /*const narrative = await createNarrative();
                 console.log('narrative:', narrative);*/
+                // just test narrative creation and print it to console
+                /*const narrative = await createNarrative();
+                console.log('narrative:', narrative);*/
                 // Handle action message
-                const ai = await askSuspect(data.suspect, data.message.content);
-                console.log('question:', data.message);
-                const response = {
-                    type: 'response',
-                    message: {
-                        content: ai.output_text,
-                        role: 'suspect',
-                        suspicionChange: 1,
-                        suspectId: data.suspect.id,
+                try {
+                    const ai = await askSuspect(data.suspect, data.message.content);
+                    console.log('question:', data.message);
+                    const response = {
+                        type: 'response',
+                        message: {
+                            content: ai.output_text,
+                            role: 'suspect',
+                            suspicionChange: 1,
+                            suspectId: data.suspect.id,
+                        }
                     }
+                    ws.send(JSON.stringify(response));
+                } catch (error) {
+                    console.error('Error processing question:', error);
+                    ws.send(JSON.stringify({
+                        type: 'error',
+                        message: 'Error processing question',
+                    }));
                 }
-                ws.send(JSON.stringify(response));
             }
         });
     }
