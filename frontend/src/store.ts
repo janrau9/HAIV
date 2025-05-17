@@ -1,12 +1,5 @@
 import { create } from 'zustand'
-import type {
-  Message,
-  SuspectProfile,
-  Clue,
-  Scene,
-} from '../../types/types' // Adjust the import path as necessary
-
-
+import type { Message, SuspectProfile, Clue, Scene } from '../../types/types' // Adjust the import path as necessary
 
 type GameState = {
   messages: Message[]
@@ -62,11 +55,8 @@ const initialSuspects: SuspectProfile[] = [
     suspicion: 0,
     trust: 0,
     guessCount: 0,
-    mugshot: '/images/suspects/suspect_1.png',
-    characteristics: [
-      'Has a short temper',
-      'Often speaks in a loud voice',
-    ],
+    mugshot: '/images/gameBoy/suspects/suspect_1.png',
+    characteristics: ['Has a short temper', 'Often speaks in a loud voice'],
   },
   {
     id: 'suspect_2',
@@ -79,11 +69,8 @@ const initialSuspects: SuspectProfile[] = [
     suspicion: 0,
     trust: 0,
     guessCount: 0,
-    mugshot: '/images/suspects/suspect_2.png',
-    characteristics: [
-      'Fidgets with her hands',
-      'Avoids eye contact',
-    ],
+    mugshot: '/images/gameBoy/suspects/suspect_2.png',
+    characteristics: ['Fidgets with her hands', 'Avoids eye contact'],
   },
   {
     id: 'suspect_3',
@@ -96,7 +83,7 @@ const initialSuspects: SuspectProfile[] = [
     suspicion: 0,
     trust: 0,
     guessCount: 0,
-    mugshot: '/images/suspects/suspect_3.png',
+    mugshot: '/images/gameBoy/suspects/suspect_3.png',
     characteristics: [
       'Speaks in a calm and collected manner',
       'Uses flattery to gain trust',
@@ -113,7 +100,7 @@ const initialSuspects: SuspectProfile[] = [
     suspicion: 0,
     trust: 0,
     guessCount: 0,
-    mugshot: '/images/suspects/suspect_4.png',
+    mugshot: '/images/gameBoy/suspects/suspect_4.png',
     characteristics: [
       'Speaks slowly and deliberately',
       'Maintains a neutral expression',

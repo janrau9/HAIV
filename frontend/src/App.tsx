@@ -12,7 +12,7 @@ import { SuspectSelection } from './components/suspect/SuspectSelection'
 import { AnimatePresence } from 'framer-motion'
 
 const App: React.FC = () => {
-  const [suspectResponse, setSuspectResponse] = useState('');
+  const [suspectResponse, setSuspectResponse] = useState('')
   const {
     addMessage,
     currentSuspectId,
@@ -20,33 +20,35 @@ const App: React.FC = () => {
     adjustSuspicion,
     setCurrentSuspect,
   } = useGameStore.getState()
-  const messages = useGameStore((state) => state.messages);
-  const suspects = useGameStore((state) => state.suspects);
+  const messages = useGameStore((state) => state.messages)
+  const suspects = useGameStore((state) => state.suspects)
 
-
-  const [guessCount, setGuessCount] = useState(0);
-  const [suspectIndex, setSuspectIndex] = useState(0);
-  const [outOfQuestions, setOutOfQuestions] = useState(false);
+  const [guessCount, setGuessCount] = useState(0)
+  const [suspectIndex, setSuspectIndex] = useState(0)
+  const [outOfQuestions, setOutOfQuestions] = useState(false)
   const [gameStart, setGameStart] = useState(false)
+  const [showChatBubble, setShowChatBubble] = useState(false)
 
-  const guessesPerSuspect = 5;
+  const guessesPerSuspect = 5
 
-  useWebsocket();
+  useWebsocket()
 
   useEffect(() => {
-    const lastMessage = messages[messages.length - 1];
+    const lastMessage = messages[messages.length - 1]
     if (lastMessage && lastMessage.role === 'suspect') {
       console.log('last message', lastMessage.content)
-      setSuspectResponse(lastMessage.content);
+      setSuspectResponse(lastMessage.content)
+      setShowChatBubble(true)
     }
-  }
-    , [messages]);
+  }, [messages])
 
   if (!gameStart) {
     return (
       <div className="w-screen h-screen bg-black gap-2 relative flex flex-col gap-10 justify-center items-center p-10 font-display">
         <h1 className="uppercase font-bold text-5xl">Dead Loop</h1>
-        <h2 className="uppercase font-bold" onClick={() => setGameStart(true)}>New Game</h2>
+        <h2 className="uppercase font-bold" onClick={() => setGameStart(true)}>
+          New Game
+        </h2>
       </div>
     )
   }
@@ -59,22 +61,28 @@ const App: React.FC = () => {
       content: playerInput,
     })
 
-    const newGuessCount = guessCount + 1;
-    setGuessCount(newGuessCount);
+    const newGuessCount = guessCount + 1
+    setGuessCount(newGuessCount)
 
-    const newIndex = Math.floor(newGuessCount / guessesPerSuspect);
-    setCurrentSuspect(suspects[newIndex].id);
+    const newIndex = Math.floor(newGuessCount / guessesPerSuspect)
+    setCurrentSuspect(suspects[newIndex].id)
     if (newIndex < suspects.length) {
-      setSuspectIndex(newIndex);
+      setSuspectIndex(newIndex)
     }
 
     if (newIndex == suspects.length) {
-      setOutOfQuestions(true);
+      setOutOfQuestions(true)
     }
-  };
+
+    const timer = setTimeout(() => {
+      setShowChatBubble(false)
+    }, 3000) // Chat bubble disappears after 3 seconds
+
+    return () => clearTimeout(timer) // Clear timeout on re-render
+  }
 
   return (
-    <div className="w-screen h-screen bg-black gap-2 relative flex flex-col justify-center items-center p-10 grayscale">
+    <div className="w-screen h-screen bg-black-custom gap-2 relative flex flex-col justify-center items-center p-10 ">
       <div className="w-[80%] relative border-white border-1 overflow-hidden">
         <Background></Background>
         <AnimatePresence>
@@ -83,7 +91,14 @@ const App: React.FC = () => {
         <div className="w-full h-full absolute top-0 ">
           <Table></Table>
         </div>
-        <ChatBubble text={suspectResponse} />
+        <AnimatePresence mode="wait">
+          {showChatBubble && (
+            <ChatBubble
+              text={suspectResponse}
+              onComplete={() => setShowChatBubble(false)}
+            />
+          )}
+        </AnimatePresence>
       </div>
       <div className="w-[80%] flex justify-between">
         <UserInput onSend={handleUserMessage}></UserInput>
@@ -94,11 +109,11 @@ const App: React.FC = () => {
           <SuspectSelection
             suspects={suspects}
             onSelect={(index) => {
-              alert(`You selected Suspect #${index + 1}`);
-              setGameStart(false);
-              setGuessCount(0);
-              setOutOfQuestions(false);
-              setSuspectIndex(0);
+              alert(`You selected Suspect #${index + 1}`)
+              setGameStart(false)
+              setGuessCount(0)
+              setOutOfQuestions(false)
+              setSuspectIndex(0)
               // You can handle logic here (like showing result or resetting)
             }}
           />
