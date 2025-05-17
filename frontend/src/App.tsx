@@ -289,45 +289,6 @@ const App: React.FC = () => {
             FINISH QUESTIONING
           </button>
 
-          {/* Confirmation dialog */}
-          {showFinishConfirm && (
-            <motion.div
-              className="absolute inset-0 bg-black bg-opacity-70 flex items-center justify-center z-30"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              <motion.div
-                className="bg-black border-2 border-green-500 p-6 max-w-md text-green-500 font-mono"
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.9, opacity: 0 }}
-              >
-                <h3 className="text-lg font-bold mb-4">
-                  Confirm End Investigation
-                </h3>
-                <p className="mb-6">
-                  Are you ready to make your final accusation? This will end the
-                  questioning phase.
-                </p>
-                <div className="flex justify-center gap-4">
-                  <button
-                    onClick={cancelFinishQuestioning}
-                    className="border border-green-500 px-4 py-2 hover:bg-red-900"
-                  >
-                    CANCEL
-                  </button>
-                  <button
-                    onClick={confirmFinishQuestioning}
-                    className="border border-green-500 px-4 py-2 hover:bg-green-900"
-                  >
-                    CONFIRM
-                  </button>
-                </div>
-              </motion.div>
-            </motion.div>
-          )}
-
           {/* Notes button at bottom right */}
           <button
             onClick={() => openModal('noteBook')}
@@ -346,6 +307,47 @@ const App: React.FC = () => {
                 text={suspectResponse}
                 onComplete={() => setShowChatBubble(false)}
               />
+            )}
+          </AnimatePresence>
+
+          {/* Confirmation dialog - positioned to show suspect */}
+          <AnimatePresence>
+            {showFinishConfirm && (
+              <motion.div
+                className="absolute bottom-32 left-1/2 transform -translate-x-1/2 z-30"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+              >
+                <motion.div
+                  className="bg-black bg-opacity-90 border-2 border-green-500 p-6 max-w-md text-green-500 font-mono"
+                  initial={{ scale: 0.9 }}
+                  animate={{ scale: 1 }}
+                  exit={{ scale: 0.9 }}
+                >
+                  <h3 className="text-lg font-bold mb-4">
+                    Confirm End Investigation
+                  </h3>
+                  <p className="mb-6">
+                    Are you ready to make your final accusation? This will end
+                    the questioning phase.
+                  </p>
+                  <div className="flex justify-center gap-4">
+                    <button
+                      onClick={cancelFinishQuestioning}
+                      className="border border-green-500 px-4 py-2 hover:bg-red-900"
+                    >
+                      CANCEL
+                    </button>
+                    <button
+                      onClick={confirmFinishQuestioning}
+                      className="border border-green-500 px-4 py-2 hover:bg-green-900"
+                    >
+                      CONFIRM
+                    </button>
+                  </div>
+                </motion.div>
+              </motion.div>
             )}
           </AnimatePresence>
         </motion.div>
