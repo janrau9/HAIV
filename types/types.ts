@@ -66,8 +66,8 @@ export type SuspectProfile = {
 	how_they_speak: string
 	secret: string
 	clues: {
-		genuine: Clue[]
-		distracting: Clue[]
+		genuine: Clue
+		distracting: Clue
 	}
 	suspicion: number
   trust: number

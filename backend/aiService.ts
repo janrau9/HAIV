@@ -33,12 +33,12 @@ export async function askSuspect(
         ? `Detective: ${m.content}`
         : `Suspect: ${m.content}`
     ).join('\n');
-    console.log("recent messages: ", recentMsgs);
+    // console.log("recent messages: ", recentMsgs);
 
     const systemPrompt = [intro, '[RECENT CONVERCATION]', recentMsgs]
       .filter(Boolean)
       .join('\n\n');
-    console.log('systemPrompt:', systemPrompt);
+    // console.log('systemPrompt:', systemPrompt);
 
   const resp = await openai_obj.responses.create({
     model: "gpt-4.1-nano",

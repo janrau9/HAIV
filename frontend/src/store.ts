@@ -33,7 +33,7 @@ type GameState = {
 
 const initialSuspects: SuspectSummary[] = [
   {
-    id: 'suspect_1',
+    id: 'Suspect_1',
     name: 'John Doe',
     age: 32,
     occupation: 'Mechanic',
@@ -44,7 +44,7 @@ const initialSuspects: SuspectSummary[] = [
     trust: 0,
   },
   {
-    id: 'suspect_2',
+    id: 'Suspect_2',
     name: 'Jane Smith',
     age: 28,
     occupation: 'Nurse',
@@ -55,7 +55,7 @@ const initialSuspects: SuspectSummary[] = [
     trust: 0,
   },
   {
-    id: 'suspect_3',
+    id: 'Suspect_3',
     name: 'Charlie Brown',
     age: 45,
     occupation: 'Teacher',
@@ -66,7 +66,7 @@ const initialSuspects: SuspectSummary[] = [
     trust: 0,
   },
   {
-    id: 'suspect_4',
+    id: 'Suspect_4',
     name: 'Bob Brown',
     age: 40,
     occupation: 'Artist',
@@ -170,6 +170,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     set({
       questionCounts: initializeQuestionCounts(),
     }),
+  
   updateSuspect: (id, updates) =>
     set((state) => {
       const updatedSuspects = state.suspects.map((suspect) =>
