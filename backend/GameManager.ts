@@ -1,9 +1,9 @@
 // GameLogicManager.ts
 import { Clue, SuspectProfile, GameState } from '../types/types'
 
-class GameLogicManager {
-    private static instance: GameLogicManager
-
+class GameManager {
+    private static instance: GameManager
+    private caseSummary: {}
     private suspects: SuspectProfile[] = []
     private clues: Clue[] = []
     private gameState: GameState = 'playing'
@@ -11,17 +11,18 @@ class GameLogicManager {
 
     private constructor() { }
 
-    public static getInstance(): GameLogicManager {
-        if (!GameLogicManager.instance) {
-            GameLogicManager.instance = new GameLogicManager()
+    public static getInstance(): GameManager {
+        if (!GameManager.instance) {
+            GameManager.instance = new GameManager()
         }
-        return GameLogicManager.instance
+        return GameManager.instance
     }
 
-    initGame(suspects: SuspectProfile[], clues: Clue[], killerId: string) {
+    initGame(suspects: SuspectProfile[], clues: Clue[], caseSummary: any) {
+        this.caseSummary = caseSummary
         this.suspects = suspects
         this.clues = clues
-        this.killerId = killerId
+        this.killerId = null
         this.gameState = 'playing'
     }
 
@@ -39,8 +40,8 @@ class GameLogicManager {
 
     discoverClue(clueId: string) {
         const clue = this.clues.find(c => c.id === clueId)
-        if (clue && !clue.discovered) {
-            clue.discovered = true
+        if (clue && !clue.revealed) {
+            clue.revealed = true
             if (clue.suspectId) {
                 this.updateSuspicion(clue.suspectId, 1)
             }
@@ -91,4 +92,4 @@ class GameLogicManager {
     }
 }
 
-export const gameLogic = GameLogicManager.getInstance()
+export const game = GameManager.getInstance()

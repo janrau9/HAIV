@@ -7,6 +7,7 @@ import type {
 import fs from "fs/promises";
 import path from "path";
 import Mustache from 'mustache';
+import { game } from "./GameManager";
 
 export interface ChatResponse {
   content: string;
@@ -55,5 +56,9 @@ export async function createNarrative() {
       },
     ],
   });
-  return resp.output_text;
+  const parsedResp = JSON.parse(resp.output_text);
+  game.initGame(parsedResp.suspects, [], parsedResp.case_summary)
+  delete parsedResp.case_summary;
+  const sanitizeResp = JSON.stringify(parsedResp);
+  return sanitizeResp;
 }

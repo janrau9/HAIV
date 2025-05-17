@@ -67,8 +67,34 @@ Below is the required output JSON format:
       "voice": "Notes on their tone, sentence style, tics, or speaking habits",
       "secret": "One juicy hidden fact",
       "clues": {
-        "genuine": "A true clue related to the crime (e.g., timeline, weapon)",
-        "distracting": "A misleading clue that seems suspicious but leads nowhere"
+        "genuine": {
+          "id": "c1",
+          "content": "A true clue related to the crime (e.g., timeline, weapon)",
+          "category": "choose between evidence, motive, ,alibi, relationship and behavior",
+          "suspectId": "ID of suspect",
+          "tags": [
+            "Tags for this clue"
+          ], 
+          "difficulty":"choose between easy, medium and hard for the clue revealing difficulty",
+          "revealed": "boolean (false initially)",
+          "triggeredBy":[
+          "array of keywords that we can check by includes used for triggering revealed"
+          ]
+        }
+        "distracting": {
+          "id": "c1",
+          "content": "A misleading clue that seems suspicious but leads nowhere",
+          "category": "choose between evidence, motive, ,alibi, relationship and behavior",
+          "suspectId": "ID of suspect",
+          "tags": [
+            "Tags for this clue"
+          ], 
+          "difficulty":"choose between easy, medium and hard for the clue revealing difficulty",
+          "revealed": "boolean (false initially)",
+          "triggeredBy":[
+          "array of keywords that we can check by includes used for triggering revealed"
+          ]
+        }
       }
 			"suspicion": "Number (0 initially)"
 			"trust": "Number (0 initially)"
