@@ -73,7 +73,7 @@ Below is the required output JSON format:
 			"age": 9,
 			"notes": "an actual dog smoking a pipe, can speak like a human but only about dog activities"
 		}
-}
+	},
   "suspects": [
     {
 			"id": "<Suspect_1>"

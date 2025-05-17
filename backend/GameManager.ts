@@ -23,7 +23,8 @@ class GameManager {
         this.suspects = suspects
         this.clues = clues
         this.killerId = null
-        this.gameState = 'playing'
+			this.gameState = 'playing'
+			console.log('Game initialized with suspects:', this.suspects)
     }
 
     getGameState(): GameState {
@@ -81,7 +82,7 @@ class GameManager {
     }
 
     private getSuspectName(id: string): string {
-        return this.suspects.find(s => s.id === id)?.name || 'Unknown Suspect'
+        return this.suspects.find(s => s.id === id)?.summary.name || 'Unknown Suspect'
     }
 
     resetGame() {

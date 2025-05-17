@@ -133,7 +133,7 @@ const OurSuspectsTab: React.FC<{ selectedSuspectId?: string | null }> = ({
   const suspects = useGameStore((state) => state.suspects)
   const [localSelectedSuspectId, setLocalSelectedSuspectId] = useState<
     string | null
-  >(selectedSuspectId || 'suspect_1')
+  >(selectedSuspectId || 'Suspect_1')
 
   // Update local state if prop changes
   useEffect(() => {

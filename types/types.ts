@@ -1,6 +1,6 @@
 import type { ChatResponse } from '../backend/aiService'
 
-export type Role = 'player' | 'suspect' | 'narrator' | 'system'
+export type Role = 'player' | 'Suspect' | 'narrator' | 'system'
 export type GameState = 'playing' | 'accused' | 'won' | 'lost'
 
 

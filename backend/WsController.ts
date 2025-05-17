@@ -20,7 +20,7 @@ export class WsController {
         this.suspects = this.gameManager.getSuspects().reduce((acc, suspect) => {
             acc[suspect.id] = suspect;
             return acc;
-        }, {});
+				}, {});
     }
 
     static getInstance(): WsController {
@@ -30,8 +30,7 @@ export class WsController {
         return WsController.instance;
     }
 
-    async play(ws: any, req: FastifyRequest) {
-
+	async play(ws: any, req: FastifyRequest) {
         console.log('Client connected');
 
         ws.on('close', () => {
@@ -40,25 +39,27 @@ export class WsController {
         ws.on('error', () => {
             console.log('Client error');
         });
-        ws.on('message', async (raw) => {
+				ws.on('message', async (raw) => {
+					this.suspects = this.gameManager.getSuspects().reduce((acc, suspect) => {
+						acc[suspect.id] = suspect;
+						return acc;
+					}, {});
             const data = JSON.parse(raw);
             console.log('Received message:', data);
             if (data.type === 'question') {
                 try {
                     let suspect = this.suspects[data.suspect.id];
-                    if (!suspect) {
+									if (!suspect) {
+												console.log('Suspect not found, creating new suspect');
                         suspect = {
                             id: data.suspect.id,
-                            summary: data.SuspectSummary,
-                            personality: '',
-                            motive: '',
-                            alibi: '',
-                            how_they_speak: '',
-                            secret: '',
-                            clues: {
-                                genuine: [],
-                                distracting: [],
-                            },
+                            summary: data.suspect.SuspectSummary,
+                            personality: data.suspect.personality,
+                            motive: data.suspect.motive,
+                            alibi: data.suspect.alibi,
+                            how_they_speak: data.suspect.how_they_speak,
+                            secret: data.suspect.secret,
+                            clues: data.suspect.clues,
                             suspicion: 0,
                             trust: 0,
                             guessCount: 0,
