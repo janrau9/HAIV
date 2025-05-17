@@ -52,17 +52,6 @@ export type SuspectSummary = {
 	known_interactions: string
 }
 
-export type SuspectSummary = {
-  id: string
-	name: string
-	age: number
-	occupation: string
-  relationship_to_victim: string
-  mugshot: string
-  alibi?: string
-	known_interactions: string
-}
-
 // if you change anything here, update that change to WsController.ts as well please!
 export type SuspectProfile = {
 	id: string
