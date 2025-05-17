@@ -12,101 +12,69 @@ import { SuspectSelection } from './components/suspect/SuspectSelection'
 import { AnimatePresence } from 'framer-motion'
 
 const App: React.FC = () => {
-  const [suspectResponse, setSuspectResponse] = useState('')
+  const [suspectResponse, setSuspectResponse] = useState('');
   const {
     addMessage,
     currentSuspectId,
     // suspects,
     adjustSuspicion,
+    setCurrentSuspect,
   } = useGameStore.getState()
-  const messages = useGameStore((state) => state.messages)
+  const messages = useGameStore((state) => state.messages);
+  const suspects = useGameStore((state) => state.suspects);
 
-  const [guessCount, setGuessCount] = useState(0)
-  const [suspectIndex, setSuspectIndex] = useState(0)
-  const [outOfQuestions, setOutOfQuestions] = useState(false)
+
+  const [guessCount, setGuessCount] = useState(0);
+  const [suspectIndex, setSuspectIndex] = useState(0);
+  const [outOfQuestions, setOutOfQuestions] = useState(false);
   const [gameStart, setGameStart] = useState(false)
-  const guessesPerSuspect = 5
 
-  const suspects = [
-    {
-      mugshot: '/images/gameBoy/suspects/suspect_1.png',
-      name: 'Suspect One',
-      guessCount: 0,
-    },
-    {
-      mugshot: '/images/gameBoy/suspects/suspect_4.png',
-      name: 'Suspect Four',
-      guessCount: 0,
-    },
-    {
-      mugshot: '/images/gameBoy/suspects/suspect_5.png',
-      name: 'Suspect Five',
-      guessCount: 0,
-    },
-    {
-      mugshot: '/images/gameBoy/suspects/suspect_2.png',
-      name: 'Suspect Two',
-      guessCount: 0,
-    },
-    // Add more suspects here
-  ]
+  const guessesPerSuspect = 5;
 
-  const isWsOpen = useRef(false)
-  const ws = WebSocketManager.getInstance()
-
-  const handleResponse = (message: string) => {
-    console.log('response: ', message)
-    setSuspectResponse(message.content)
-  }
+  useWebsocket();
 
   useEffect(() => {
-    ws.connect()
-    ws.addEventListener('response', handleResponse)
-    ws.addEventListener('open', () => {
-      isWsOpen.current = true
-      console.log('WebSocket connection opened')
-    })
-    ws.addEventListener('close', () => {
-      isWsOpen.current = false
-      console.log('WebSocket connection closed')
-    })
-  }, [])
-
-  const handleUserMessage = (message: string) => {
-    if (isWsOpen.current) {
-      const data = {
-        type: 'question',
-        message: message,
-      }
-      ws.sendMessage(data)
-    } else {
-      console.error('WebSocket is not open. Message not sent:', message)
-    }
-
-    const newGuessCount = guessCount + 1
-    setGuessCount(newGuessCount)
-
-    const newIndex = Math.floor(newGuessCount / guessesPerSuspect)
-    if (newIndex < suspects.length) {
-      setSuspectIndex(newIndex)
-    }
-    if (newIndex == suspects.length) {
-      setOutOfQuestions(true)
+    const lastMessage = messages[messages.length - 1];
+    if (lastMessage && lastMessage.role === 'suspect') {
+      console.log('last message', lastMessage.content)
+      setSuspectResponse(lastMessage.content);
     }
   }
+    , [messages]);
 
-  if (!gameStart)
-	{
-		return (
-			<div className="w-screen h-screen bg-black gap-2 relative flex flex-col gap-10 justify-center items-center p-10 font-display">
-				<h1 className="uppercase font-bold text-5xl">Dead Loop</h1>
-				<h2 className="uppercase font-bold" onClick={() => setGameStart(true)}>New Game</h2>
-			</div>
-		)
-	}
+  if (!gameStart) {
+    return (
+      <div className="w-screen h-screen bg-black gap-2 relative flex flex-col gap-10 justify-center items-center p-10 font-display">
+        <h1 className="uppercase font-bold text-5xl">Dead Loop</h1>
+        <h2 className="uppercase font-bold" onClick={() => setGameStart(true)}>New Game</h2>
+      </div>
+    )
+  }
+  const handleUserMessage = (playerInput: string) => {
+    // Simulated AI response
+    console.log('Player input:', playerInput)
+    addMessage({
+      id: crypto.randomUUID(),
+      role: 'player',
+      content: playerInput,
+    })
+
+    const newGuessCount = guessCount + 1;
+    setGuessCount(newGuessCount);
+
+    const newIndex = Math.floor(newGuessCount / guessesPerSuspect);
+    setCurrentSuspect(suspects[newIndex].id);
+    if (newIndex < suspects.length) {
+      setSuspectIndex(newIndex);
+    }
+
+    if (newIndex == suspects.length) {
+      setOutOfQuestions(true);
+    }
+  };
 
   return (
-    <div className="w-screen h-screen bg-black gap-2 relative flex flex-col justify-center items-center p-10">
+    <div className="w-screen h-screen bg-black gap-2 relative flex flex-col justify-center items-center p-10 grayscale">
       <div className="w-[80%] relative border-white border-1 overflow-hidden">
         <Background></Background>
         <AnimatePresence>
@@ -127,10 +95,10 @@ const App: React.FC = () => {
             suspects={suspects}
             onSelect={(index) => {
               alert(`You selected Suspect #${index + 1}`);
-			  setGameStart(false);
-			  setGuessCount(0);
-			  setOutOfQuestions(false);
-			  setSuspectIndex(0);
+              setGameStart(false);
+              setGuessCount(0);
+              setOutOfQuestions(false);
+              setSuspectIndex(0);
               // You can handle logic here (like showing result or resetting)
             }}
           />

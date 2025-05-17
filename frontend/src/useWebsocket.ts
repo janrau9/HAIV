@@ -3,10 +3,12 @@ import { WebSocketManager } from './WebSocketManager'
 import { useGameStore } from './store'
 
 const useWebsocket = () => {
-  const isWsOpen = useRef(false)
-  const ws = WebSocketManager.getInstance()
-  const messages = useGameStore((state) => state.messages)
-  const { addMessage } = useGameStore.getState()
+    const isWsOpen = useRef(false);
+    const ws = WebSocketManager.getInstance();
+    const messages = useGameStore((state) => state.messages);
+    const currentSuspectId = useGameStore((state) => state.currentSuspectId);
+    const suspects = useGameStore((state) => state.suspects);
+    const { addMessage } = useGameStore.getState();
 
   const handleResponse = (message: any) => {
     console.log('response: ', message)
@@ -16,7 +18,6 @@ const useWebsocket = () => {
       content: message.content,
       suspicionChange: message.suspicionChange,
     })
-    console.log('WebSocket message received:', message)
   }
 
   useEffect(() => {
@@ -33,21 +34,28 @@ const useWebsocket = () => {
   }, [])
 
   useEffect(() => {
-    if (messages.length === 0) return
-    console.log('Messages changed:', messages)
-    const lastMessage = messages[messages.length - 1]
-    if (lastMessage.role === 'player') {
-      ws.sendMessage({
-        type: 'question',
-        message: lastMessage,
-      })
-      console.log('WebSocket message sent')
-    }
-  }, [messages])
-
-  useEffect(() => {
     console.log('updating messages', messages)
   }, [messages])
+
+    useEffect(() => {
+        if (messages.length === 0) return;
+        console.log('Messages changed:', messages);
+        const lastMessage = messages[messages.length - 1];
+        if (lastMessage.role === 'player') {
+            ws.sendMessage({
+                type: 'question',
+                message: lastMessage,
+                suspect: suspects.find((s) => s.id === currentSuspectId),
+            });
+            console.log('WebSocket message sent');
+        }
+    }, [messages]);
+
+
+    useEffect(() => {
+        console.log('updating messages', messages);
+    }, [messages]);
+
 }
 
 export default useWebsocket
