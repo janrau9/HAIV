@@ -24,6 +24,7 @@ const App: React.FC = () => {
   const [guessCount, setGuessCount] = useState(0)
   const [suspectIndex, setSuspectIndex] = useState(0)
   const [outOfQuestions, setOutOfQuestions] = useState(false)
+  const [gameStart, setGameStart] = useState(false)
   const guessesPerSuspect = 5
 
   const suspects = [
@@ -94,6 +95,16 @@ const App: React.FC = () => {
     }
   }
 
+  if (!gameStart)
+	{
+		return (
+			<div className="w-screen h-screen bg-black gap-2 relative flex flex-col gap-10 justify-center items-center p-10 font-display">
+				<h1 className="uppercase font-bold text-5xl">Dead Loop</h1>
+				<h2 className="uppercase font-bold" onClick={() => setGameStart(true)}>New Game</h2>
+			</div>
+		)
+	}
+
   return (
     <div className="w-screen h-screen bg-black gap-2 relative flex flex-col justify-center items-center p-10">
       <div className="w-[80%] relative border-white border-1 overflow-hidden">
@@ -115,7 +126,11 @@ const App: React.FC = () => {
           <SuspectSelection
             suspects={suspects}
             onSelect={(index) => {
-              alert(`You selected Suspect #${index + 1}`)
+              alert(`You selected Suspect #${index + 1}`);
+			  setGameStart(false);
+			  setGuessCount(0);
+			  setOutOfQuestions(false);
+			  setSuspectIndex(0);
               // You can handle logic here (like showing result or resetting)
             }}
           />
