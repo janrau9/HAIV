@@ -115,7 +115,7 @@ const SuspectsNav: React.FC<SuspectsNavProps> = ({
         <button
           key={suspect.id}
           onClick={() => setSelectedTab(suspect.id)}
-          className={`px-4 py-2 text-xs rounded-t-lg border-1 border-b-0 whitespace-nowrap flex-shrink-0 ${
+          className={`px-4 py-2 text-xs rounded-t-lg border-1 border-b-0 ${
             selectedTab === suspect.id ? 'bg-notebook-bg' : 'bg-notebook-darker'
           }`}
         >
