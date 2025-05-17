@@ -106,7 +106,7 @@ const App: React.FC = () => {
 	}
 
   return (
-    <div className="w-screen h-screen bg-black gap-2 relative flex flex-col justify-center items-center p-10">
+    <div className="w-screen h-screen bg-black gap-2 relative flex flex-col justify-center items-center p-10 grayscale">
       <div className="w-[80%] relative border-white border-1 overflow-hidden">
         <Background></Background>
         <AnimatePresence>
