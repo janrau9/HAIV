@@ -8,7 +8,7 @@
   --color-white-custom: #c2e1e9;
   --color-black-custom: #404049;
   --color-gray-custom: #c3c3c3;
-  --color-notebook-bg: #F6EEE3;
+  --color-notebook-bg: #f6eee3;
   --color-notebook-darker: #ccc6bf;
 }
 
@@ -27,7 +27,6 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-
-#notebook  {
+#notebook {
   filter: url(#distort);
 }
