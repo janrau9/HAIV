@@ -1,5 +1,32 @@
 export type Role = 'player' | 'suspect' | 'narrator' | 'system'
 
+export type Narrative = {
+  detective_briefing: string
+  scene: {
+    when: string,
+    where: string;
+    victim: {
+      name: string,
+      age: number,
+      description: string;
+    }
+  }
+}
+
+export type NarrativeResponse = {
+  detective_briefing: string
+  scene: {
+    when: string,
+    where: string;
+    victim: {
+      name: string,
+      age: number,
+      description: string;
+    }
+  }
+  suspects: SuspectProfile[]
+}
+
 export type Message = {
   id: string
   role: Role
@@ -13,11 +40,13 @@ export type Message = {
 }
 
 export type SuspectSummary = {
+  id: string
 	name: string
 	age: number
 	occupation: string
-	relationship_to_victim: string
-	alibi: string
+  relationship_to_victim: string
+  mugshot: string
+  alibi?: string
 }
 
 export type SuspectProfile = {
@@ -33,7 +62,8 @@ export type SuspectProfile = {
 		distracting: string
 	}
 	suspicion: number
-	trust: number
+  trust: number
+  guessCount: number
 }
 
 export type Clue = {

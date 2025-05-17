@@ -6,6 +6,7 @@ import { Background } from './components/Background'
 import { Table } from './components/Table'
 import { useGameStore } from './store'
 import useWebsocket from './useWebsocket'
+import { getNarrative } from './api'
 import { WebSocketManager } from './WebSocketManager'
 
 import { SuspectSelection } from './components/suspect/SuspectSelection'
@@ -16,22 +17,22 @@ import { useModal } from './contexts/ModalContext'
 const App: React.FC = () => {
   const [suspectResponse, setSuspectResponse] = useState('')
   const {
+    addNarrative,
     addMessage,
-    currentSuspectId,
-    // suspects,
-    adjustSuspicion,
     setCurrentSuspect,
+    updateSuspect,
   } = useGameStore.getState()
   const messages = useGameStore((state) => state.messages)
   const suspects = useGameStore((state) => state.suspects)
-
+  const narrative = useGameStore((state) => state.narrative)
   const [guessCount, setGuessCount] = useState(0)
   const [suspectIndex, setSuspectIndex] = useState(0)
   const [outOfQuestions, setOutOfQuestions] = useState(false)
   const [gameStart, setGameStart] = useState(false)
   const [showChatBubble, setShowChatBubble] = useState(false)
   const [showIntro, setShowIntro] = useState(false)
-  const {openModal} = useModal()
+  const [isLoading, setIsLoading] = useState(false)
+  const { openModal } = useModal()
 
   const guessesPerSuspect = 5
 
@@ -47,83 +48,116 @@ const App: React.FC = () => {
   }, [messages])
 
   const handleUserMessage = (playerInput: string) => {
-	  console.log('Player input:', playerInput)
-	  addMessage({
-		  id: crypto.randomUUID(),
-		  role: 'player',
-		  content: playerInput,
-		})
-		
-		const newGuessCount = guessCount + 1
-		setGuessCount(newGuessCount)
-		
-		const newIndex = Math.floor(newGuessCount / guessesPerSuspect)
-		setCurrentSuspect(suspects[newIndex].id)
-		if (newIndex < suspects.length) {
-			setSuspectIndex(newIndex)
-		}
-		
-		if (newIndex == suspects.length) {
-			setOutOfQuestions(true)
-		}
-		
-	}
+    console.log('Player input:', playerInput)
+    addMessage({
+      id: crypto.randomUUID(),
+      role: 'player',
+      content: playerInput,
+    })
 
-	
+    const newGuessCount = guessCount + 1
+    setGuessCount(newGuessCount)
 
-	if (!gameStart) {
-	  return (
-		<div className="w-screen h-screen bg-black gap-2 relative flex flex-col gap-10 justify-center items-center p-10 font-display">
-		  <h1 className="uppercase font-bold text-5xl">Dead Loop</h1>
-		  <h2 className="uppercase font-bold" onClick={() => {setGameStart(true); openModal('noteBook')}}>
-			New Game
-		  </h2>
-		</div>
-	  )
-	}
+    const newIndex = Math.floor(newGuessCount / guessesPerSuspect)
+    setCurrentSuspect(suspects[newIndex].id)
+    if (newIndex < suspects.length) {
+      setSuspectIndex(newIndex)
+    }
+
+    if (newIndex == suspects.length) {
+      setOutOfQuestions(true)
+    }
+
+  }
+
+  const fetchNarrative = async () => {
+    try {
+      setIsLoading(true)
+      const narrative = await getNarrative()
+      console.log('narrative:', narrative)
+      addNarrative(narrative)
+      const randomizeSuspects = suspects.sort(() => Math.random() - 0.5)
+      randomizeSuspects.forEach((suspect, index) => {
+        updateSuspect(suspect.id, narrative.suspects[index].summary)
+      })
+    } catch (error) {
+      console.error('Error fetching narrative:', error)
+      // Handle error
+    } finally {
+      setIsLoading(false)
+    }
+  }
+  useEffect(() => {
+    if (!gameStart) return;
+    fetchNarrative()
+  }, [gameStart])
+
+  useEffect(() => {
+    console.log('narrative:', narrative)
+  }, [narrative])
+
+  useEffect(() => {
+    console.log('suspects:', suspects)
+  }, [suspects])
+
+  if (!gameStart) {
+    return (
+      <div className="w-screen h-screen bg-black gap-2 relative flex flex-col gap-10 justify-center items-center p-10 font-display">
+        <h1 className="uppercase font-bold text-5xl">Dead Loop</h1>
+        <h2 className="uppercase font-bold" onClick={() => { setGameStart(true); openModal('noteBook') }}>
+          New Game
+        </h2>
+      </div>
+    )
+  }
 
   return (
-    <div className="w-screen h-screen bg-black-custom gap-2 relative flex flex-col justify-center items-center p-10 ">
-      <div className="w-[80%] relative border-white border-1 overflow-hidden">
-        <Background></Background>
-        <AnimatePresence>
-          <Suspect imgUrl={suspects[suspectIndex].mugshot} />
-        </AnimatePresence>
-        <div className="w-full h-full absolute top-0 ">
-          <Table></Table>
+    !isLoading ? (
+      <div className="w-screen h-screen bg-black-custom gap-2 relative flex flex-col justify-center items-center p-10 ">
+        <div className="w-[80%] relative border-white border-1 overflow-hidden">
+          <Background></Background>
+          <AnimatePresence>
+            <Suspect imgUrl={suspects[suspectIndex].mugshot} />
+          </AnimatePresence>
+          <div className="w-full h-full absolute top-0 ">
+            <Table></Table>
+          </div>
+          <AnimatePresence mode="wait">
+            {showChatBubble && (
+              <ChatBubble
+                text={suspectResponse}
+                onComplete={() => setShowChatBubble(false)}
+              />
+            )}
+          </AnimatePresence>
         </div>
-        <AnimatePresence mode="wait">
-          {showChatBubble && (
-            <ChatBubble
-              text={suspectResponse}
-              onComplete={() => setShowChatBubble(false)}
+        <div className="w-[80%] flex justify-between">
+          <UserInput onSend={handleUserMessage}></UserInput>
+          <button onClick={() => openModal('noteBook')}>
+            <img className="w-12 h-12" src="/images/gameBoy/notes.png" ></img>
+          </button>
+        </div>
+        <AnimatePresence>
+          {outOfQuestions && (
+            <SuspectSelection
+              suspects={suspects}
+              onSelect={(index) => {
+                alert(`You selected Suspect #${index + 1}`)
+                setGameStart(false)
+                setGuessCount(0)
+                setOutOfQuestions(false)
+                setSuspectIndex(0)
+                // You can handle logic here (like showing result or resetting)
+              }}
             />
           )}
         </AnimatePresence>
+        <NoteBookMoadal></NoteBookMoadal>
       </div>
-      <div className="w-[80%] flex justify-between">
-        <UserInput onSend={handleUserMessage}></UserInput>
-		<button onClick={() => openModal('noteBook')}>
-        <img className="w-12 h-12" src="/images/gameBoy/notes.png" ></img>
-		</button>
-      </div>
-      <AnimatePresence>
-        {outOfQuestions && (
-          <SuspectSelection
-            suspects={suspects}
-            onSelect={(index) => {
-              alert(`You selected Suspect #${index + 1}`)
-              setGameStart(false)
-              setGuessCount(0)
-              setOutOfQuestions(false)
-              setSuspectIndex(0)
-              // You can handle logic here (like showing result or resetting)
-            }}
-          />
-        )}
-      </AnimatePresence>
-	<NoteBookMoadal></NoteBookMoadal>
-    </div>
+    ) :
+      <span className="text-white">
+        generating narrative...
+      </span>
   )
 }
 

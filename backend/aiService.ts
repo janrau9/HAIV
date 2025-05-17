@@ -1,6 +1,7 @@
 import { openai_obj } from "./ai";
 import type {
   SuspectProfile,
+  Narrative,
 }
   from "../types/types";
 import fs from "fs/promises";
@@ -18,11 +19,11 @@ export async function askSuspect(
   suspect: SuspectProfile,
   question: string
 ) {
-	const promptPath = path.join(__dirname, "prompts", "suspect_template.txt");
-	const template = await fs.readFile(promptPath, 'utf-8');
+  const promptPath = path.join(__dirname, "prompts", "suspect_template.txt");
+  const template = await fs.readFile(promptPath, 'utf-8');
 
-	const systemPrompt = Mustache.render(template, suspect);
-	console.log('systemPrompt:', systemPrompt);
+  const systemPrompt = Mustache.render(template, suspect);
+  console.log('systemPrompt:', systemPrompt);
 
   const resp = await openai_obj.responses.create({
     model: "gpt-4.1-nano",
@@ -45,7 +46,7 @@ export async function createNarrative() {
   const promptPath = path.join(__dirname, "prompts", "narrative.txt");
   const systemPrompt = await fs.readFile(promptPath, "utf-8");
 
-  const resp = openai_obj.responses.create({
+  const resp = await openai_obj.responses.create({
     model: "gpt-4.1-nano",
     input: [
       {
@@ -54,6 +55,5 @@ export async function createNarrative() {
       },
     ],
   });
-
-  return (await resp).output_text;
+  return resp.output_text;
 }

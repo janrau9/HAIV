@@ -6,3 +6,4 @@ frontend.log
 backend.log
 *.env
 backend/.env
+backend/test.http

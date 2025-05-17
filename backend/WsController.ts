@@ -21,10 +21,10 @@ export class WsController {
 			console.log('Client connected');
 			
 			// just test narrative creation and print it to console
-			if (!narrative) {
-				narrative = await createNarrative();
-				console.log('narrative:', narrative);
-			}
+			// if (!narrative) {
+			// 	narrative = await createNarrative();
+			// 	console.log('narrative:', narrative);
+			// }
 
         ws.on('close', () => {
             console.log('Client disconnected');

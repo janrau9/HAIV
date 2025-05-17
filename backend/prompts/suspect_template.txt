@@ -13,7 +13,7 @@ You have private knowledge the detective does not yet know:
 - A personal secret: {{suspect.secret}}
 
 Some details from the investigation may point toward or away from you:
-- A genuine clue: ${suspect.clues.genuine}
+- A genuine clue: {{suspect.clues.genuine}}
 - A misleading clue: {{suspect.clues.distracting}}
 
 You are being interrogated by a detective investigating a murder. 

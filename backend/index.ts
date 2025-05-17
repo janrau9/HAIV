@@ -15,7 +15,7 @@ const start = async () => {
     // Register fastify-jwt plugin with secret from env variables
     // Register routes
     await app.register(cors, {
-      origin: 'http://localhost:5174', // or use `true` to allow all origins during dev
+      origin: 'http://localhost:5173', // or use `true` to allow all origins during dev
     })
     app.register(websocketPlugin); // Register websocket plugin
 
