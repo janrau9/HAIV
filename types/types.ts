@@ -12,19 +12,28 @@ export type Message = {
   timestamp?: number
 }
 
+export type SuspectSummary = {
+	name: string
+	age: number
+	occupation: string
+	relationship_to_victim: string
+	alibi: string
+}
+
 export type SuspectProfile = {
-  id: string
-  name: string
-  personality: 'aggressive' | 'nervous' | 'manipulative' | 'calm'
-  characteristics: string[]
-  secrets: string[]
-  alibi: string
-  relationships: Record<string, string>
-  suspicion: number
-  trust: number
-  mugshot: string
-  guessCount: number
-  age: number
+	id: string
+	summary: SuspectSummary
+	personality: string
+	motive: string
+	alibi: string
+	how_they_speak: string
+	secret: string
+	clues: {
+		genuine: string
+		distracting: string
+	}
+	suspicion: number
+	trust: number
 }
 
 export type Clue = {
