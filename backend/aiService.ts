@@ -22,7 +22,6 @@ function flattenObject(obj: any, prefix = '', result: any = {}): any {
 
     const value = obj[key];
 		const newKey = prefix ? `${prefix}_${key}` : key;
-		console.log("newKey in flattenObject: ", newKey);
 
     if (Array.isArray(value)) {
       // Optionally handle arrays of strings or numbers
@@ -46,7 +45,7 @@ export async function askSuspect(
   const promptPath = path.join(__dirname, "prompts", "suspect_template.txt");
   const template = await fs.readFile(promptPath, 'utf-8');
 
-	console.log("suspect: ", suspect);
+	// console.log("suspect: ", suspect);
 	const flatSuspect = flattenObject(suspect);
 	// const flatSuspect = {
 	// 	...suspect,
@@ -55,9 +54,9 @@ export async function askSuspect(
 	// 	clues_distracting: JSON.stringify(suspect.clues.distracting),
 	// 	memory_history: JSON.stringify(suspect.memory?.history ?? [])
 	// };
-	console.log("flatSuspect: ", flatSuspect);
+	// console.log("flatSuspect: ", flatSuspect);
 	const intro = Mustache.render(template, flatSuspect);
-  console.log('systemPrompt:', intro);
+  // console.log('systemPrompt:', intro);
 
   const recentMsgs = getRecentHistory(suspect, 3)
     .map(m =>

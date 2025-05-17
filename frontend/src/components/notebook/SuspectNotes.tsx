@@ -17,7 +17,8 @@ export const SuspectNotes: React.FC<{ suspect: SuspectSummary }> = ({ suspect })
           </p>
           <p>
             <strong>Alibi:</strong> {suspect.alibi}
-          </p>
+					</p>
+					<p><strong>Known Interactions:</strong> {suspect.known_interactions.join(', ')}</p>
         </div>
         <div className="relative w-24 h-24 min-w-24 min-h-24 overflow-hidden">
           <img
