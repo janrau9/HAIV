@@ -31,7 +31,7 @@ export async function askSuspect(
   You are being interrogated by a detective.
   you will give answers based on your characteristics.`;
 
-  const resp = openai_obj.responses.create({
+  const resp = await openai_obj.responses.create({
     model: "gpt-4.1-nano",
     input: [
       {
@@ -44,7 +44,6 @@ export async function askSuspect(
       },
     ],
   });
-
   return (resp);
 }
 
