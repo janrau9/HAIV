@@ -81,7 +81,7 @@ class GameManager {
     }
 
     private getSuspectName(id: string): string {
-        return this.suspects.find(s => s.id === id)?.name || 'Unknown Suspect'
+        return this.suspects.find(s => s.id === id)?.summary.name || 'Unknown Suspect'
     }
 
     resetGame() {

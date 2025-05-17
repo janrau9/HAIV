@@ -45,7 +45,7 @@ export class WsController {
             console.log('Received message:', data);
             if (data.type === 'question') {
                 try {
-                    let suspect = this.suspects[data.suspect.id];
+                    let suspect = this.suspects[0];
                     if (!suspect) {
                         suspect = {
                             id: data.suspect.id,
@@ -80,6 +80,7 @@ export class WsController {
                             suspectId: suspect.id,
                         }
                     }
+                    this.isContainTriggerWord(ws, ai.output_text, suspect);
                     ws.send(JSON.stringify(response));
                 } catch (error) {
                     console.error('Error processing question:', error);
@@ -90,5 +91,34 @@ export class WsController {
                 }
             }
         });
+    }
+
+    isContainTriggerWord(ws: WebSocket, message: string, suspect: SuspectProfile) {
+        const distractingTriggerWords = suspect.clues.distracting[0].triggeredBy;
+        const genuineTriggerWords = suspect.clues.genuine[0].triggeredBy;
+        const isDistracting = distractingTriggerWords.some((word: string) => message.includes(word));
+        let content = '';
+        const isGenuine = genuineTriggerWords.some((word: string) => message.includes(word));
+        if (isDistracting) {
+            console.log(`Distracting clue triggered by: ${distractingTriggerWords}`);
+            this.gameManager.updateSuspicion(suspect.id, 1);
+            content = suspect.clues.distracting[0].content;
+        }
+        if (isGenuine) {
+            console.log(`Genuine clue triggered by: ${genuineTriggerWords}`);
+            this.gameManager.updateTrust(suspect.id, 1);
+            content = suspect.clues.genuine[0].content;
+        }
+        const response = {
+            type: 'reveal',
+            message: {
+                content: content,
+                role: 'suspect',
+                suspicionChange: isDistracting ? 1 : 0,
+                trustChange: isGenuine ? 1 : 0,
+                suspectId: suspect.id,
+            }
+        }
+        ws.send(JSON.stringify(response));
     }
 }

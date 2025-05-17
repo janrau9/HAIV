@@ -40,6 +40,8 @@ const initialSuspects: SuspectSummary[] = [
     relationship_to_victim: 'Friend',
     known_interactions: 'Met victim last week',
     mugshot: '/images/gameBoy/suspects/suspect_1.png',
+    suspicion: 0,
+    trust: 0,
   },
   {
     id: 'suspect_2',
@@ -49,6 +51,8 @@ const initialSuspects: SuspectSummary[] = [
     relationship_to_victim: 'Colleague',
     known_interactions: 'Discussed with victim yesterday',
     mugshot: '/images/gameBoy/suspects/suspect_2.png',
+    suspicion: 0,
+    trust: 0,
   },
   {
     id: 'suspect_3',
@@ -58,6 +62,8 @@ const initialSuspects: SuspectSummary[] = [
     relationship_to_victim: 'Neighbor',
     known_interactions: 'Saw victim come home last night',
     mugshot: '/images/gameBoy/suspects/suspect_3.png',
+    suspicion: 0,
+    trust: 0,
   },
   {
     id: 'suspect_4',
@@ -67,6 +73,8 @@ const initialSuspects: SuspectSummary[] = [
     relationship_to_victim: 'Stranger',
     known_interactions: 'Has heard a thing or two about the victim',
     mugshot: '/images/gameBoy/suspects/suspect_4.png',
+    suspicion: 0,
+    trust: 0,
   },
   // Add more suspects here
 ]
@@ -149,6 +157,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       return { suspects: updatedSuspects };
     }),
 
+    
   decrementQuestionCount: (suspectId) =>
     set((state) => ({
       questionCounts: {

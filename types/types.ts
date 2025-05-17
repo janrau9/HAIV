@@ -51,7 +51,9 @@ export type SuspectSummary = {
   relationship_to_victim: string
   mugshot: string
   alibi?: string
-	known_interactions: string
+  known_interactions: string
+  suspicion: number
+  trust: number
 }
 
 // if you change anything here, update that change to WsController.ts as well please!
