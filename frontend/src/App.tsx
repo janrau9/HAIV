@@ -1,18 +1,18 @@
-import { AnimatePresence, motion } from 'framer-motion'
-import React, { useEffect, useState } from 'react'
-import { getNarrative } from './api'
-import { Background } from './components/Background'
-import { Table } from './components/Table'
+import React, { useState, useEffect } from 'react'
 import { ChatBubble } from './components/dialogue/ChatBubble'
 import UserInput from './components/dialogue/UserInput'
-import { NoteBookMoadal } from './components/modals/NoteBookModal'
 import { Suspect } from './components/suspect/Suspect'
-import { SuspectInfo } from './components/suspect/SuspectInfo'
-import { SuspectSelection } from './components/suspect/SuspectSelection'
-import { SuspectSelector } from './components/suspect/SuspectSelector'
-import { useModal } from './contexts/ModalContext'
+import { Background } from './components/Background'
+import { Table } from './components/Table'
 import { useGameStore } from './store'
 import useWebsocket from './useWebsocket'
+import { getNarrative } from './api'
+import { SuspectSelection } from './components/suspect/SuspectSelection'
+import { SuspectSelector } from './components/suspect/SuspectSelector'
+import { SuspectInfo } from './components/suspect/SuspectInfo'
+import { AnimatePresence, motion } from 'framer-motion'
+import { NoteBookMoadal } from './components/modals/NoteBookModal'
+import { useModal } from './contexts/ModalContext'
 
 const App: React.FC = () => {
   // State variables
@@ -180,8 +180,9 @@ const App: React.FC = () => {
           </motion.h2>
 
           <motion.div className="text-green-600 text-sm mt-4 text-center max-w-md">
-            <p>A murder investigation simulator</p>
-            <p>with AI-driven narrative.</p>
+            <p>A murder investigation simulator with AI-driven narrative.</p>
+            <p>Use the suspect selector to choose who to question.</p>
+            <p>Each suspect can be questioned 4 times.</p>
           </motion.div>
         </motion.div>
       </div>

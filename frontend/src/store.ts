@@ -22,7 +22,7 @@ type GameState = {
   addNarrative: (narrative: Narrative) => void
   addMessage: (message: Message) => void
   setCurrentSuspect: (id: string) => void
-  updateSuspect: (id: string, updates: Partial<SuspectSummary>) => void;
+  updateSuspect: (id: string, updates: Partial<SuspectSummary>) => void
 
   markClueFound: (clueId: string) => void
   adjustSuspicion: (suspectId: string, amount: number) => void
@@ -38,6 +38,7 @@ const initialSuspects: SuspectSummary[] = [
     age: 32,
     occupation: 'Mechanic',
     relationship_to_victim: 'Friend',
+    known_interactions: 'Met victim last week',
     mugshot: '/images/gameBoy/suspects/suspect_1.png',
   },
   {
@@ -46,6 +47,7 @@ const initialSuspects: SuspectSummary[] = [
     age: 28,
     occupation: 'Nurse',
     relationship_to_victim: 'Colleague',
+    known_interactions: 'Discussed with victim yesterday',
     mugshot: '/images/gameBoy/suspects/suspect_2.png',
   },
   {
@@ -54,6 +56,7 @@ const initialSuspects: SuspectSummary[] = [
     age: 45,
     occupation: 'Teacher',
     relationship_to_victim: 'Neighbor',
+    known_interactions: 'Saw victim come home last night',
     mugshot: '/images/gameBoy/suspects/suspect_3.png',
   },
   {
@@ -62,6 +65,7 @@ const initialSuspects: SuspectSummary[] = [
     age: 40,
     occupation: 'Artist',
     relationship_to_victim: 'Stranger',
+    known_interactions: 'Has heard a thing or two about the victim',
     mugshot: '/images/gameBoy/suspects/suspect_4.png',
   },
   // Add more suspects here
@@ -87,7 +91,7 @@ export const useGameStore = create<GameState>((set, get) => ({
         age: 0,
         description: '',
       },
-    }
+    },
   },
   messages: [],
   currentSceneId: 'intro',
@@ -105,7 +109,7 @@ export const useGameStore = create<GameState>((set, get) => ({
         ...state.narrative,
         detective_briefing: newNarrative.detective_briefing,
         scene: newNarrative.scene,
-      }
+      },
     })),
 
   addMessage: (message) =>
@@ -160,11 +164,10 @@ export const useGameStore = create<GameState>((set, get) => ({
   updateSuspect: (id, updates) =>
     set((state) => {
       const updatedSuspects = state.suspects.map((suspect) =>
-        suspect.id === id ? { ...suspect, ...updates } : suspect
-      );
-      return { suspects: updatedSuspects };
+        suspect.id === id ? { ...suspect, ...updates } : suspect,
+      )
+      return { suspects: updatedSuspects }
     }),
-
 
   resetGame: () =>
     set({

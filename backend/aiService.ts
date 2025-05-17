@@ -6,6 +6,7 @@ import type {
   from "../types/types";
 import fs from "fs/promises";
 import path from "path";
+import { getRecentHistory, addToHistory } from "./memory";
 import Mustache from 'mustache';
 
 export interface ChatResponse {
@@ -22,8 +23,21 @@ export async function askSuspect(
   const promptPath = path.join(__dirname, "prompts", "suspect_template.txt");
   const template = await fs.readFile(promptPath, 'utf-8');
 
-  const systemPrompt = Mustache.render(template, suspect);
-  console.log('systemPrompt:', systemPrompt);
+  const intro = Mustache.render(template, suspect);
+  console.log('systemPrompt:', intro);
+
+  const recentMsgs = getRecentHistory(suspect, 3)
+    .map(m =>
+      m.role === 'user'
+        ? `Detective: ${m.content}`
+        : `Suspect: ${m.content}`
+    ).join('\n');
+    console.log("recent messages: ", recentMsgs);
+
+    const systemPrompt = [intro, '[RECENT CONVERCATION]', recentMsgs]
+      .filter(Boolean)
+      .join('\n\n');
+    console.log('systemPrompt:', systemPrompt);
 
   const resp = await openai_obj.responses.create({
     model: "gpt-4.1-nano",
@@ -38,6 +52,10 @@ export async function askSuspect(
       },
     ],
   });
+  const answer = resp.output_text;
+
+  addToHistory(suspect, question, answer);
+
   return (resp);
 }
 
