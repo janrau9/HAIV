@@ -1,3 +1,5 @@
+import type { ChatResponse } from '../backend/aiService'
+
 export type Role = 'player' | 'suspect' | 'narrator' | 'system'
 
 export type Narrative = {
@@ -50,6 +52,18 @@ export type SuspectSummary = {
 	known_interactions: string
 }
 
+export type SuspectSummary = {
+  id: string
+	name: string
+	age: number
+	occupation: string
+  relationship_to_victim: string
+  mugshot: string
+  alibi?: string
+	known_interactions: string
+}
+
+// if you change anything here, update that change to WsController.ts as well please!
 export type SuspectProfile = {
 	id: string
 	summary: SuspectSummary
@@ -65,6 +79,10 @@ export type SuspectProfile = {
 	suspicion: number
   trust: number
   guessCount: number
+  age: number
+  memory?: {
+    history: ChatResponse[];
+  };
 }
 
 export type Clue = {
