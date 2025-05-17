@@ -8,16 +8,24 @@ const useWebsocket = () => {
   const messages = useGameStore((state) => state.messages)
   const currentSuspectId = useGameStore((state) => state.currentSuspectId)
   const suspects = useGameStore((state) => state.suspects)
-  const { addMessage } = useGameStore.getState()
+  const { addMessage, adjustSuspicion } = useGameStore.getState()
 
   const handleResponse = (message: any) => {
     console.log('response: ', message)
+    
+    // Add the message to the store
     addMessage({
       id: crypto.randomUUID(),
       role: message.role,
       content: message.content,
       suspicionChange: message.suspicionChange,
+      suspectId: message.suspectId,
     })
+    
+    // If there's a suspicion change and a suspectId, update the suspect's suspicion level
+    if (message.suspicionChange && message.suspectId) {
+      adjustSuspicion(message.suspectId, message.suspicionChange)
+    }
   }
 
   useEffect(() => {
@@ -34,11 +42,15 @@ const useWebsocket = () => {
       isWsOpen.current = false
       console.log('WebSocket connection closed')
     })
+    
+    // Cleanup function
+    return () => {
+      ws.removeEventListener('response', handleResponse)
+      ws.removeEventListener('error', () => {})
+      ws.removeEventListener('open', () => {})
+      ws.removeEventListener('close', () => {})
+    }
   }, [])
-
-  useEffect(() => {
-    console.log('updating messages', messages)
-  }, [messages])
 
   useEffect(() => {
     if (messages.length === 0) return
@@ -52,11 +64,7 @@ const useWebsocket = () => {
       })
       console.log('WebSocket message sent')
     }
-  }, [messages])
-
-  useEffect(() => {
-    console.log('updating messages', messages)
-  }, [messages])
+  }, [messages, currentSuspectId, suspects])
 }
 
 export default useWebsocket
