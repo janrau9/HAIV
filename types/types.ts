@@ -47,6 +47,7 @@ export type SuspectSummary = {
   relationship_to_victim: string
   mugshot: string
   alibi?: string
+	known_interactions: string
 }
 
 export type SuspectProfile = {
