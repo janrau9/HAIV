@@ -8,7 +8,7 @@ const useWebsocket = () => {
   const messages = useGameStore((state) => state.messages)
   const currentSuspectId = useGameStore((state) => state.currentSuspectId)
   const suspects = useGameStore((state) => state.suspects)
-  const { addMessage, adjustSuspicion, adjustTrust } = useGameStore.getState()
+  const { addMessage, adjustSuspicion, adjustTrust, updateSuspect } = useGameStore.getState()
 
   const handleResponse = (message: any) => {
     console.log('response: ', message)
@@ -18,25 +18,48 @@ const useWebsocket = () => {
       id: crypto.randomUUID(),
       role: message.role,
       content: message.content,
-      suspicionChange: message.suspicionChange,
-      trustChange: message.trustChange,
+      // suspicionChange: message.suspicionChange,
+      // trustChange: message.trustChange,
       suspectId: message.suspectId,
     })
 
+    // // If there's a suspicion change and a suspectId, update the suspect's suspicion level
+    // if (message.suspicionChange && message.suspectId) {
+    //   adjustSuspicion(message.suspectId, message.suspicionChange)
+    // }
+
+    // // If there's a trust change and a suspectId, update the suspect's trust level
+    // if (message.trustChange && message.suspectId) {
+    //   adjustTrust(message.suspectId, message.trustChange)
+    // }
+  }
+
+  const handleReveal = (message: any) => {
+    console.log('reveal: ', message)
+
     // If there's a suspicion change and a suspectId, update the suspect's suspicion level
     if (message.suspicionChange && message.suspectId) {
-      adjustSuspicion(message.suspectId, message.suspicionChange)
+      console.log('suspicionChange: ', message.suspicion)
+      updateSuspect(message.suspectId, {
+        suspicion: message.suspicion,
+      })
+      // adjustSuspicion(message.suspectId, message.suspicionChange)
     }
 
     // If there's a trust change and a suspectId, update the suspect's trust level
     if (message.trustChange && message.suspectId) {
-      adjustTrust(message.suspectId, message.trustChange)
+      console.log('trustChange: ', message.trust)
+      updateSuspect(message.suspectId, {
+        trust: message.trust,
+      })
+      // adjustTrust(message.suspectId, message.trustChange)
     }
   }
 
   useEffect(() => {
     ws.connect()
     ws.addEventListener('response', handleResponse)
+    ws.addEventListener('reveal', handleReveal)
     ws.addEventListener('error', (error) => {
       console.error('WebSocket error:', error)
     })
@@ -52,9 +75,10 @@ const useWebsocket = () => {
     // Cleanup function
     return () => {
       ws.removeEventListener('response', handleResponse)
-      ws.removeEventListener('error', () => {})
-      ws.removeEventListener('open', () => {})
-      ws.removeEventListener('close', () => {})
+      ws.removeEventListener('reveal', handleReveal)
+      ws.removeEventListener('error', () => { })
+      ws.removeEventListener('open', () => { })
+      ws.removeEventListener('close', () => { })
     }
   }, [])
 
@@ -70,7 +94,7 @@ const useWebsocket = () => {
       })
       console.log('WebSocket message sent')
     }
-  }, [messages, currentSuspectId, suspects])
+  }, [messages])
 }
 
 export default useWebsocket

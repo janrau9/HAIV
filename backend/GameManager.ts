@@ -20,9 +20,14 @@ class GameManager {
 
     initGame(suspects: SuspectProfile[], clues: Clue[], caseSummary: any) {
         this.caseSummary = caseSummary
-        this.suspects = suspects
+        this.suspects = suspects.map(suspect => ({
+            ...suspect,
+            suspicion: 0,
+            trust: 0,
+        }))
         this.clues = clues
         this.killerId = null
+
         this.gameState = 'playing'
     }
 
@@ -81,7 +86,7 @@ class GameManager {
     }
 
     private getSuspectName(id: string): string {
-        return this.suspects.find(s => s.id === id)?.name || 'Unknown Suspect'
+        return this.suspects.find(s => s.id === id)?.summary.name || 'Unknown Suspect'
     }
 
     resetGame() {

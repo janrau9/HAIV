@@ -130,8 +130,8 @@ const App: React.FC = () => {
       addNarrative(narrativeData)
 
       // Randomize suspects and update them with narrative data
-      const randomizeSuspects = [...suspects].sort(() => Math.random() - 0.5)
-      randomizeSuspects.forEach((suspect, index) => {
+      // const randomizeSuspects = [...suspects].sort(() => Math.random() - 0.5)
+      suspects.forEach((suspect, index) => {
         if (narrativeData.suspects[index]?.summary) {
           updateSuspect(suspect.id, narrativeData.suspects[index].summary)
         }
@@ -222,7 +222,7 @@ const App: React.FC = () => {
           animate={{ opacity: [0.7, 1, 0.7], scale: [0.95, 1, 0.95] }}
           transition={{ repeat: Infinity, duration: 2 }}
         >
-          Dead Loop
+          case files
         </motion.h1>
 
         <motion.div

@@ -33,40 +33,48 @@ type GameState = {
 
 const initialSuspects: SuspectSummary[] = [
   {
-    id: 'suspect_1',
+    id: 'Suspect_1',
     name: 'John Doe',
     age: 32,
     occupation: 'Mechanic',
     relationship_to_victim: 'Friend',
     known_interactions: 'Met victim last week',
     mugshot: '/images/gameBoy/suspects/suspect_1.png',
+    suspicion: 0,
+    trust: 0,
   },
   {
-    id: 'suspect_2',
+    id: 'Suspect_2',
     name: 'Jane Smith',
     age: 28,
     occupation: 'Nurse',
     relationship_to_victim: 'Colleague',
     known_interactions: 'Discussed with victim yesterday',
     mugshot: '/images/gameBoy/suspects/suspect_2.png',
+    suspicion: 0,
+    trust: 0,
   },
   {
-    id: 'suspect_3',
+    id: 'Suspect_3',
     name: 'Charlie Brown',
     age: 45,
     occupation: 'Teacher',
     relationship_to_victim: 'Neighbor',
     known_interactions: 'Saw victim come home last night',
     mugshot: '/images/gameBoy/suspects/suspect_3.png',
+    suspicion: 0,
+    trust: 0,
   },
   {
-    id: 'suspect_4',
+    id: 'Suspect_4',
     name: 'Bob Brown',
     age: 40,
     occupation: 'Artist',
     relationship_to_victim: 'Stranger',
     known_interactions: 'Has heard a thing or two about the victim',
     mugshot: '/images/gameBoy/suspects/suspect_4.png',
+    suspicion: 0,
+    trust: 0,
   },
   // Add more suspects here
 ]
@@ -149,6 +157,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       return { suspects: updatedSuspects };
     }),
 
+    
   decrementQuestionCount: (suspectId) =>
     set((state) => ({
       questionCounts: {
@@ -161,6 +170,7 @@ export const useGameStore = create<GameState>((set, get) => ({
     set({
       questionCounts: initializeQuestionCounts(),
     }),
+  
   updateSuspect: (id, updates) =>
     set((state) => {
       const updatedSuspects = state.suspects.map((suspect) =>
