@@ -161,7 +161,7 @@ const App: React.FC = () => {
           animate={{ opacity: [0.7, 1, 0.7], scale: [0.95, 1, 0.95] }}
           transition={{ repeat: Infinity, duration: 2 }}
         >
-          case_files
+          casefiles
         </motion.h1>
 
         <motion.div
@@ -197,7 +197,7 @@ const App: React.FC = () => {
       >
         <div className="flex flex-col items-center">
           <div className="text-green-500 font-mono text-xl animate-pulse mb-4">
-            GENERATING CASE FILE...
+            GENERATING CASEFILE...
           </div>
           <div className="w-32 h-1 bg-green-900 relative overflow-hidden">
             <div
