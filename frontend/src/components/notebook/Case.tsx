@@ -5,7 +5,7 @@ export const Case: React.FC = () => {
   const narrative = useGameStore((state) => state.narrative)
 
   return (
-    <div className="w-full flex justify-center items-center gap-2 p-4 flex-col">
+    <div className="w-full flex pb-6 justify-center items-center gap-2 p-4 flex-col">
       <h1 className="font-bold uppercase text-center text-2xl text-red-400">
         Victim
       </h1>
@@ -31,9 +31,7 @@ export const Case: React.FC = () => {
           </p>
         </div>
       </div>
-      <p className="font-bold  text-lg">
-        <strong>Description:</strong> {narrative.scene.victim.description}
-      </p>
+      <p className="mb-6">{narrative.detective_briefing}</p>
     </div>
   )
 }
