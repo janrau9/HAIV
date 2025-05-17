@@ -213,22 +213,24 @@ const App: React.FC = () => {
 
   // Main game screen
   return (
+	<div className="w-screen h-screen relative">
+     <NoteBookMoadal />
     <div
       className="w-screen h-screen bg-black-custom relative flex flex-col justify-center items-center p-10"
       style={securityCameraStyle}
-    >
+	  >
       {/* Scanline effect overlay */}
       <div className="absolute inset-0 pointer-events-none z-50 overflow-hidden opacity-20">
         {[...Array(100)].map((_, i) => (
-          <div
+			<div
             key={i}
             className="w-full h-px bg-green-500"
             style={{
-              position: 'absolute',
-              top: `${i * 10}px`,
-              opacity: i % 3 === 0 ? 0.8 : 0.3,
+				position: 'absolute',
+				top: `${i * 10}px`,
+				opacity: i % 3 === 0 ? 0.8 : 0.3,
             }}
-          />
+			/>
         ))}
       </div>
 
@@ -256,13 +258,13 @@ const App: React.FC = () => {
         <button
           onClick={handleFinishQuestioning}
           className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black border-2 border-green-500 text-green-500 px-4 py-2 font-mono hover:bg-green-900 transition-colors z-20"
-        >
+		  >
           FINISH QUESTIONING
         </button>
 
         {/* Confirmation dialog */}
         {showFinishConfirm && (
-          <div className="absolute inset-0 bg-black bg-opacity-70 flex items-center justify-center z-30">
+			<div className="absolute inset-0 bg-black bg-opacity-70 flex items-center justify-center z-30">
             <div className="bg-black border-2 border-green-500 p-6 max-w-md text-green-500 font-mono">
               <h3 className="text-lg font-bold mb-4">
                 Confirm End Investigation
@@ -275,13 +277,13 @@ const App: React.FC = () => {
                 <button
                   onClick={cancelFinishQuestioning}
                   className="border border-green-500 px-4 py-2 hover:bg-red-900"
-                >
+				  >
                   CANCEL
                 </button>
                 <button
                   onClick={confirmFinishQuestioning}
                   className="border border-green-500 px-4 py-2 hover:bg-green-900"
-                >
+				  >
                   CONFIRM
                 </button>
               </div>
@@ -293,21 +295,21 @@ const App: React.FC = () => {
         <button
           onClick={() => openModal('noteBook')}
           className="absolute bottom-4 right-4 bg-black border border-green-500 p-2 hover:bg-green-900 z-10"
-        >
+		  >
           <img
             className="w-10 h-10 invert sepia hue-rotate-90"
             src="/images/gameBoy/notes.png"
             alt="Notes"
-          />
+			/>
         </button>
 
         <AnimatePresence mode="wait">
           {showChatBubble && (
-            <ChatBubble
+			  <ChatBubble
               text={suspectResponse}
               onComplete={() => setShowChatBubble(false)}
-            />
-          )}
+			  />
+			)}
         </AnimatePresence>
       </div>
 
@@ -323,7 +325,7 @@ const App: React.FC = () => {
           <UserInput
             onSend={handleUserMessage}
             disabled={questionCounts[currentSuspectId || ''] <= 0}
-          />
+			/>
         </div>
 
         {/* Right side - Suspect selector grid */}
@@ -335,19 +337,20 @@ const App: React.FC = () => {
       {/* Final suspect selection modal */}
       <AnimatePresence>
         {outOfQuestions && (
-          <SuspectSelection
+			<SuspectSelection
             suspects={suspects}
             onSelect={(index) => {
-              alert(`You selected ${suspects[index].name} as the murderer!`)
-              setGameStart(false)
-              setOutOfQuestions(false)
+				alert(`You selected ${suspects[index].name} as the murderer!`)
+				setGameStart(false)
+				setOutOfQuestions(false)
             }}
-          />
+			/>
         )}
       </AnimatePresence>
 
-      <NoteBookMoadal />
+ 
     </div>
+		</div>
   )
 }
 
