@@ -12,7 +12,7 @@ export const Case: React.FC = () => {
 
       <div className="flex border-b-1 py-2">
         <div className="">
-          <CasePolaroid imgUrl={'/images/gameBoy/suspects/suspect_1.png'}></CasePolaroid>
+          <CasePolaroid imgUrl={'/images/mansion.png'}></CasePolaroid>
         </div>
         <div className="my-2 p-2 ">
           <p className="font-bold underline text-lg">
@@ -21,14 +21,19 @@ export const Case: React.FC = () => {
           <p className="font-bold underline text-lg">
             <strong>Age:</strong> {narrative.scene.victim.age}
           </p>
-          <p className="font-bold  text-lg"><strong>When:</strong> {narrative.scene.when}</p>
-          <p className="font-bold  text-lg"> <strong>Where:</strong>{narrative.scene.where}</p>
-        </div>
- 
-      </div>
           <p className="font-bold  text-lg">
-            <strong>Description:</strong> {narrative.scene.victim.description}
+            <strong>When:</strong> {narrative.scene.when}
           </p>
+          <p className="font-bold  text-lg">
+            {' '}
+            <strong>Where:</strong>
+            {narrative.scene.where}
+          </p>
+        </div>
+      </div>
+      <p className="font-bold  text-lg">
+        <strong>Description:</strong> {narrative.scene.victim.description}
+      </p>
     </div>
   )
 }

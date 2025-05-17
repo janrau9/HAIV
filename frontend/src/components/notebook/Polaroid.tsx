@@ -22,7 +22,7 @@ export const CasePolaroid: React.FC<{ imgUrl: string }> = ({ imgUrl }) => {
       <div className="relative w-32 h-32 overflow-hidden border-1 bg-notebook-darker border-black">
         <img src={imgUrl} className="w-32 h-32 object-contain absolute" />
       </div>
-      <p className="font-bold text-black">Victim</p>
+      <p className="font-bold text-black">Crime Scene</p>
     </div>
   )
 }
