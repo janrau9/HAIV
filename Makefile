@@ -17,6 +17,10 @@ down:
 	@ps aux | grep '[v]ite' | awk '{print $$2}' | xargs -r kill
 	@ps aux | grep '[e]sbuild' | awk '{print $$2}' | xargs -r kill
 
+re:
+	@echo "Rebuilding both..."
+	( make down & make all )
+
 fclean: down
 	rm -rf backend/node_modules
 	rm -rf frontend/node_modules
