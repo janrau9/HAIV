@@ -60,9 +60,6 @@ export class WsController {
                             trust: 0,
                             guessCount: 0,
                             age: 0,
-                            memory: {
-                                history: [],
-                            },
                         };
                     }
                     const ai = await askSuspect(suspect, data.message.content);
@@ -73,8 +70,9 @@ export class WsController {
                             content: ai.output_text,
                             role: 'suspect',
                             suspectId: suspect.id,
+                            history: suspect.summary.memory.history,
                         }
-                    }
+                    };
                     this.isContainTriggerWord(ws, ai.output_text, suspect);
                     ws.send(JSON.stringify(response));
                 } catch (error) {
