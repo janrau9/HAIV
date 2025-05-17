@@ -25,55 +25,77 @@ Additionally:
   - `"alibi"`: What the suspect claims and whether anyone could verify it
 - This `"summary"` object should ONLY include information the detective would reasonably know before interrogation. Do NOT include any secrets, personality descriptions, hidden motives, or clue references here.
 - The `"summary"` is used for the suspect mugshot display and overview panel.
+- For each suspect, include a known_interactions field: a list of 1–2 short statements about what this suspect publicly knows, saw, or believes about other suspects (names must match the ones generated). These should not reveal secrets or falsehoods, only what is plausibly public knowledge or observable behavior.
+
+At the end of your output, include a hidden "case_summary" field (outside of the detective_briefing). This is a factual summary of the true events of the murder:
+Who committed the murder and why (motive).
+How the murder was carried out (method, time, location).
+What was staged or concealed (e.g., false alibis, planted clues).
+Which suspects are innocent and how they’re misled or misleading.
+How the player could eventually deduce the truth (e.g., contradictions in alibis, behavior under questioning, clue relevance).
+The player should be able to deduce the truth solely from interrogating the suspects
+This summary is for internal use only. Do NOT include this information in the briefing or suspects’ summaries.
 
 Below is the required output JSON format:
 
 ```json
 {
-  detective_briefing: "A paragraph summarizing what the detective knows and suspects so far.",
-  scene: {
-    when: "Date, time, weather",
-    where: "Specific location",
-    victim: {
-      name: "Victim's full name",
-      age: Number,
-      description: "Occupation or role in the setting, how they were found, known facts"
+  "detective_briefing": "A paragraph summarizing what the detective knows and suspects so far.",
+  "scene": {
+    "when": "Date, time, weather",
+    "where": "Specific location",
+    "victim": {
+      "name": "Victim's full name",
+      "age": "Number",
+      "description": "Occupation or role in the setting, how they were found, known facts"
     }
   },
-  suspects: [
+  "suspects": [
     {
-			id: 
-      summary: {
-        name: "Suspect's full name",
-        age: Number,
-        occupation: "What they do",
-        relationship_to_victim: "Known relationship",
-        alibi: "Their claimed whereabouts and who could confirm it"
+			"id": "<Suspect_1>"
+      "summary": {
+        "name": "Suspect's full name",
+        "age": "Number",
+        "occupation": "What they do",
+        "relationship_to_victim": "Known relationship",
+        "alibi": "Their claimed whereabouts and who could confirm it"
+				"known_interactions": "what this suspect publicly knows, saw, or believes about other suspects"
       },
-      personality: "How they act, speak, behave under questioning",
-      motive: "What they might gain or fear losing",
-      alibi: "Repeat or expand on their claimed story",
-      voice: "Notes on their tone, sentence style, tics, or speaking habits",
-      secret: "One juicy hidden fact",
-      clues: {
-        genuine: "A true clue related to the crime (e.g., timeline, weapon)",
-        distracting: "A misleading clue that seems suspicious but leads nowhere"
+      "personality": "How they act, speak, behave under questioning",
+      "motive": "What they might gain or fear losing",
+      "alibi": "Repeat or expand on their claimed story",
+      "voice": "Notes on their tone, sentence style, tics, or speaking habits",
+      "secret": "One juicy hidden fact",
+      "clues": {
+        "genuine": "A true clue related to the crime (e.g., timeline, weapon)",
+        "distracting": "A misleading clue that seems suspicious but leads nowhere"
       }
-			suspicion: Number (0 initially)
-			trust: Number (0 initially)
+			"suspicion": "Number (0 initially)"
+			"trust": "Number (0 initially)"
     }
     // Repeat for 4 suspects total
   ]
+	"case_summary": {
+      "killer": "ID of the guilty suspect (e.g., Suspect_3)",
+      "motive": "The real reason the killer committed the crime",
+      "method": "How the murder was committed (weapon, location, timing)",
+      "false_alibis": [
+        "List of alibis that are untrue or fabricated"
+      ],
+      "innocent_suspects": {
+        "Suspect_1": "Why this suspect looks suspicious but is innocent",
+        "Suspect_2": "Similar explanation",
+        "Suspect_4": "Etc"
+      },
+      "deduction_path": [
+        "Clues or contradictions the detective/player can extract from the subjects during interrogation to uncover the plot"
+      ]
+  }
 }
 
 Formatting:
-
-Use clear, vivid prose.
-
-Use third-person and present tense in scene descriptions and suspect profiles.
-
-Keep each suspect's full profile between 200–250 words excluding the summary block.
-
-Use creative names, motives, and clue ideas — make each case completely unique.
-
-Only return valid JSON. Do not include markdown formatting or explanations. Begin immediately with the JSON object.
+- Use clear, vivid prose.
+- Use third-person and present tense in scene descriptions and suspect profiles.
+- Keep each suspect's full profile between 200–250 words excluding the summary block.
+- Use creative names, motives, and clue ideas — make each case completely unique.
+- Only return valid JSON. Do not include markdown formatting or explanations. Begin immediately with the JSON object.
