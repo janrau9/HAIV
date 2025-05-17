@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
-import { WebSocketManager } from './WebSocketManager'
-import { useGameStore } from './store'
-import { SuspectSelection } from './components/suspect/SuspectSelection'
-import Result from './components/Result'
+import React, { useState, useEffect } from 'react'
 import { ChatBubble } from './components/dialogue/ChatBubble'
 import UserInput from './components/dialogue/UserInput'
 import { Suspect } from './components/suspect/Suspect'
 import { Background } from './components/Background'
 import { Table } from './components/Table'
+import { useGameStore } from './store'
+import useWebsocket from './useWebsocket'
 import { getNarrative } from './api'
+import { SuspectSelection } from './components/suspect/SuspectSelection'
 import { SuspectSelector } from './components/suspect/SuspectSelector'
 import { SuspectInfo } from './components/suspect/SuspectInfo'
+import { AnimatePresence, motion } from 'framer-motion'
 import { NoteBookMoadal } from './components/modals/NoteBookModal'
 import { useModal } from './contexts/ModalContext'
+import { WebSocketManager } from './WebSocketManager'
+import Result from './components/Result'
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -91,6 +92,8 @@ const App: React.FC = () => {
     boxShadow:
       'inset 0 0 30px rgba(0, 255, 0, 0.3), 0 0 10px rgba(0, 255, 0, 0.5)',
   }
+
+  useWebsocket()
 
   // Custom WebSocket event handler for accusation responses
   useEffect(() => {
