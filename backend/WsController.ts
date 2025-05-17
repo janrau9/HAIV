@@ -1,5 +1,6 @@
 import { WebSocket } from '@fastify/websocket';
 import { FastifyRequest } from 'fastify';
+import { askSuspect, createNarrative } from "./aiService";
 
 export class WsController {
     private static instance: WsController;
@@ -16,22 +17,27 @@ export class WsController {
     async play(ws: any, req: FastifyRequest) {
 
         console.log('Client connected');
+
         ws.on('close', () => {
             console.log('Client disconnected');
         });
         ws.on('error', () => {
             console.log('Client error');
         });
-        ws.on('message', (message: string) => {
-            const data = JSON.parse(message);
+        ws.on('message', async(raw) => {
+            const data = JSON.parse(raw);
             console.log('Received message:', data);
             if (data.type === 'question') {
+                // just test narrative creation and print it to console
+                /*const narrative = await createNarrative();
+                console.log('narrative:', narrative);*/
                 // Handle action message
+                const ai = await askSuspect(data.suspectId, data.message.content);
                 console.log('question:', data.message);
                 const response = {
                     type: 'response',
                     message: {
-                        content: `We dated... That doesn’t mean I killed her! ${data.message.content}`,
+                        content: ai.output_text,
                         role: 'suspect',
                         suspicionChange: 1,
                     }
