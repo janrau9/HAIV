@@ -14,6 +14,28 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { NoteBookMoadal } from './components/modals/NoteBookModal'
 import { useModal } from './contexts/ModalContext'
 
+// Animation variants for staggered animations
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      when: 'beforeChildren',
+      staggerChildren: 0.2,
+      duration: 0.5,
+    },
+  },
+}
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5 },
+  },
+}
+
 const App: React.FC = () => {
   // State variables
   const [suspectResponse, setSuspectResponse] = useState('')
@@ -192,7 +214,7 @@ const App: React.FC = () => {
   if (isLoading) {
     return (
       <div
-        className="w-screen h-screen flex justify-center items-center bg-black-custom"
+        className="w-screen h-screen flex justify-center items-center bg-black"
         style={securityCameraStyle}
       >
         <div className="flex flex-col items-center">
@@ -212,9 +234,12 @@ const App: React.FC = () => {
 
   // Main game screen
   return (
-    <div
+    <motion.div
       className="w-screen h-screen bg-black-custom relative flex flex-col justify-center items-center p-10"
       style={securityCameraStyle}
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
     >
       {/* Scanline effect overlay */}
       <div className="absolute inset-0 pointer-events-none z-50 overflow-hidden opacity-20">
@@ -241,7 +266,10 @@ const App: React.FC = () => {
       </div>
 
       {/* Main content area */}
-      <div className="w-[80%] relative border border-green-500 overflow-hidden mb-4">
+      <motion.div
+        className="w-[80%] relative border border-green-500 overflow-hidden mb-4"
+        variants={itemVariants}
+      >
         <Background />
         <AnimatePresence mode="wait">
           <Suspect imgUrl={currentSuspect?.mugshot || ''} />
@@ -259,10 +287,20 @@ const App: React.FC = () => {
           FINISH QUESTIONING
         </button>
 
-        {/* Confirmation dialog */}
+        {/* Confirmation dialog - positioned to not obscure the suspect */}
         {showFinishConfirm && (
-          <div className="absolute inset-0 bg-black bg-opacity-70 flex items-center justify-center z-30">
-            <div className="bg-black border-2 border-green-500 p-6 max-w-md text-green-500 font-mono">
+          <motion.div
+            className="absolute bottom-1/3 left-1/2 transform -translate-x-1/2 z-30"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+          >
+            <motion.div
+              className="bg-black border-2 border-green-500 p-6 max-w-md text-green-500 font-mono"
+              initial={{ scale: 0.9 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.9 }}
+            >
               <h3 className="text-lg font-bold mb-4">
                 Confirm End Investigation
               </h3>
@@ -284,8 +322,8 @@ const App: React.FC = () => {
                   CONFIRM
                 </button>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         )}
 
         {/* Notes button at bottom right */}
@@ -308,10 +346,10 @@ const App: React.FC = () => {
             />
           )}
         </AnimatePresence>
-      </div>
+      </motion.div>
 
       {/* Bottom input area with grid layout */}
-      <div className="w-[80%] flex gap-4">
+      <motion.div className="w-[80%] flex gap-4" variants={itemVariants}>
         {/* Left side - Suspect info */}
         <div className="w-1/3">
           <SuspectInfo />
@@ -329,24 +367,31 @@ const App: React.FC = () => {
         <div className="w-1/3">
           <SuspectSelector onSelect={handleSuspectSelect} />
         </div>
-      </div>
+      </motion.div>
 
       {/* Final suspect selection modal */}
       <AnimatePresence>
         {outOfQuestions && (
-          <SuspectSelection
-            suspects={suspects}
-            onSelect={(index) => {
-              alert(`You selected ${suspects[index].name} as the murderer!`)
-              setGameStart(false)
-              setOutOfQuestions(false)
-            }}
-          />
+          <motion.div
+            className="absolute inset-0 z-40 flex items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <SuspectSelection
+              suspects={suspects}
+              onSelect={(index) => {
+                alert(`You selected ${suspects[index].name} as the murderer!`)
+                setGameStart(false)
+                setOutOfQuestions(false)
+              }}
+            />
+          </motion.div>
         )}
       </AnimatePresence>
 
       <NoteBookMoadal />
-    </div>
+    </motion.div>
   )
 }
 
