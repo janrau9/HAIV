@@ -22,7 +22,6 @@ export class APIController {
     }
     async getNarrative(req: FastifyRequest, reply: FastifyReply) {
 			const narrative = await createNarrative();
-			console.log('narrative:', narrative); // Debugging
         reply.send(narrative);
     }
 }

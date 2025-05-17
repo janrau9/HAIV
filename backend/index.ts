@@ -8,7 +8,7 @@ import cors from '@fastify/cors';
 
 // Create Fastify instance
 const app = fastify({
-  logger: true
+  logger: false
 });
 const start = async () => {
   try {

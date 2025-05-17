@@ -2,11 +2,12 @@ import { WebSocket } from '@fastify/websocket';
 import { FastifyRequest } from 'fastify';
 import { askSuspect, createNarrative } from "./aiService";
 import type { SuspectProfile } from '../types/types';
+import { game } from './GameManager';
 
 interface QuestionMessage {
-  type: 'question';
-  suspect: { id: string };
-  message: { content: string };
+    type: 'question';
+    suspect: { id: string };
+    message: { content: string };
 }
 
 let narrative: any;
@@ -14,7 +15,12 @@ let narrative: any;
 export class WsController {
     private static instance: WsController;
     private suspects: Record<string, SuspectProfile> = {};
+    private gameManager = game;
     constructor() {
+        this.suspects = this.gameManager.getSuspects().reduce((acc, suspect) => {
+            acc[suspect.id] = suspect;
+            return acc;
+        }, {});
     }
 
     static getInstance(): WsController {
@@ -26,13 +32,7 @@ export class WsController {
 
     async play(ws: any, req: FastifyRequest) {
 
-			console.log('Client connected');
-			
-			// just test narrative creation and print it to console
-			if (!narrative) {
-				narrative = await createNarrative();
-				console.log('narrative:', narrative);
-			}
+        console.log('Client connected');
 
         ws.on('close', () => {
             console.log('Client disconnected');
@@ -56,8 +56,8 @@ export class WsController {
                             how_they_speak: '',
                             secret: '',
                             clues: {
-                                genuine: '',
-                                distracting: '',
+                                genuine: [],
+                                distracting: [],
                             },
                             suspicion: 0,
                             trust: 0,
