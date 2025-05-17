@@ -16,6 +16,7 @@ import { useModal } from './contexts/ModalContext'
 import { WebSocketManager } from './WebSocketManager'
 import Result from './components/Result'
 
+// Animation variants for staggered animations
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -38,12 +39,14 @@ const itemVariants = {
 }
 
 const App: React.FC = () => {
+  // State variables
   const [suspectResponse, setSuspectResponse] = useState('')
   const [outOfQuestions, setOutOfQuestions] = useState(false)
   const [gameStart, setGameStart] = useState(false)
   const [showChatBubble, setShowChatBubble] = useState(false)
   const [showFinishConfirm, setShowFinishConfirm] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  // New state variables for result screen
   const [showResult, setShowResult] = useState(false)
   const [isCorrect, setIsCorrect] = useState(false)
   const [selectedSuspectName, setSelectedSuspectName] = useState('')
@@ -63,6 +66,7 @@ const App: React.FC = () => {
   const suspects = useGameStore((state) => state.suspects)
   const currentSuspectId = useGameStore((state) => state.currentSuspectId)
   const questionCounts = useGameStore((state) => state.questionCounts)
+  const narrative = useGameStore((state) => state.narrative)
 
   // Helper functions for finishing questioning
   const handleFinishQuestioning = () => {
@@ -83,7 +87,7 @@ const App: React.FC = () => {
     setShowResult(false)
     setGameStart(false)
     setOutOfQuestions(false)
-    resetGame()
+    resetGame() // Reset game state completely
   }
 
   // Security camera filter effect CSS
@@ -106,7 +110,7 @@ const App: React.FC = () => {
       } else {
         setIsCorrect(false)
       }
-      // No need to set selectedSuspectName again
+      // No need to set selectedSuspectName again as it's already set when sending the accusation
       setShowResult(true)
     }
 
@@ -130,8 +134,8 @@ const App: React.FC = () => {
       addNarrative(narrativeData)
 
       // Randomize suspects and update them with narrative data
-      // const randomizeSuspects = [...suspects].sort(() => Math.random() - 0.5)
-      suspects.forEach((suspect, index) => {
+      const randomizeSuspects = [...suspects].sort(() => Math.random() - 0.5)
+      randomizeSuspects.forEach((suspect, index) => {
         if (narrativeData.suspects[index]?.summary) {
           updateSuspect(suspect.id, narrativeData.suspects[index].summary)
         }
@@ -148,7 +152,9 @@ const App: React.FC = () => {
   useEffect(() => {
     const lastMessage = messages[messages.length - 1]
     if (lastMessage && lastMessage.role === 'suspect') {
-      setSuspectResponse(lastMessage.content)
+      // Remove any 'undefined' strings that might appear in the response
+      const cleanResponse = lastMessage.content.replace('undefined', '')
+      setSuspectResponse(cleanResponse)
       setShowChatBubble(true)
     }
   }, [messages])
@@ -168,6 +174,15 @@ const App: React.FC = () => {
     if (!gameStart) return
     fetchNarrative()
   }, [gameStart])
+
+  // Logging effects
+  useEffect(() => {
+    console.log('narrative:', narrative)
+  }, [narrative])
+
+  useEffect(() => {
+    console.log('suspects:', suspects)
+  }, [suspects])
 
   // Handle user messages
   const handleUserMessage = (playerInput: string) => {
@@ -222,7 +237,7 @@ const App: React.FC = () => {
           animate={{ opacity: [0.7, 1, 0.7], scale: [0.95, 1, 0.95] }}
           transition={{ repeat: Infinity, duration: 2 }}
         >
-          case files
+          Dead Loop
         </motion.h1>
 
         <motion.div
@@ -338,6 +353,15 @@ const App: React.FC = () => {
               }}
             />
           ))}
+        </div>
+
+        {/* Camera interface elements */}
+        <div className="absolute top-5 left-5 text-green-500 font-mono text-xs">
+          REC ● {new Date().toLocaleTimeString()}
+        </div>
+
+        <div className="absolute top-5 right-5 text-green-500 font-mono text-xs">
+          CAM-01 :: INTERROGATION
         </div>
 
         {/* Main content area */}
