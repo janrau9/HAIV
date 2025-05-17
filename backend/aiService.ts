@@ -16,6 +16,28 @@ export interface ChatResponse {
   suspicionChange?: number;
 }
 
+function flattenObject(obj: any, prefix = '', result: any = {}): any {
+  for (const key in obj) {
+    if (!obj.hasOwnProperty(key)) continue;
+
+    const value = obj[key];
+		const newKey = prefix ? `${prefix}_${key}` : key;
+		console.log("newKey in flattenObject: ", newKey);
+
+    if (Array.isArray(value)) {
+      // Optionally handle arrays of strings or numbers
+      result[newKey] = value.map(v =>
+        typeof v === 'object' ? JSON.stringify(v) : String(v)
+      ).join(', ');
+    } else if (value !== null && typeof value === 'object') {
+      flattenObject(value, newKey, result);
+    } else {
+      result[newKey] = value;
+    }
+  }
+  return result;
+}
+
 
 export async function askSuspect(
   suspect: SuspectProfile,
@@ -24,7 +46,17 @@ export async function askSuspect(
   const promptPath = path.join(__dirname, "prompts", "suspect_template.txt");
   const template = await fs.readFile(promptPath, 'utf-8');
 
-  const intro = Mustache.render(template, suspect);
+	console.log("suspect: ", suspect);
+	const flatSuspect = flattenObject(suspect);
+	// const flatSuspect = {
+	// 	...suspect,
+	// 	...suspect.summary,
+	// 	clues_genuine: JSON.stringify(suspect.clues.genuine),
+	// 	clues_distracting: JSON.stringify(suspect.clues.distracting),
+	// 	memory_history: JSON.stringify(suspect.memory?.history ?? [])
+	// };
+	console.log("flatSuspect: ", flatSuspect);
+	const intro = Mustache.render(template, flatSuspect);
   console.log('systemPrompt:', intro);
 
   const recentMsgs = getRecentHistory(suspect, 3)
@@ -74,7 +106,8 @@ export async function createNarrative() {
       },
     ],
   });
-  const parsedResp = JSON.parse(resp.output_text);
+	const parsedResp = JSON.parse(resp.output_text);
+	console.log("parsedResp: ", parsedResp); // Debugging
   game.initGame(parsedResp.suspects, [], parsedResp.case_summary)
   delete parsedResp.case_summary;
   const sanitizeResp = JSON.stringify(parsedResp);

@@ -49,16 +49,13 @@ export class WsController {
                     if (!suspect) {
                         suspect = {
                             id: data.suspect.id,
-                            summary: data.SuspectSummary,
-                            personality: '',
-                            motive: '',
-                            alibi: '',
-                            how_they_speak: '',
-                            secret: '',
-                            clues: {
-                                genuine: {},
-                                distracting: {},
-                            },
+                            summary: data.suspect.SuspectSummary,
+                            personality: data.suspect.personality,
+                            motive: data.suspect.motive,
+                            alibi: data.suspect.alibi,
+                            how_they_speak: data.suspect.how_they_speak,
+                            secret: data.suspect.secret,
+                            clues: data.suspect.clues,
                             suspicion: 0,
                             trust: 0,
                             guessCount: 0,
