@@ -23,11 +23,11 @@ export const SuspectSelector: React.FC<SuspectSelectorProps> = ({
   ]
 
   return (
-    <div className="p-2 bg-black bg-opacity-70 border border-green-500 text-green-500 font-mono">
-      <div className="text-center mb-2">
-        <h3 className="font-bold text-sm">SELECT SUSPECT</h3>
+    <div className="h-full bg-black bg-opacity-70 border border-green-500 text-green-500 font-mono w-full">
+      <div className="text-center p-2">
+        <h3 className="font-bold">SELECT SUSPECT</h3>
       </div>
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-2 gap-2 p-2">
         {buttons.map(({ key, suspect }) => (
           <motion.button
             key={key}

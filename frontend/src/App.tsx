@@ -125,7 +125,7 @@ const App: React.FC = () => {
 
   return (
     <div
-      className="w-screen h-screen bg-black-custom gap-2 relative flex flex-col justify-center items-center p-10"
+      className="w-screen h-screen bg-black-custom relative flex flex-col justify-center items-center p-10"
       style={securityCameraStyle}
     >
       {/* Scanline effect overlay */}
@@ -144,16 +144,16 @@ const App: React.FC = () => {
       </div>
 
       {/* Camera interface elements */}
-      <div className="absolute top-2 left-2 text-green-500 font-mono text-xs">
+      <div className="absolute top-5 left-5 text-green-500 font-mono text-xs">
         REC ● {new Date().toLocaleTimeString()}
       </div>
 
-      <div className="absolute top-2 right-2 text-green-500 font-mono text-xs">
+      <div className="absolute top-5 right-5 text-green-500 font-mono text-xs">
         CAM-01 :: INTERROGATION
       </div>
 
       {/* Main content area */}
-      <div className="w-[80%] relative border border-green-500 overflow-hidden">
+      <div className="w-[80%] relative border border-green-500 overflow-hidden mb-4">
         <Background />
         <AnimatePresence mode="wait">
           <Suspect imgUrl={currentSuspect?.mugshot || ''} />
@@ -186,14 +186,14 @@ const App: React.FC = () => {
       </div>
 
       {/* Bottom input area with grid layout */}
-      <div className="w-[80%] flex mt-4 gap-2">
+      <div className="w-[80%] flex gap-4">
         {/* Left side - Suspect info */}
-        <div className="w-1/4">
+        <div className="w-1/3">
           <SuspectInfo />
         </div>
 
         {/* Middle - Input field */}
-        <div className="flex-1">
+        <div className="w-1/3">
           <UserInput
             onSend={handleUserMessage}
             disabled={questionCounts[currentSuspectId || ''] <= 0}
@@ -201,7 +201,7 @@ const App: React.FC = () => {
         </div>
 
         {/* Right side - Suspect selector grid */}
-        <div className="w-1/4">
+        <div className="w-1/3">
           <SuspectSelector onSelect={handleSuspectSelect} />
         </div>
       </div>

@@ -37,7 +37,7 @@ const UserInput: React.FC<UserInputProps> = ({ onSend, disabled = false }) => {
   return (
     <form
       onSubmit={handleSubmit}
-      className={`h-full border-green-500 border bg-black bg-opacity-70 w-full px-4 flex justify-center items-center gap-2 ${
+      className={`h-full border-green-500 border bg-black bg-opacity-70 w-full relative ${
         disabled ? 'opacity-50' : ''
       }`}
     >
@@ -53,11 +53,15 @@ const UserInput: React.FC<UserInputProps> = ({ onSend, disabled = false }) => {
             handleSubmit(e) // Send message
           }
         }}
-        rows={2}
+        rows={3}
         disabled={disabled}
-        className="flex-1 p-2 bg-transparent text-green-500 resize-none border-none focus:outline-none h-full font-mono"
+        className="w-full p-4 bg-transparent text-green-500 resize-none border-none focus:outline-none h-full font-mono"
       />
-      <button type="submit" className="text-green-500 p-2" disabled={disabled}>
+      <button
+        type="submit"
+        className="text-green-500 p-2 absolute bottom-2 right-2"
+        disabled={disabled}
+      >
         <SendIcon />
       </button>
     </form>
