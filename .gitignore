@@ -1,9 +1,5 @@
 node_modules
 dist
-backend/backend.log
-frontend/frontend.log
-frontend.log
-backend.log
 *.env
-backend/.env
+*.log
 backend/test.http
