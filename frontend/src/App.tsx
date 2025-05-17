@@ -131,11 +131,9 @@ const App: React.FC = () => {
       setIsLoading(true)
       const narrativeData = await getNarrative()
       console.log('narrative:', narrativeData)
-      addNarrative(narrativeData)
+			addNarrative(narrativeData)
 
-      // Randomize suspects and update them with narrative data
-      const randomizeSuspects = [...suspects].sort(() => Math.random() - 0.5)
-      randomizeSuspects.forEach((suspect, index) => {
+      suspects.forEach((suspect, index) => {
         if (narrativeData.suspects[index]?.summary) {
           updateSuspect(suspect.id, narrativeData.suspects[index].summary)
         }
