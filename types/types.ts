@@ -35,6 +35,7 @@ export type Message = {
   id: string
   role: Role
   speakerId?: string
+  suspectId?: string
   content: string
   emotion?: string
   sceneId?: string
@@ -55,6 +56,9 @@ export type SuspectSummary = {
   suspicion: number
   trust: number
   revealedClues?: string[]
+  memory?: {
+    history: ChatResponse[];
+  };
 }
 
 // if you change anything here, update that change to WsController.ts as well please!
@@ -74,9 +78,6 @@ export type SuspectProfile = {
   trust: number
   guessCount: number
   age: number
-  memory?: {
-    history: ChatResponse[];
-  };
 }
 
 // types/clue.ts

@@ -8,7 +8,7 @@ const useWebsocket = () => {
   const messages = useGameStore((state) => state.messages)
   const currentSuspectId = useGameStore((state) => state.currentSuspectId)
   const suspects = useGameStore((state) => state.suspects)
-  const { addMessage, adjustSuspicion, adjustTrust, updateSuspect } = useGameStore.getState()
+  const { addMessage, updateSuspectMemory, adjustSuspicion, adjustTrust, updateSuspect } = useGameStore.getState()
 
   const handleResponse = (message: any) => {
     console.log('response: ', message)
@@ -22,6 +22,10 @@ const useWebsocket = () => {
       // trustChange: message.trustChange,
       suspectId: message.suspectId,
     })
+
+    if (message.history && message.suspectId) {
+      updateSuspectMemory(message.suspectId, message.history)
+    }
 
     // // If there's a suspicion change and a suspectId, update the suspect's suspicion level
     // if (message.suspicionChange && message.suspectId) {

@@ -6,6 +6,8 @@ import type {
   Scene,
   SuspectSummary,
 } from '../../types/types' // Adjust the import path as necessary
+import type { ChatResponse } from '../../backend/aiService'
+import { Suspect } from './components/suspect/Suspect'
 
 // New interface for managing question counts
 interface QuestionCounts {
@@ -35,6 +37,7 @@ type GameState = {
   resetGame: () => void
   decrementQuestionCount: (suspectId: string) => void
   resetQuestionCounts: () => void
+  updateSuspectMemory: (id: string, history: ChatResponse[]) => void
 }
 
 const initialSuspects: SuspectSummary[] = [
@@ -48,6 +51,7 @@ const initialSuspects: SuspectSummary[] = [
     mugshot: '/images/gameBoy/suspects/suspect_1.png',
     suspicion: 0,
     trust: 0,
+    memory: { history: [] },
   },
   {
     id: 'Suspect_2',
@@ -59,6 +63,7 @@ const initialSuspects: SuspectSummary[] = [
     mugshot: '/images/gameBoy/suspects/suspect_2.png',
     suspicion: 0,
     trust: 0,
+    memory: { history: [] },
   },
   {
     id: 'Suspect_3',
@@ -70,6 +75,7 @@ const initialSuspects: SuspectSummary[] = [
     mugshot: '/images/gameBoy/suspects/suspect_3.png',
     suspicion: 0,
     trust: 0,
+    memory: { history: [] },
   },
   {
     id: 'Suspect_4',
@@ -81,6 +87,7 @@ const initialSuspects: SuspectSummary[] = [
     mugshot: '/images/gameBoy/suspects/suspect_4.png',
     suspicion: 0,
     trust: 0,
+    memory: { history: [] },
   },
   // Add more suspects here
 ]
@@ -205,4 +212,11 @@ export const useGameStore = create<GameState>((set, get) => ({
       gameOver: false,
       questionCounts: initializeQuestionCounts(),
     }),
+
+  updateSuspectMemory: (id, history) =>
+    set((state) => ({
+      suspects: state.suspects.map((suspect) =>
+        suspect.id === id ? { ...suspect, memory: { history } } : suspect,
+      ),
+    })),
 }))
