@@ -274,12 +274,12 @@ export const Notes: React.FC = () => {
     'case',
   )
   const [selectedSuspectId, setSelectedSuspectId] = useState<string | null>(
-    'suspect_1',
+    'Suspect_1',
   )
 
   return (
     <div className="w-full h-full">
-      <div className="my-0 flex items-end">
+      <div className="my-0 flex items-end justify-end">
         <NotesNav selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
 
         {selectedTab === 'suspects' && (
