@@ -1,7 +1,6 @@
-import React from 'react'
 import { motion } from 'framer-motion'
+import React from 'react'
 import { useGameStore } from '../../store'
-// import { SuspectProfile } from '../../../types/types';
 
 interface SuspectSelectorProps {
   onSelect: (suspectId: string) => void
