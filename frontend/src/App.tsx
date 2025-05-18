@@ -227,9 +227,16 @@ const App: React.FC = () => {
   if (!gameStart) {
     return (
       <div
-        className="w-screen h-screen bg-black gap-2 relative flex flex-col gap-10 justify-center items-center p-10 font-display"
+        className="w-screen h-screen relative flex flex-col gap-10 justify-center items-center p-10 font-display"
         style={securityCameraStyle}
       >
+        {/* Background wall */}
+        <img
+          src="/images/wall.png"
+          className="w-full h-full object-cover brightness-50 absolute inset-0"
+          alt="Wall"
+        />
+  
         {/* Scanline effect overlay */}
         <div className="absolute inset-0 pointer-events-none z-50 overflow-hidden opacity-20">
           {[...Array(100)].map((_, i) => (
@@ -244,18 +251,21 @@ const App: React.FC = () => {
             />
           ))}
         </div>
-
+  
+        {/* Central glow effect */}
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-green-500 opacity-10 filter blur-xl z-10" />
+  
         <motion.h1
-          className="uppercase font-bold text-5xl text-green-500"
+          className="uppercase font-bold text-5xl text-green-500 z-20"
           initial={{ opacity: 0 }}
           animate={{ opacity: [0.7, 1, 0.7], scale: [0.95, 1, 0.95] }}
           transition={{ repeat: Infinity, duration: 2 }}
         >
-          Case Files
+          DEAD LOOP
         </motion.h1>
-
+  
         <motion.div
-          className="flex flex-col items-center gap-5"
+          className="flex flex-col items-center gap-5 z-20"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
@@ -268,7 +278,7 @@ const App: React.FC = () => {
           >
             New Game
           </motion.h2>
-
+  
           <motion.div className="text-green-600 text-sm mt-4 text-center max-w-md">
             <p>A murder investigation simulator</p>
             <p>with AI-driven narrative.</p>
@@ -306,42 +316,181 @@ const App: React.FC = () => {
     )
   }
 
-  // Show loading screen while fetching narrative
-  if (isLoading) {
-    return (
-      <div
-        className="w-screen h-screen flex justify-center items-center bg-black"
-        style={securityCameraStyle}
-      >
-        {/* Scanline effect overlay */}
-        <div className="absolute inset-0 pointer-events-none z-50 overflow-hidden opacity-20">
-          {[...Array(100)].map((_, i) => (
-            <div
-              key={i}
-              className="w-full h-px bg-green-500"
-              style={{
-                position: 'absolute',
-                top: `${i * 10}px`,
-                opacity: i % 3 === 0 ? 0.8 : 0.3,
-              }}
-            />
-          ))}
-        </div>
+if (!gameStart) {
+  return (
+    <div
+      className="w-screen h-screen relative flex flex-col gap-10 justify-center items-center p-10 font-display"
+      style={securityCameraStyle}
+    >
+      {/* Background wall */}
+      <img
+        src="/images/wall.png"
+        className="w-full h-full object-cover brightness-50 absolute inset-0"
+        alt="Wall"
+      />
 
-        <div className="flex flex-col items-center">
-          <div className="text-green-500 font-mono text-xl animate-pulse mb-4">
-            GENERATING CASE FILE...
+      {/* Scanline effect overlay */}
+      <div className="absolute inset-0 pointer-events-none z-50 overflow-hidden opacity-20">
+        {[...Array(100)].map((_, i) => (
+          <div
+            key={i}
+            className="w-full h-px bg-green-500"
+            style={{
+              position: 'absolute',
+              top: `${i * 10}px`,
+              opacity: i % 3 === 0 ? 0.8 : 0.3,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Central glow effect */}
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-green-500 opacity-10 filter blur-xl z-10" />
+
+      <motion.h1
+        className="uppercase font-bold text-5xl text-green-500 z-20"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: [0.7, 1, 0.7], scale: [0.95, 1, 0.95] }}
+        transition={{ repeat: Infinity, duration: 2 }}
+      >
+        Case Files
+      </motion.h1>
+
+      <motion.div
+        className="flex flex-col items-center gap-5 z-20"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.5 }}
+      >
+        <motion.h2
+          className="uppercase font-bold text-green-500 border border-green-500 px-6 py-3 cursor-pointer hover:bg-green-900"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={restartGame}
+        >
+          New Game
+        </motion.h2>
+
+        <motion.div className="text-green-600 text-sm mt-4 text-center max-w-md">
+          <p>A murder investigation simulator</p>
+          <p>with AI-driven narrative.</p>
+        </motion.div>
+      </motion.div>
+    </div>
+  )
+}
+
+if (isLoading) {
+  return (
+    <div
+      className="w-screen h-screen flex justify-center items-center relative"
+      style={securityCameraStyle}
+    >
+      {/* Background wall */}
+      <img
+        src="/images/wall.png"
+        className="w-full h-full object-cover brightness-50 absolute inset-0"
+        alt="Wall"
+      />
+
+      {/* Scanline effect overlay */}
+      <div className="absolute inset-0 pointer-events-none z-50 overflow-hidden opacity-20">
+        {[...Array(100)].map((_, i) => (
+          <div
+            key={i}
+            className="w-full h-px bg-green-500"
+            style={{
+              position: 'absolute',
+              top: `${i * 10}px`,
+              opacity: i % 3 === 0 ? 0.8 : 0.3,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Central glow effect */}
+      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-green-500 opacity-10 filter blur-xl z-10" />
+
+      <div className="flex flex-col items-center z-20">
+        {/* Breathing "GENERATING CASE FILE..." text with animation matching the title */}
+        <motion.div
+          className="text-green-500 font-mono text-xl mb-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: [0.7, 1, 0.7], scale: [0.95, 1, 0.95] }}
+          transition={{ repeat: Infinity, duration: 2 }}
+        >
+          GENERATING CASE FILE...
+        </motion.div>
+        
+        {/* Progress bar container */}
+        <div className="w-64 h-6 bg-black border-2 border-green-500 p-0.5 rounded relative overflow-hidden">
+          {/* Animated progress bar */}
+          <div 
+            className="h-full bg-green-500 rounded transition-all duration-1000 ease-linear relative overflow-hidden"
+            style={{ 
+              animation: 'progressBar 13s linear forwards',
+              width: '0%'
+            }}
+          >
+            {/* Optional: Add scanner line effect inside the progress bar */}
+            <div className="absolute h-full w-1 bg-green-200 opacity-30 animate-pulse"></div>
           </div>
-          <div className="w-32 h-1 bg-green-900 relative overflow-hidden">
-            <div
-              className="absolute h-full bg-green-500 animate-[loading_1.5s_ease-in-out_infinite]"
-              style={{ width: '30%' }}
-            />
+          
+          {/* Progress percentage counter */}
+          <div className="absolute inset-0 flex items-center justify-center text-green-500 font-mono text-sm tracking-wider mix-blend-difference">
+            <span className="loading-percentage"></span>
           </div>
+        </div>
+        
+        {/* Keyframes for progress bar animation */}
+        <style jsx>{`
+          @keyframes progressBar {
+            0% { width: 0%; }
+            10% { width: 10%; }
+            20% { width: 20%; }
+            30% { width: 30%; }
+            40% { width: 40%; }
+            50% { width: 50%; }
+            60% { width: 60%; }
+            70% { width: 70%; }
+            80% { width: 80%; }
+            90% { width: 90%; }
+            100% { width: 100%; }
+          }
+          
+          /* Animation for percentage counter text */
+          .loading-percentage {
+            counter-reset: percentage 0;
+            animation: count 13s linear forwards;
+          }
+          
+          .loading-percentage::after {
+            content: counter(percentage) '%';
+          }
+          
+          @keyframes count {
+            0% { counter-increment: percentage 0; }
+            10% { counter-increment: percentage 10; }
+            20% { counter-increment: percentage 20; }
+            30% { counter-increment: percentage 30; }
+            40% { counter-increment: percentage 40; }
+            50% { counter-increment: percentage 50; }
+            60% { counter-increment: percentage 60; }
+            70% { counter-increment: percentage 70; }
+            80% { counter-increment: percentage 80; }
+            90% { counter-increment: percentage 90; }
+            100% { counter-increment: percentage 100; }
+          }
+        `}</style>
+        
+        {/* Status text */}
+        <div className="text-green-500 font-mono text-xs mt-3">
+          ENCRYPTING DATA...
         </div>
       </div>
-    )
-  }
+    </div>
+  )
+}
 
   // Main game screen
   return (
@@ -367,15 +516,6 @@ const App: React.FC = () => {
               }}
             />
           ))}
-        </div>
-
-        {/* Camera interface elements */}
-        <div className="absolute top-5 left-5 text-green-500 font-mono text-xs">
-          REC ● {new Date().toLocaleTimeString()}
-        </div>
-
-        <div className="absolute top-5 right-5 text-green-500 font-mono text-xs">
-          CAM-01 :: INTERROGATION
         </div>
 
         {/* Main content area */}

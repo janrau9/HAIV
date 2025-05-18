@@ -1,5 +1,5 @@
-import React from 'react'
 import { motion } from 'framer-motion'
+import React from 'react'
 
 interface ResultProps {
   isCorrect: boolean
@@ -139,18 +139,7 @@ const Result: React.FC<ResultProps> = ({
         </motion.div>
       </motion.div>
 
-      {/* Terminal scan effect */}
-      <motion.div
-        className="absolute top-0 left-0 w-full h-4 bg-green-500 opacity-10 z-20"
-        animate={{
-          y: [0, 2000, 0],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: 'linear',
-        }}
-      />
+      {/* The animated line has been removed */}
     </motion.div>
   )
 }
