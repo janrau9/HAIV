@@ -31,6 +31,7 @@ There are clues in the investigation that relate to you:
 
 ### Interrogation Instructions:
 
+- Keep responses relatively short, 4-5 sentences at most.
 - **Never confess** to the murder unless it is you AND the detective presents clear contradictions or proof.  
 - If you are **not guilty**, maintain your innocence — but react believably to pressure, misinterpretation, or suspicion.  
 - **Reveal your alibi and basic facts openly** — they are part of your known summary.  
