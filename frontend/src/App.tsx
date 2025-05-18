@@ -52,6 +52,7 @@ const App: React.FC = () => {
   const [isCorrect, setIsCorrect] = useState(false)
   const [selectedSuspectName, setSelectedSuspectName] = useState('')
   const { openModal } = useModal()
+  const [questionsAreExhausted, setQuestionsAreExhausted] = useState(false)
 
   // Store functions and state
   const {
@@ -95,7 +96,8 @@ const App: React.FC = () => {
     setShowResult(false)
     setGameStart(false)
     setOutOfQuestions(false)
-    resetGame() // Reset game state completely
+    setQuestionsAreExhausted(false)
+    resetGame()
   }
 
   // Security camera filter effect CSS
@@ -170,16 +172,23 @@ const App: React.FC = () => {
     const allQuestionsUsed = Object.values(questionCounts).every(
       (count) => count <= 0,
     )
-    if (allQuestionsUsed && !outOfQuestions && !showQuestionsExhaustedPrompt) {
+    if (allQuestionsUsed && !outOfQuestions && !questionsAreExhausted) {
+      setQuestionsAreExhausted(true)
+    }
+  }, [questionCounts, outOfQuestions, questionsAreExhausted])
+
+  // Show the prompt after chat bubble disappears
+  useEffect(() => {
+    if (questionsAreExhausted && !showChatBubble && !showQuestionsExhaustedPrompt) {
       setShowQuestionsExhaustedPrompt(true)
-      
-      // After 3 seconds, show the suspect selection screen
+
+      // After 5 seconds, show the suspect selection screen
       setTimeout(() => {
         setOutOfQuestions(true)
         setShowQuestionsExhaustedPrompt(false)
-      }, 3000)
+      }, 5000)
     }
-  }, [questionCounts, outOfQuestions, showQuestionsExhaustedPrompt])
+  }, [questionsAreExhausted, showChatBubble, showQuestionsExhaustedPrompt])
 
   // Effect to fetch narrative when game starts
   useEffect(() => {
@@ -218,6 +227,7 @@ const App: React.FC = () => {
   const restartGame = () => {
     setGameStart(true)
     setOutOfQuestions(false)
+    setQuestionsAreExhausted(false)
     resetQuestionCounts()
   }
 
@@ -482,7 +492,7 @@ const App: React.FC = () => {
                     You have used all available questions.
                   </p>
                   <p className="text-center">
-                    Prepare to make your final accusation...
+                    Prepare to make your final accusation.
                   </p>
                 </motion.div>
               </motion.div>
