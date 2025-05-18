@@ -53,6 +53,8 @@ Dead Loop is an interactive murder mystery investigation game with AI-driven nar
 
 6. When you are ready (or out of questions), make your accusation by selecting "Finish Questioning"
 
+![Suspect Selection](frontend/public/screenshot2.png)
+
 ## Project Structure
 
 ```
@@ -85,8 +87,8 @@ Dead Loop is an interactive murder mystery investigation game with AI-driven nar
 
 ## Credits
 
-Janrau - https://github.com/janrau9
-Lassi - https://github.com/lassikon
-Valle - https://github.com/Vallehtelia
-Olli - https://github.com/koodikommando
-Jarno - https://github.com/Jarnomer
+[Janrau](https://github.com/janrau9)
+[Lassi](https://github.com/lassikon)
+[Valle](https://github.com/Vallehtelia)
+[Olli](https://github.com/koodikommando)
+[Jarno](https://github.com/Jarnomer)
