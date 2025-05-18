@@ -1,12 +1,12 @@
 <div align="center">
+  <img src="frontend/public/dead-loop-title.svg" alt="DEAD LOOP" width="600">
+</div>
+
+<div align="center">
   <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License">
   <img src="https://img.shields.io/badge/Version-1.0.0-brightgreen.svg" alt="Version">
   <img src="https://img.shields.io/badge/Node.js-v16+-orange.svg" alt="Node.js">
   <img src="https://img.shields.io/badge/API-OpenAI-lightgrey.svg" alt="API">
-</div>
-
-<div align="center">
-  <img src="frontend/public/dead-loop-title.svg" alt="DEAD LOOP" width="600">
 </div>
 
 <p align="center">
@@ -45,7 +45,7 @@ Dead Loop is an interactive murder mystery investigation game with AI-driven nar
 - **Suspicion Tracking**: Monitor how suspicious each character appears as you gather evidence
 - **Retro Security Camera Aesthetic**: Immersive UI with a green-tinted security camera visual style
 
-## 🛠️ Technologies Used
+## 🛠️ Technologies
 
 - **Frontend**: React, TypeScript, Vite, Framer Motion
 - **Backend**: Node.js, Fastify, WebSockets
