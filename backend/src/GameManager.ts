@@ -1,5 +1,5 @@
 // GameLogicManager.ts
-import { Clue, SuspectProfile, GameState } from '../types/types'
+import { Clue, SuspectProfile, GameState } from '../../types/types'
 
 class GameManager {
     private static instance: GameManager

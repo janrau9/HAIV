@@ -6,7 +6,7 @@ import type {
   Scene,
   SuspectSummary,
 } from '../../types/types' // Adjust the import path as necessary
-import type { ChatResponse } from '../../backend/aiService'
+import type { ChatResponse } from '../../backend/src/aiService'
 import { Suspect } from './components/suspect/Suspect'
 
 // New interface for managing question counts
