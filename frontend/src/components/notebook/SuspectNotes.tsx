@@ -19,9 +19,13 @@ export const SuspectNotes: React.FC<{ suspect: SuspectSummary }> = ({ suspect })
             <strong>Alibi:</strong> {suspect.alibi}
 					</p>
 					<p>
-  				<strong>Known Interactions:</strong>{" "}
-  				{suspect.known_interactions?.split(";").join(", ")}
-					</p>
+           <strong>Known Interactions:</strong>{" "}
+           {suspect.known_interactions == null
+             ? "Unknown"
+             : Array.isArray(suspect.known_interactions)
+             ? suspect.known_interactions.join(", ")
+             : suspect.known_interactions.split(";").join(", ")}
+          </p>
         </div>
         <div className="relative w-24 h-24 min-w-24 min-h-24 overflow-hidden">
           <img
@@ -42,6 +46,21 @@ export const SuspectNotes: React.FC<{ suspect: SuspectSummary }> = ({ suspect })
               <span className="font-bold">{note}</span>
             </li>
           ))}
+        </ul>
+         <h2 className="font-semibold mt-4">Conversation History</h2>
+        <ul className="pl-5 list-disc">
+          {suspect.memory?.history?.length ? (
+            suspect.memory.history.map((msg, idx) => (
+              <li key={`hist-${idx}`} className="mb-1">
+                <strong>
+                  {msg.role === 'user' ? 'You' : suspect.name}:
+                </strong>{' '}
+                {msg.content}
+              </li>
+            ))
+          ) : (
+            <li className="italic text-gray-600">No conversation yet.</li>
+          )}
         </ul>
       </div>
     </div>

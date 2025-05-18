@@ -22,6 +22,13 @@ export class WebSocketManager {
   }
 
   connect() {
+
+    if (
+    this.ws && (this.ws.readyState === WebSocket.OPEN || this.ws.readyState === WebSocket.CONNECTING)) {
+      console.log('WebSocketManager: connect() called but socket is already open/connecting')
+      return
+    }
+    
     if (this.ws) {
       console.log('Closing existing WebSocket:', this.url)
       this.ws.close()
