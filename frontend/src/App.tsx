@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import React, { useEffect, useState } from 'react'
+import { WebSocketManager } from './WebSocketManager'
+import { getNarrative } from './api'
+import { Background } from './components/Background'
+import Result from './components/Result'
+import { Table } from './components/Table'
 import { ChatBubble } from './components/dialogue/ChatBubble'
 import UserInput from './components/dialogue/UserInput'
+import { NoteBookMoadal } from './components/modals/NoteBookModal'
 import { Suspect } from './components/suspect/Suspect'
-import { Background } from './components/Background'
-import { Table } from './components/Table'
-import { useGameStore } from './store'
-import useWebsocket from './useWebsocket'
-import { getNarrative } from './api'
+import { SuspectInfo } from './components/suspect/SuspectInfo'
 import { SuspectSelection } from './components/suspect/SuspectSelection'
 import { SuspectSelector } from './components/suspect/SuspectSelector'
-import { SuspectInfo } from './components/suspect/SuspectInfo'
-import { AnimatePresence, motion } from 'framer-motion'
-import { NoteBookMoadal } from './components/modals/NoteBookModal'
 import { useModal } from './contexts/ModalContext'
-import { WebSocketManager } from './WebSocketManager'
-import Result from './components/Result'
+import { useGameStore } from './store'
+import useWebsocket from './useWebsocket'
 
 // Animation variants for staggered animations
 const containerVariants = {
@@ -42,6 +42,7 @@ const App: React.FC = () => {
   // State variables
   const [suspectResponse, setSuspectResponse] = useState('')
   const [outOfQuestions, setOutOfQuestions] = useState(false)
+  const [showQuestionsExhaustedPrompt, setShowQuestionsExhaustedPrompt] = useState(false)
   const [gameStart, setGameStart] = useState(false)
   const [showChatBubble, setShowChatBubble] = useState(false)
   const [showFinishConfirm, setShowFinishConfirm] = useState(false)
@@ -74,7 +75,14 @@ const App: React.FC = () => {
   }
 
   const confirmFinishQuestioning = () => {
-    setOutOfQuestions(true)
+    setShowQuestionsExhaustedPrompt(true)
+    
+    // After 3 seconds, show the suspect selection screen
+    setTimeout(() => {
+      setOutOfQuestions(true)
+      setShowQuestionsExhaustedPrompt(false)
+    }, 3000)
+    
     setShowFinishConfirm(false)
   }
 
@@ -162,10 +170,16 @@ const App: React.FC = () => {
     const allQuestionsUsed = Object.values(questionCounts).every(
       (count) => count <= 0,
     )
-    if (allQuestionsUsed) {
-      setOutOfQuestions(true)
+    if (allQuestionsUsed && !outOfQuestions && !showQuestionsExhaustedPrompt) {
+      setShowQuestionsExhaustedPrompt(true)
+      
+      // After 3 seconds, show the suspect selection screen
+      setTimeout(() => {
+        setOutOfQuestions(true)
+        setShowQuestionsExhaustedPrompt(false)
+      }, 3000)
     }
-  }, [questionCounts])
+  }, [questionCounts, outOfQuestions, showQuestionsExhaustedPrompt])
 
   // Effect to fetch narrative when game starts
   useEffect(() => {
@@ -445,6 +459,35 @@ const App: React.FC = () => {
               </motion.div>
             )}
           </AnimatePresence>
+
+          {/* Questions Exhausted Prompt */}
+          <AnimatePresence>
+            {showQuestionsExhaustedPrompt && (
+              <motion.div
+                className="absolute inset-0 flex items-center justify-center z-30"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <motion.div
+                  className="bg-black bg-opacity-90 border-2 border-green-500 p-6 max-w-md text-green-500 font-mono"
+                  initial={{ scale: 0.9 }}
+                  animate={{ scale: 1 }}
+                  exit={{ scale: 0.9 }}
+                >
+                  <h3 className="text-lg font-bold mb-4 text-center">
+                    ALL QUESTIONS EXHAUSTED
+                  </h3>
+                  <p className="mb-2 text-center">
+                    You have used all available questions.
+                  </p>
+                  <p className="text-center">
+                    Prepare to make your final accusation...
+                  </p>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.div>
 
         {/* Bottom input area with grid layout */}
@@ -499,18 +542,7 @@ const App: React.FC = () => {
                     }
                     setShowResult(true)
                   })
-                  // For now, we'll just simulate the accusation result
 
-                  // For now, we'll determine correctness based on suspicion level
-                  // In a full implementation, the backend would tell us if we're correct
-                  // const suspectWithHighestSuspicion = [...suspects].sort(
-                  //   (a, b) => (b.suspicion || 0) - (a.suspicion || 0),
-                  // )[0]
-
-                  // // Set state for the result screen
-                  // const isCorrect =
-                  //   selectedSuspect.id === suspectWithHighestSuspicion?.id
-                  // setIsCorrect(isCorrect)
                   setSelectedSuspectName(selectedSuspect.name)
                   setShowResult(true)
                 }}
