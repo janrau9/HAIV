@@ -107,9 +107,9 @@ export class WsController {
         }
         const distractingTriggerWords = suspect.clues.distracting.triggeredBy;
         const genuineTriggerWords = suspect.clues.genuine.triggeredBy;
-        const isDistracting = distractingTriggerWords.some((word: string) => message.includes(word));
+        const isDistracting = distractingTriggerWords.some((word: string) => message.toLowerCase().includes(word.toLowerCase()));
         let content = [];
-        const isGenuine = genuineTriggerWords.some((word: string) => message.includes(word));
+        const isGenuine = genuineTriggerWords.some((word: string) => message.toLowerCase().includes(word.toLowerCase()));
         if (isDistracting) {
             console.log(`Distracting clue triggered by: ${distractingTriggerWords}`);
             this.gameManager.updateSuspicion(suspect.id, 1);

@@ -130,7 +130,7 @@ const App: React.FC = () => {
     try {
       setIsLoading(true)
       const narrativeData = await getNarrative()
-      console.log('narrative:', narrativeData)
+      console.info('narrative fetched');
 			addNarrative(narrativeData)
 
       suspects.forEach((suspect, index) => {
@@ -173,18 +173,10 @@ const App: React.FC = () => {
     fetchNarrative()
   }, [gameStart])
 
-  // Logging effects
-  useEffect(() => {
-    console.log('narrative:', narrative)
-  }, [narrative])
-
-  useEffect(() => {
-    console.log('suspects:', suspects)
-  }, [suspects])
 
   // Handle user messages
   const handleUserMessage = (playerInput: string) => {
-    console.log('Player input:', playerInput)
+    console.info('Player input:', playerInput)
     addMessage({
       id: crypto.randomUUID(),
       role: 'player',
