@@ -110,7 +110,7 @@ const SuspectsNav: React.FC<SuspectsNavProps> = ({
   const suspects = useGameStore((state) => state.suspects)
 
   return (
-    <div className="w-full flex justify-center items-center">
+    <div className="w-full flex justify-end items-end">
       {suspects.map((suspect) => (
         <button
           key={suspect.id}

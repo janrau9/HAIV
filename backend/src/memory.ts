@@ -1,4 +1,4 @@
-import type { SuspectProfile } from '../types/types';
+import type { SuspectProfile } from '../../types/types';
 import { ChatResponse } from './aiService';
 
 export function addToHistory(

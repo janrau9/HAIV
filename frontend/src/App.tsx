@@ -259,7 +259,7 @@ const App: React.FC = () => {
           animate={{ opacity: [0.7, 1, 0.7], scale: [0.95, 1, 0.95] }}
           transition={{ repeat: Infinity, duration: 2 }}
         >
-          Dead Loop
+          Case Files
         </motion.h1>
 
         <motion.div

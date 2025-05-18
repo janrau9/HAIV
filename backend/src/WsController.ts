@@ -1,7 +1,7 @@
 import { WebSocket } from '@fastify/websocket';
 import { FastifyRequest } from 'fastify';
 import { askSuspect, createNarrative } from "./aiService";
-import type { SuspectProfile } from '../types/types';
+import type { SuspectProfile } from '../../types/types';
 import { game } from './GameManager';
 
 interface QuestionMessage {
