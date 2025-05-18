@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { createNarrative } from './aiService';
+import { createNarrative, createNarrativeWithRetry } from './aiService';
 
 export class APIController {
     private static instance: APIController;
@@ -21,7 +21,7 @@ export class APIController {
         reply.send(api);
     }
     async getNarrative(req: FastifyRequest, reply: FastifyReply) {
-			const narrative = await createNarrative();
+			const narrative = await createNarrativeWithRetry();
 			console.log(narrative);
         reply.send(narrative);
     }

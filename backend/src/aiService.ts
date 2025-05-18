@@ -128,3 +128,22 @@ function keepOnlyInPlace(obj: Record<string, any>, keyToKeep: string) {
     }
   }
 }
+
+export async function createNarrativeWithRetry(maxRetries = 3, delayMs = 1000): Promise<string> {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      return await createNarrative();
+    } catch (error) {
+      console.warn(`Attempt ${attempt} failed:`, error);
+
+      if (attempt === maxRetries) {
+        console.error("All attempts failed.");
+        throw error;
+      }
+
+      // Optional: wait before retrying
+      await new Promise((res) => setTimeout(res, delayMs));
+    }
+  }
+}
+
