@@ -33,6 +33,8 @@
   
 </div>
 
+##
+
 ## 📖 Overview
 
 Dead Loop is an interactive murder mystery investigation game with AI-driven narrative generation. Players take on the role of a detective who must interrogate suspects, discover clues, and ultimately solve the case by identifying the killer.
