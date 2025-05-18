@@ -76,13 +76,11 @@ const App: React.FC = () => {
   }
 
   const confirmFinishQuestioning = () => {
-    setShowQuestionsExhaustedPrompt(true)
-    
-    // After 3 seconds, show the suspect selection screen
+    // Skip showing "questions exhausted" prompt when manually finishing
+    // Go directly to suspect selection after a brief delay
     setTimeout(() => {
       setOutOfQuestions(true)
-      setShowQuestionsExhaustedPrompt(false)
-    }, 3000)
+    }, 1000)
     
     setShowFinishConfirm(false)
   }
