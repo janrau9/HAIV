@@ -369,14 +369,7 @@ const App: React.FC = () => {
           ))}
         </div>
 
-        {/* Camera interface elements */}
-        <div className="absolute top-5 left-5 text-green-500 font-mono text-xs">
-          REC ● {new Date().toLocaleTimeString()}
-        </div>
 
-        <div className="absolute top-5 right-5 text-green-500 font-mono text-xs">
-          CAM-01 :: INTERROGATION
-        </div>
 
         {/* Main content area */}
         <motion.div

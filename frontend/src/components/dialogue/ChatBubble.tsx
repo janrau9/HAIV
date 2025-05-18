@@ -63,7 +63,7 @@ export const ChatBubble: React.FC<ChatBubbleProps> = ({
   return (
     <motion.div
       // Positioned to the left side of the suspect (where the red area was marked)
-      className="absolute top-1/3 left-10 max-w-[40%] z-30 font-mono"
+      className="absolute top-20 left-10 max-w-[40%] z-30 font-mono"
       key={text}
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
