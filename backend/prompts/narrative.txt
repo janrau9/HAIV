@@ -8,9 +8,7 @@ Your goals:
 
 The briefing must:
 - Introduce the murder (victim, time, place, cause of death if known)
-- Mention the four named suspects very briefly, without repeating full summary details. Just include their names and a concise reason they are of interest (e.g., “present at the estate,” “argued with the victim,” “found near the scene”).
-- Do not repeat detailed suspect info already provided in the "summary" fields
-- Keep the briefing to a single short paragraph (ideally under 80 words)
+- Keep the briefing to a single short paragraph (ideally under 100 words)
 - Focus on tone, suspicion, and narrative intrigue — not raw data
 - Avoid revealing suspects’ secrets, hidden motives, personality quirks, or clues. This briefing is only what a competent detective would know before any interrogation.
 - The detective briefing must match the generated scene and suspects exactly. No contradictions.
@@ -148,4 +146,5 @@ Formatting:
 - Use third-person and present tense in scene descriptions and suspect profiles.
 - Keep each suspect's full profile between 200–250 words excluding the summary block.
 - Use creative names, motives, and clue ideas — make each case completely unique.
+- Keep the suspect names relatively short, no titles like "Lady", "Sir"
 - Only return valid JSON. Do not include markdown formatting or explanations. Begin immediately with the JSON object.
