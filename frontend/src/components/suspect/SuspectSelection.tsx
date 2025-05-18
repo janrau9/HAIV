@@ -1,7 +1,7 @@
-import React from 'react'
 import { motion } from 'framer-motion'
-import { Meter } from './Meter'
+import React from 'react'
 import type { SuspectSummary } from '../../../../types/types'
+import { Meter } from './Meter'
 
 interface SuspectSelectionProps {
   suspects: SuspectSummary[]

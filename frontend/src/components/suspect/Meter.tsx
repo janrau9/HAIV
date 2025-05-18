@@ -1,5 +1,5 @@
-import React from 'react'
 import { motion } from 'framer-motion'
+import React from 'react'
 
 interface MeterProps {
   label: string
@@ -16,10 +16,8 @@ export const Meter: React.FC<MeterProps> = ({
   colorScheme,
   showLabel = true,
 }) => {
-  // Calculate the fill percentage
   const fillPercentage = Math.min(100, (value / maxValue) * 100)
 
-  // Determine the color based on value and color scheme
   const getColor = () => {
     if (colorScheme === 'suspicion') {
       if (fillPercentage < 30) return 'rgb(74, 222, 128)' // green-400

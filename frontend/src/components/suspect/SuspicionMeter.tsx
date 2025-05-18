@@ -1,5 +1,5 @@
-import React from 'react'
 import { motion } from 'framer-motion'
+import React from 'react'
 
 interface SuspicionMeterProps {
   suspicionLevel: number
@@ -10,10 +10,8 @@ export const SuspicionMeter: React.FC<SuspicionMeterProps> = ({
   suspicionLevel,
   maxLevel = 10,
 }) => {
-  // Calculate the fill percentage
   const fillPercentage = Math.min(100, (suspicionLevel / maxLevel) * 100)
 
-  // Determine the color based on suspicion level
   const getColor = () => {
     if (fillPercentage < 30) return 'rgb(74, 222, 128)' // green-400
     if (fillPercentage < 60) return 'rgb(250, 204, 21)' // yellow-400
