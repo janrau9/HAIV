@@ -1,7 +1,7 @@
-import { Polaroid } from './Polaroid'
 import { motion } from 'framer-motion'
-import { useGameStore } from '../../store'
 import type { SuspectSummary } from '../../../../types/types'
+import { useGameStore } from '../../store/gameStore'
+import { Polaroid } from './Polaroid'
 
 export const SuspectNotes: React.FC<{ suspect: SuspectSummary }> = ({ suspect }) => {
   console.log('suspect notes: ', suspect)

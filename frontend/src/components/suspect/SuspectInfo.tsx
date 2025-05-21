@@ -1,5 +1,5 @@
 import React from 'react'
-import { useGameStore } from '../../store'
+import { useGameStore } from '../../store/gameStore'
 import { Meter } from './Meter'
 
 export const SuspectInfo: React.FC = () => {

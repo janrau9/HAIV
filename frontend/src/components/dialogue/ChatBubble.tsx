@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion'
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 interface ChatBubbleProps {
   text: string
-  speed?: number // milliseconds per character
-  onComplete?: () => void // Called after full text + delay
+  speed?: number // ms per character
+  onComplete?: () => void // Full text + delay
 }
 
 export const ChatBubble: React.FC<ChatBubbleProps> = ({
@@ -26,7 +26,8 @@ export const ChatBubble: React.FC<ChatBubbleProps> = ({
     setTypingDone(false)
 
     let currentIndex = 0
-    const cleanText = textRef.current.replace('undefined', '') // Remove any 'undefined' strings
+
+    const cleanText = textRef.current.replace('undefined', '')
 
     const typeNextChar = () => {
       if (currentIndex < cleanText.length) {

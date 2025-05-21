@@ -1,5 +1,5 @@
+import { useGameStore } from '../../store/gameStore'
 import { CasePolaroid } from './Polaroid'
-import { useGameStore } from '../../store'
 
 export const Case: React.FC = () => {
   const narrative = useGameStore((state) => state.narrative)

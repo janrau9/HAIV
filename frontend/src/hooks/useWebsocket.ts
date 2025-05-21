@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
-import { WebSocketManager } from './WebSocketManager'
-import { useGameStore } from './store'
+import { WebSocketManager } from '../services/WebSocketManager'
+import { useGameStore } from '../store/gameStore'
 
 const useWebsocket = () => {
   const isWsOpen = useRef(false)

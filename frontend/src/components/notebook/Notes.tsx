@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { useGameStore } from '../../store'
-import { Meter } from '../suspect/Meter'
-import { Case } from './Case' // Import from separate component if it exists
-import { SuspectsTab as MainSuspectsTab } from './SuspectNotes' // Import from separate component if it exists
+import { motion } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
+import { useGameStore } from '../../store/gameStore';
+import { Meter } from '../suspect/Meter';
+import { Case } from './Case'; // Import from separate component if it exists
+import { SuspectsTab as MainSuspectsTab } from './SuspectNotes'; // Import from separate component if it exists
 
 interface NotesNavProps {
   selectedTab?: 'case' | 'suspects' | 'clues'

@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion'
-import { TypingEffect } from './utils/TypingEffect'
+import { TypingEffect } from '../utils/TypingEffect'
+
+// THIS IS CURRENTLY NOT USED!!
 
 interface IntroProps {
   text: string

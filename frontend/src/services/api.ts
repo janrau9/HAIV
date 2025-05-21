@@ -1,5 +1,5 @@
 import axios from 'axios'
-import type { NarrativeResponse } from '../../types/types'
+import type { NarrativeResponse } from '../../../types/types'
 
 const api = axios.create({
   baseURL: 'http://localhost:8000/api',

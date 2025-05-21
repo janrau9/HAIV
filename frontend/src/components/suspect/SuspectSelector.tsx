@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import React from 'react'
-import { useGameStore } from '../../store'
+import { useGameStore } from '../../store/gameStore'
 
 interface SuspectSelectorProps {
   onSelect: (suspectId: string) => void

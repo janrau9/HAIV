@@ -1,15 +1,13 @@
-import { create } from 'zustand'
+import { create } from 'zustand';
+import type { ChatResponse } from '../../../backend/src/aiService';
 import type {
   Clue,
   Message,
   Narrative,
   Scene,
   SuspectSummary,
-} from '../../types/types' // Adjust the import path as necessary
-import type { ChatResponse } from '../../backend/src/aiService'
-import { Suspect } from './components/suspect/Suspect'
+} from '../../../types/types';
 
-// New interface for managing question counts
 interface QuestionCounts {
   [suspectId: string]: number
 }
@@ -24,14 +22,13 @@ type GameState = {
   clues: Record<string, Clue>
   playerNotebook: string[]
   gameOver: boolean
-  questionCounts: QuestionCounts // New field to track question counts
+  questionCounts: QuestionCounts
 
   // Actions
   addNarrative: (narrative: Narrative) => void
   addMessage: (message: Message) => void
   setCurrentSuspect: (id: string) => void
   updateSuspect: (id: string, updates: Partial<SuspectSummary>) => void
-
   markClueFound: (clueId: string) => void
   adjustSuspicion: (suspectId: string, amount: number) => void
   resetGame: () => void
@@ -116,7 +113,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
   messages: [],
   currentSceneId: 'intro',
-  currentSuspectId: initialSuspects[0].id, // Default to first suspect
+  currentSuspectId: initialSuspects[0].id,
   suspects: initialSuspects,
   scenes: {},
   clues: {},
@@ -135,7 +132,7 @@ export const useGameStore = create<GameState>((set, get) => ({
 
   addMessage: (message) =>
     set((state) => {
-      // If it's a player message, decrement the question count for the current suspect
+      // If it's a player message, decrement the question count
       if (message.role === 'player' && state.currentSuspectId) {
         get().decrementQuestionCount(state.currentSuspectId)
       }
@@ -193,7 +190,7 @@ export const useGameStore = create<GameState>((set, get) => ({
           ...suspect,
           ...updates,
           revealedClues: [
-            ...(suspect.revealedClues ?? []), // default to empty array if undefined
+            ...(suspect.revealedClues ?? []), // default to empty
             ...(updates.revealedClues ?? []), // append new clues
           ],
         };

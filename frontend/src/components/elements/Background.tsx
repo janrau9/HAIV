@@ -8,7 +8,6 @@ export const Background: React.FC = () => {
         className="min-w-full min-h-full"
       ></img>
 
-      {/* Camera interface elements inside the room */}
       <div className="absolute top-3 left-3 text-green-500 font-mono text-xs">
         REC ● {new Date().toLocaleTimeString()}
       </div>
