@@ -2,12 +2,17 @@
   <img src="frontend/public/dead-loop-title.svg" alt="DEAD LOOP" width="600">
 </div>
 
-<div align="center">
-  <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License">
-  <img src="https://img.shields.io/badge/Version-1.0.0-brightgreen.svg" alt="Version">
-  <img src="https://img.shields.io/badge/Node.js-v16+-orange.svg" alt="Node.js">
-  <img src="https://img.shields.io/badge/API-OpenAI-lightgrey.svg" alt="API">
-</div>
+<p align="center">
+  <img src="https://img.shields.io/badge/License-MIT-lightgreen?style=for-the-badge" alt="license">
+  <img src="https://img.shields.io/github/languages/top/janrau9/HAIV?style=for-the-badge&logo=typescript&label=%20&labelColor=gray&color=lightblue" alt="GitHub top language">
+  <img src="https://img.shields.io/github/languages/code-size/janrau9/HAIV?style=for-the-badge&color=lightyellow" alt="GitHub code size in bytes">
+  <img src="https://img.shields.io/badge/Sources-41-pink?style=for-the-badge" alt="source files">
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Version-1.0.0-violet?style=for-the-badge" alt="version">
+  <img src="https://img.shields.io/github/last-commit/janrau9/HAIV/main?style=for-the-badge&color=red" alt="GitHub last commit (branch)">
+</p>
 
 ##
 
@@ -90,6 +95,8 @@ Dead Loop is an interactive murder mystery investigation game with AI-driven nar
 5. Monitor suspicion levels and discovered clues in the notebook.
 
 6. When you are ready (or out of questions), make your accusation.
+
+##
 
 <div align="center">
   <img src="frontend/public/screenshot2.png" alt="Suspect Selection" width="700">
