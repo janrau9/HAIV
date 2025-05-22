@@ -3,16 +3,18 @@
 </div>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/License-MIT-lightgreen?style=for-the-badge" alt="license">
   <img src="https://img.shields.io/github/languages/top/janrau9/HAIV?style=for-the-badge&logo=typescript&label=%20&labelColor=gray&color=lightblue" alt="GitHub top language">
   <img src="https://img.shields.io/github/languages/code-size/janrau9/HAIV?style=for-the-badge&color=lightyellow" alt="GitHub code size in bytes">
   <img src="https://img.shields.io/badge/Sources-41-pink?style=for-the-badge" alt="source files">
+  <img src="https://img.shields.io/github/last-commit/janrau9/HAIV/main?style=for-the-badge&color=red"
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Version-1.0.0-brightgreen?style=for-the-badge" alt="version">
+  <img src="https://img.shields.io/badge/License-MIT-lightgreen?style=for-the-badge" alt="license">
   <img src="https://img.shields.io/badge/API-OpenAI-orange?style=for-the-badge" alt="API">
-  <img src="https://img.shields.io/github/last-commit/janrau9/HAIV/main?style=for-the-badge&color=red" alt="GitHub last commit (branch)">
+
+ alt="GitHub last commit (branch)">
 </p>
 
 ##
