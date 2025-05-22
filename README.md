@@ -10,6 +10,7 @@
 </p>
 
 <p align="center">
+  <img src="https://img.shields.io/badge/API-OpenAI-lightgrey?style=for-the-badge" alt="API">
   <img src="https://img.shields.io/badge/Version-1.0.0-violet?style=for-the-badge" alt="version">
   <img src="https://img.shields.io/github/last-commit/janrau9/HAIV/main?style=for-the-badge&color=red" alt="GitHub last commit (branch)">
 </p>
