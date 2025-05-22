@@ -23,12 +23,12 @@
 
   ## 📋 Table of Contents
   
-  [📖 Overview](#overview)
-  [✨ Features](#features)
-  [🛠️ Technologies](#technologies)
-  [📋 Dependencies](#dependencies)
-  [📦 Installation](#installation)
-  [🚀 Gameplay](#usage)
+  [📖 Overview](#-overview)
+  [✨ Features](#-features)
+  [🛠️ Technologies](#-technologies)
+  [📋 Dependencies](#-dependencies)
+  [📦 Installation](#-installation)
+  [🚀 Gameplay](#-gameplay)
 
 </div>
 
