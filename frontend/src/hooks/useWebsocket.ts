@@ -8,7 +8,7 @@ const useWebsocket = () => {
   const messages = useGameStore((state) => state.messages)
   const currentSuspectId = useGameStore((state) => state.currentSuspectId)
   const suspects = useGameStore((state) => state.suspects)
-  const { addMessage, updateSuspectMemory, adjustSuspicion, adjustTrust, updateSuspect } = useGameStore.getState()
+  const { addMessage, updateSuspectMemory, updateSuspect } = useGameStore.getState()
 
   const handleResponse = (message: any) => {
     console.info('handling response');

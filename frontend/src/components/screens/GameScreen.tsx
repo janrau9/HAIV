@@ -35,7 +35,6 @@ export const GameScreen: React.FC<GameScreenProps> = ({
   showQuestionsExhaustedPrompt,
   showChatBubble,
   showFinishConfirm,
-  questionsAreExhausted,
   setShowChatBubble,
   handleFinishQuestioning,
   confirmFinishQuestioning,

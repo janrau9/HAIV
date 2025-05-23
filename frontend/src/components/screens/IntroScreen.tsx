@@ -8,7 +8,7 @@ interface IntroProps {
   onComplete?: () => void
 }
 
-export const Intro: React.FC<IntroProps> = ({ text }) => {
+export const Intro: React.FC<IntroProps> = () => {
   return (
     <motion.div className="w-full h-full">
       <TypingEffect text="Typing Effect" />

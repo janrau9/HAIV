@@ -127,14 +127,14 @@ const Result: React.FC<ResultProps> = ({
           </div>
 
           <motion.div className="flex justify-center" variants={itemVariants}>
-            <button
+            <motion.button
               onClick={onReturnToMainScreen}
               className="bg-black border-2 border-green-500 text-green-500 px-6 py-3 font-mono hover:bg-green-900 transition-colors"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
               RETURN TO MAIN SCREEN
-            </button>
+            </motion.button>
           </motion.div>
         </motion.div>
       </motion.div>

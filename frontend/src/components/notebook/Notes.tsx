@@ -163,7 +163,7 @@ const CluesTab: React.FC = () => {
   const playerNotebook = useGameStore((state) => state.playerNotebook)
 
   // Filter to only show discovered clues
-  const discoveredClues = Object.values(clues).filter((clue) => clue.discovered)
+  const discoveredClues = Object.values(clues).filter((clue) => clue.revealed)
 
   return (
     <div className="p-4">
@@ -176,7 +176,7 @@ const CluesTab: React.FC = () => {
           {discoveredClues.map((clue) => (
             <li key={clue.id} className="mb-2">
               <p>{clue.content}</p>
-              <p className="text-xs italic">Found in: {clue.foundInSceneId}</p>
+              <p className="text-xs italic">Found in: {clue.category}</p>
             </li>
           ))}
         </ul>
@@ -273,7 +273,7 @@ export const Notes: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState<'case' | 'suspects' | 'clues'>(
     'case',
   )
-  const [selectedSuspectId, setSelectedSuspectId] = useState<string | null>(
+  const [selectedSuspectId, setSelectedSuspectId] = useState<string>(
     'Suspect_1',
   )
 

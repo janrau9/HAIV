@@ -1,4 +1,4 @@
-import { CSSProperties } from 'react'
+import type { CSSProperties } from 'react'
 
 // Security camera style filter
 export const securityCameraStyle: CSSProperties = {
